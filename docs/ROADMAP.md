@@ -28,7 +28,7 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 4 — Backend
 - [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — tested on
   SQLite only; must run `alembic upgrade head` against Supabase before deploy
-- [ ] Orchestrator state machine with resume-from-failed-step
+- [~] Orchestrator state machine with resume-from-failed-step (engine done; real steps next)
 - [ ] Redis + Arq worker
 - [ ] FastAPI: create run, get run, SSE progress stream
 
@@ -185,3 +185,11 @@ Progress log after every working session (what was built, what broke, what's nex
   `Text` import). `DatabaseSettings` split out so migrations need no API keys;
   DATABASE_URL defaults to local SQLite. Found SQLite drops timezones -> `as_utc()` helper.
   152 tests. NOT yet run on Postgres. Next: orchestrator state machine with resume.
+- 2026-10-02 — Week 4 step 2a: orchestrator engine (`app/pipeline/orchestrator.py`).
+  create_run snapshots the sender + creates pending step rows; execute walks steps in
+  order, persisting running/succeeded/failed + output + cost per step; finished steps are
+  skipped on resume (saved outputs reloaded, nothing paid twice); steps can STOP a run
+  deliberately; last step can set final status. Runs are claimed via optimistic-lock
+  UPDATE (two workers can't run the same run; verified by a concurrency test); RUNNING runs
+  older than 15 min are reclaimable. 7 engine tests (159 total). Known gap: cost spent by a
+  step that then raises isn't recorded yet — handle in 2b.
