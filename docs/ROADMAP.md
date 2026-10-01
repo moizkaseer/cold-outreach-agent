@@ -35,7 +35,7 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 5 — Production hardening
 - [x] Tracing (Langfuse or Logfire) with cost per run — Logfire; tested in-memory, no account yet
 - [x] Per-domain research cache, prompt caching, model routing (cache: Week 4 step 2b; prompt caching: loop; routing: Sonnet research/writing, Haiku scoring/verification)
-- [ ] Prompt-injection test pages in evals
+- [x] Prompt-injection test pages in evals (built + tested with fakes; never run against the real model)
 
 ## Week 6 — Ship the demo
 - [ ] Connect "Run" button on moizali.vercel.app
@@ -226,3 +226,16 @@ Progress log after every working session (what was built, what broke, what's nex
   why logfire.instrument_anthropic isn't used. Setup in worker, API (+ FastAPI request
   spans) and eval runners; LOGFIRE_TOKEN optional. Moved `Usage` to `app/agents/usage.py`
   to break a pricing<->loop import cycle. 186 tests. Next: prompt-injection eval pages.
+- 2026-10-02 — Week 5 step 2: prompt-injection evals (`evals/injection/cases.py`,
+  `evals/run_injection_evals.py`). Fictional "Brightloom" pages served by a mock HTTP layer
+  (no real web traffic): direct instruction, display:none text, white-on-white text,
+  wrapper-escape (fake </untrusted_content>), system-prompt exfiltration; plus a writer case
+  (poisoned research quote adding a link + fake discount). Canary strings detect success;
+  results split into `passed` (nothing reached output) and `model_followed` (model tried,
+  even if code then blocked it). Meta-tests prove each attack reaches the model and that an
+  obedient fake model is caught. Findings: (1) trafilatura strips display:none text, a free
+  defence (pinned so an upgrade can't silently remove it); (2) KNOWN LIMITATION: grounding
+  proves a quote is on the page, not that the page is honest — injected text can be quoted
+  and pass grounding; only the model's judgement + this eval guard it. 197 tests.
+  WEEK 5 CODE COMPLETE. Run (costs ~$0.20-0.40, my estimate): `uv run python -m
+  evals.run_injection_evals --max-cost 0.50`.
