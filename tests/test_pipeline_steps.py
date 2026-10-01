@@ -200,3 +200,10 @@ def test_factory_builds_without_calling_apis(tmp_path: Path) -> None:
     engine = make_engine(f"sqlite+aiosqlite:///{tmp_path / 'f.db'}")
     orch = build_orchestrator(s, make_sessionmaker(engine))
     assert [n for n, _ in orch._steps][-1] == "draft"
+
+
+def test_step_names_match_pipeline(env) -> None:
+    from app.pipeline.steps import STEP_NAMES
+
+    orch, _, _ = env
+    assert [n for n, _ in orch._steps] == STEP_NAMES

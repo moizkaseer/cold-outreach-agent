@@ -44,6 +44,9 @@ DraftFn = Callable[[Lead, ResearchReport, PainPoint, Sender], Awaitable[DraftRes
 
 ACTIVE = (RunStatus.RUNNING, RunStatus.SUCCEEDED, RunStatus.NEEDS_HUMAN)
 
+# Order matters: cheap gates first. Must match build_pipeline (a test enforces this).
+STEP_NAMES = ["validate", "dedupe", "score", "research", "painpoints", "draft"]
+
 
 @dataclass
 class PipelineDeps:

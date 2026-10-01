@@ -57,6 +57,20 @@ class StepFailed(Exception):
         self.cost_usd = cost_usd
 
 
+async def create_run(
+    sessions: async_sessionmaker[AsyncSession], lead: Lead, sender: Sender, step_names: list[str]
+) -> uuid.UUID:
+    """Insert the lead, the run (with a snapshot of the sender) and one PENDING row per step."""
+    async with sessions() as s:
+        row = LeadRow(domain=lead.domain, person_name=lead.person_name,
+                      person_role=lead.person_role)  # fmt: skip
+        run = Run(lead=row, sender=sender.model_dump(mode="json"))
+        run.steps = [Step(name=n, position=i) for i, n in enumerate(step_names, 1)]
+        s.add(run)
+        await s.commit()
+        return run.id
+
+
 class Orchestrator:
     def __init__(
         self,
@@ -73,14 +87,7 @@ class Orchestrator:
         self._stale_after = stale_after
 
     async def create_run(self, lead: Lead, sender: Sender) -> uuid.UUID:
-        async with self._sessions() as s:
-            row = LeadRow(domain=lead.domain, person_name=lead.person_name,
-                          person_role=lead.person_role)  # fmt: skip
-            run = Run(lead=row, sender=sender.model_dump(mode="json"))
-            run.steps = [Step(name=n, position=i) for i, (n, _) in enumerate(self._steps, 1)]
-            s.add(run)
-            await s.commit()
-            return run.id
+        return await create_run(self._sessions, lead, sender, [n for n, _ in self._steps])
 
     async def _claim(self, run_id: uuid.UUID) -> bool:
         """Atomically move the run to RUNNING if it is runnable. Optimistic lock: the

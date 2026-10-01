@@ -30,7 +30,7 @@ Progress log after every working session (what was built, what broke, what's nex
   SQLite only; must run `alembic upgrade head` against Supabase before deploy
 - [x] Orchestrator state machine with resume-from-failed-step (fakes + SQLite; no real run yet)
 - [x] Redis + Arq worker (job + enqueue tested with fakes; no real Redis run yet)
-- [ ] FastAPI: create run, get run, SSE progress stream
+- [x] FastAPI: create run, get run, SSE progress stream (+ resume) — in-process tests; no auth yet
 
 ## Week 5 — Production hardening
 - [ ] Tracing (Langfuse or Logfire) with cost per run
@@ -208,3 +208,13 @@ Progress log after every working session (what was built, what broke, what's nex
   URLs, no API keys) replaces DatabaseSettings. 173 tests. Redis isn't installed locally,
   so no real queue round-trip yet. Run: `uv run arq app.workers.worker.WorkerSettings`.
   Next: FastAPI (create run, get run, SSE progress, resume).
+- 2026-10-02 — Week 4 step 4: FastAPI (`app/api/main.py`): POST /runs (validates +
+  normalises lead, refuses without a real sender profile, enqueues; 202), GET /runs/{id}
+  (status, steps, email, cost), GET /runs/{id}/events (SSE: polls DB, sends only changes,
+  heartbeat, ends on terminal status), POST /runs/{id}/resume (FAILED only; new job id per
+  attempt), GET /health. Tests caught: 422 for a bad domain was a 500 (unserialisable
+  error context), and a blocking Path.exists() in async startup. `create_run` extracted +
+  `STEP_NAMES` (test keeps it in sync). 183 tests.
+  WEEK 4 CODE COMPLETE — but never run end-to-end for real (no Redis locally, no Postgres
+  run, no real LLM calls since the user paused API spend). No auth/rate limits: not
+  deployable publicly until Week 6.
