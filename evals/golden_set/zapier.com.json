@@ -1,0 +1,40 @@
+{
+  "domain": "zapier.com",
+  "company_name": "Zapier",
+  "segment": "saas",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Over 2 million businesses automate with Zapier.",
+      "category": "customers",
+      "source_url": "https://zapier.com/about",
+      "evidence": "Over 2 million businesses automate with Zapier",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Zapier has been fully remote since day one.",
+      "category": "hiring",
+      "source_url": "https://zapier.com/about",
+      "evidence": "We’ve been working remotely since day one",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Zapier has 800+ people across 38 countries.",
+      "category": "hiring",
+      "source_url": "https://zapier.com/about",
+      "evidence": "We’re 800+ people across 38 countries",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "69% of the Fortune 1000 use Zapier.",
+      "category": "customers",
+      "source_url": "https://zapier.com/about",
+      "evidence": "69%\nof the Fortune 1000 use Zapier",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

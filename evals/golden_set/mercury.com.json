@@ -1,0 +1,32 @@
+{
+  "domain": "mercury.com",
+  "company_name": "Mercury",
+  "segment": "fintech",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Mercury has 1,000+ employees.",
+      "category": "hiring",
+      "source_url": "https://mercury.com/about",
+      "evidence": "Our 1,000+ employees",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Mercury provides checking and savings accounts plus credit and debit cards.",
+      "category": "product",
+      "source_url": "https://mercury.com/about",
+      "evidence": "access to checking and savings accounts, credit and debit cards",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Mercury lets customers make payments, send invoices and pay bills.",
+      "category": "product",
+      "source_url": "https://mercury.com/about",
+      "evidence": "make payments, send invoices, pay bills, monitor spend",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

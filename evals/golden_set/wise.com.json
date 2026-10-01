@@ -1,0 +1,32 @@
+{
+  "domain": "wise.com",
+  "company_name": "Wise",
+  "segment": "fintech",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "Wise co-founder Taavet was the first employee at Skype.",
+      "category": "other",
+      "source_url": "https://wise.com/gb/about/our-story",
+      "evidence": "Taavet, who was the first employee at Skype",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Wise's two founders are both from Estonia.",
+      "category": "other",
+      "source_url": "https://wise.com/gb/about/our-story",
+      "evidence": "starts with two friends.\nThey’re both from Estonia.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Wise's mission is 'money without borders'.",
+      "category": "other",
+      "source_url": "https://wise.com/gb/about/our-story",
+      "evidence": "We believe in money without borders.",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

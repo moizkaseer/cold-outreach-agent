@@ -1,0 +1,24 @@
+{
+  "domain": "allbirds.com",
+  "company_name": "Allbirds",
+  "segment": "ecommerce",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Allbirds sources the wool for its M0.0NSHOT product from Lake Hawea Station via the ZQRX regenerative wool program.",
+      "category": "product",
+      "source_url": "https://www.allbirds.com/pages/our-story",
+      "evidence": "regenerative wool program, ZQRX, to source M0.0NSHOT’s wool from Lake Hawea Station",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Allbirds' original LCA Tool was third-party verified against ISO 14067.",
+      "category": "tech",
+      "source_url": "https://www.allbirds.com/pages/our-story",
+      "evidence": "The initial Allbirds LCA Tool was third-party verified against the requirements of ISO 14067",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

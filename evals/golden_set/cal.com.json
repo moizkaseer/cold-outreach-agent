@@ -1,0 +1,32 @@
+{
+  "domain": "cal.com",
+  "company_name": "Cal.com",
+  "segment": "saas",
+  "size": "startup",
+  "facts": [
+    {
+      "claim": "Cal.com's stated goal is connecting a billion people by 2031.",
+      "category": "news",
+      "source_url": "https://cal.com/about",
+      "evidence": "CONNECTING A BILLION PEOPLE BY 2031",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Cal.com follows the Open Startup philosophy of publicly sharing its core KPIs.",
+      "category": "other",
+      "source_url": "https://cal.com/about",
+      "evidence": "We're big evangelists of the Open Startup philosophy of publicly showing our core KPIs",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Cal.com lets customers add integrations through its App Store.",
+      "category": "product",
+      "source_url": "https://cal.com/about",
+      "evidence": "Add integrations and extend functionality through our App Store",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

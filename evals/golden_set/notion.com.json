@@ -1,0 +1,24 @@
+{
+  "domain": "notion.com",
+  "company_name": "Notion",
+  "segment": "saas",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "Notion is based in San Francisco, with offices around the world.",
+      "category": "other",
+      "source_url": "https://www.notion.com/about",
+      "evidence": "Notion is based in beautiful downtown San Francisco, with offices around the world.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Notion is an all-in-one workspace that combines workflow tools in one place.",
+      "category": "product",
+      "source_url": "https://www.notion.com/about",
+      "evidence": "we are blending much of your workflow into an all-in-one workspace",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

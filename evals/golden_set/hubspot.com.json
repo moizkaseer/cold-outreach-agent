@@ -1,0 +1,40 @@
+{
+  "domain": "hubspot.com",
+  "company_name": "HubSpot",
+  "segment": "saas",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "Brian Halligan and Dharmesh Shah founded HubSpot in 2006.",
+      "category": "other",
+      "source_url": "https://www.hubspot.com/our-story",
+      "evidence": "Brian Halligan and Dharmesh Shah noticed a major shift in the way people shop and purchase products. Buyers didn’t want to be interrupted by ads, they wanted helpful information. In 2006, they founded HubSpot",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "HubSpot's CEO is Yamini Rangan.",
+      "category": "other",
+      "source_url": "https://www.hubspot.com/our-story",
+      "evidence": "Expertly led by CEO Yamini Rangan",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "HubSpot's global headquarters is in Boston, MA.",
+      "category": "other",
+      "source_url": "https://www.hubspot.com/our-story",
+      "evidence": "Global Headquarters\nBoston, MA, USA",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "HubSpot opened its Europe headquarters in 2013.",
+      "category": "news",
+      "source_url": "https://www.hubspot.com/our-story",
+      "evidence": "Europe Headquarters\nOpened: 2013",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

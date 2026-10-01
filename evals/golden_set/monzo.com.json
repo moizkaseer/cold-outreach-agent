@@ -1,0 +1,32 @@
+{
+  "domain": "monzo.com",
+  "company_name": "Monzo",
+  "segment": "fintech",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "Monzo has more than 16 million personal and business customers.",
+      "category": "customers",
+      "source_url": "https://monzo.com/about",
+      "evidence": "Now more than 16 million personal and business customers trust Monzo",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Monzo's team is based in London.",
+      "category": "other",
+      "source_url": "https://monzo.com/about",
+      "evidence": "We’re a fast-growing team based in London",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Monzo also has offices in Cardiff.",
+      "category": "other",
+      "source_url": "https://monzo.com/about",
+      "evidence": "we also have offices in Cardiff",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

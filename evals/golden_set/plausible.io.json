@@ -1,0 +1,56 @@
+{
+  "domain": "plausible.io",
+  "company_name": "Plausible Analytics",
+  "segment": "saas",
+  "size": "startup",
+  "facts": [
+    {
+      "claim": "Plausible has more than 21,000 paying subscribers.",
+      "category": "customers",
+      "source_url": "https://plausible.io/about",
+      "evidence": "More than 21,000 paying subscribers use Plausible.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Uku Taht started Plausible in December 2018.",
+      "category": "other",
+      "source_url": "https://plausible.io/about",
+      "evidence": "Uku Taht started Plausible in December 2018",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Plausible crossed $1 million in annual recurring revenue in 2022.",
+      "category": "news",
+      "source_url": "https://plausible.io/about",
+      "evidence": "Plausible crossed $1 million in annual recurring revenue in 2022",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Plausible is a team of 10.",
+      "category": "hiring",
+      "source_url": "https://plausible.io/about",
+      "evidence": "Today Plausible is a team of 10.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Plausible is self-funded and profitable, with no outside investors.",
+      "category": "funding",
+      "source_url": "https://plausible.io/about",
+      "evidence": "We are self-funded and profitable, with no outside investors",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Plausible is open source under the AGPLv3 license.",
+      "category": "tech",
+      "source_url": "https://plausible.io/about",
+      "evidence": "Plausible is open source under the GNU Affero General Public License Version 3 (AGPLv3).",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

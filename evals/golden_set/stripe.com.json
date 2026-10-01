@@ -1,0 +1,24 @@
+{
+  "domain": "stripe.com",
+  "company_name": "Stripe",
+  "segment": "fintech",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "More than 5 million businesses build on Stripe.",
+      "category": "customers",
+      "source_url": "https://stripe.com/about",
+      "evidence": "More than 5 million businesses build on Stripe",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Businesses process trillions of dollars a year on Stripe, around 1.7% of global GDP.",
+      "category": "customers",
+      "source_url": "https://stripe.com/about",
+      "evidence": "They process trillions of dollars a year on Stripe, equivalent to around 1.7% of global GDP.",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}
