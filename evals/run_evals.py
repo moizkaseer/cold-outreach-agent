@@ -138,10 +138,14 @@ async def evaluate_company(
         result.error = f"judge: {type(e).__name__}: {e}"
         return result
 
-    result.faithful = sum(v.faithful for v in j.output.facts)
-    result.golden_covered = sum(v.covered for v in j.output.golden)
+    result.faithful = sum(v.faithful for v in j.facts)
+    result.golden_covered = sum(v.covered for v in j.golden)
     result.judge_cost_usd = estimate_cost_usd(judge_model, j.agent.usage) if j.agent else 0.0
-    result.details["judge"] = j.output.model_dump()
+    result.details["judge"] = {
+        "facts": [asdict(v) for v in j.facts],
+        "golden": [v.model_dump() for v in j.golden],
+        "raw": j.raw.model_dump() if j.raw else None,
+    }
     return result
 
 
@@ -183,6 +187,7 @@ def _git_commit() -> str | None:
 
 async def main(args: argparse.Namespace) -> None:
     s = get_settings()
+    judge_model = args.judge_model or s.model_fast
     companies = load_golden_set()
     if args.domains:
         companies = [c for c in companies if c.domain in set(args.domains)]
@@ -200,7 +205,7 @@ async def main(args: argparse.Namespace) -> None:
 
     async def judge(report: ResearchReport, golden: list[str]) -> Judgement:
         return await judge_report(
-            client=judge_client, model=s.model_fast, report=report, golden_claims=golden
+            client=judge_client, model=judge_model, report=report, golden_claims=golden
         )
 
     sem = asyncio.Semaphore(args.concurrency)
@@ -212,7 +217,7 @@ async def main(args: argparse.Namespace) -> None:
                 run_research=researcher.run,
                 judge=judge,
                 research_model=s.model_smart,
-                judge_model=s.model_fast,
+                judge_model=judge_model,
                 include_unverified=args.include_unverified,
             )
             print(
@@ -235,7 +240,7 @@ async def main(args: argparse.Namespace) -> None:
                 "config": {
                     "git_commit": _git_commit(),
                     "research_model": s.model_smart,
-                    "judge_model": s.model_fast,
+                    "judge_model": judge_model,
                     "max_turns": s.research_max_turns,
                     "token_budget": s.research_max_tokens,
                     "include_unverified": args.include_unverified,
@@ -259,4 +264,5 @@ if __name__ == "__main__":
     p.add_argument("--limit", type=int)
     p.add_argument("--concurrency", type=int, default=3)
     p.add_argument("--include-unverified", action="store_true")
+    p.add_argument("--judge-model", help="defaults to MODEL_FAST from config")
     asyncio.run(main(p.parse_args()))

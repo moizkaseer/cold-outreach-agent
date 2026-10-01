@@ -126,3 +126,13 @@ Progress log after every working session (what was built, what broke, what's nex
   teams", "Sep 29, 2025"), so true faithfulness is closer to ~0.75 by that review. The
   judge looks more lenient with multiple quotes. Next: make the judge decompose claims
   into atomic details and calibrate it against human labels before trusting its numbers.
+- 2026-10-02 — Judge v2 + calibration tooling. Judge now decomposes each claim into atomic
+  details and names the supporting quote for each (or null); CODE derives faithful = every
+  detail has a valid quote (out-of-range quote numbers never count). Each fact judged only
+  against its own quotes. `--judge-model` flag on run_evals. New `evals/calibration.py`:
+  `export` (results -> labels CSV, refuses to overwrite labels) and `score` (agreement,
+  false-pass/false-fail rates, Cohen's kappa, disagreement list). 101 tests.
+  Sanity check on the same 24 facts from run 3 (NOT calibration; no human labels yet):
+  old Haiku judge 0.92, new Haiku 0.67 (~$0.02), new Sonnet 0.42 (~$0.06). Judge choice
+  alone moves faithfulness by 50 points -> must calibrate before quoting any number.
+  `evals/calibration/labels.csv` (24 facts) exported, awaiting Moiz's labels.

@@ -10,11 +10,13 @@ from app.pricing import estimate_cost_usd
 from app.schemas import Fact, Lead, ResearchReport
 from evals.golden import GoldenCompany
 from evals.judge import (
+    DetailCheck,
+    FactCheck,
     FactVerdict,
     GoldenVerdict,
     JudgeError,
     Judgement,
-    JudgeOutput,
+    derive_verdict,
     judge_report,
 )
 from evals.run_evals import CompanyResult, evaluate_company, summarize
@@ -78,7 +80,7 @@ def test_cost_estimate() -> None:
 
 def verdicts(fact_ids: list[str], golden_ids: list[str]) -> dict[str, Any]:
     return {
-        "facts": [{"fact_id": i, "faithful": True, "reason": "ok"} for i in fact_ids],
+        "facts": [{"fact_id": i, "details": [{"detail": "d", "quote": 1}]} for i in fact_ids],
         "golden": [
             {"golden_id": g, "covered": g == "g1", "matched_fact_ids": [], "reason": "r"}
             for g in golden_ids
@@ -94,7 +96,8 @@ async def test_judge_ok_and_no_fallback() -> None:
         report=report("f1"),  # type: ignore[arg-type]
         golden_claims=["a", "b"],
     )
-    assert [v.covered for v in j.output.golden] == [True, False]
+    assert [v.covered for v in j.golden] == [True, False]
+    assert [(v.fact_id, v.faithful) for v in j.facts] == [("f1", True)]
     assert "fallbacks" not in client.requests[0]
     assert "quote f1" in client.requests[0]["messages"][0]["content"]
 
@@ -118,7 +121,27 @@ async def test_judge_skips_call_when_no_facts() -> None:
         report=report(),  # type: ignore[arg-type]
         golden_claims=["a"],
     )
-    assert j.agent is None and not j.output.golden[0].covered and client.requests == []
+    assert j.agent is None and not j.golden[0].covered and client.requests == []
+
+
+@pytest.mark.parametrize(
+    ("quotes", "expected_faithful", "unsupported"),
+    [
+        ([1, 2], True, []),
+        ([1, None], False, ["d2"]),  # a detail no quote states
+        ([1, 3], False, ["d2"]),  # quote 3 doesn't exist: never counts as support
+        ([0, 1], False, ["d1"]),
+    ],
+)
+def test_faithfulness_is_derived_by_code(
+    quotes: list[int | None], expected_faithful: bool, unsupported: list[str]
+) -> None:
+    check = FactCheck(
+        fact_id="f1",
+        details=[DetailCheck(detail=f"d{i}", quote=q) for i, q in enumerate(quotes, 1)],
+    )
+    v = derive_verdict(check, n_quotes=2)
+    assert v.faithful is expected_faithful and v.unsupported == unsupported
 
 
 # --- evaluate_company ---
@@ -144,14 +167,13 @@ async def run_eval(run: ResearchRun, include_unverified: bool = False, judge=Non
         return run
 
     async def fake_judge(rep: ResearchReport, golden: list[str]) -> Judgement:
-        out = JudgeOutput(
-            facts=[FactVerdict(fact_id=f.id, faithful=f.id != "f2", reason="r") for f in rep.facts],
+        return Judgement(
+            facts=[FactVerdict(f.id, faithful=f.id != "f2", unsupported=[]) for f in rep.facts],
             golden=[
                 GoldenVerdict(golden_id=f"g{i}", covered=True, reason="r")
                 for i, _ in enumerate(golden, 1)
             ],
         )
-        return Judgement(out, None)
 
     return await evaluate_company(
         COMPANY,
