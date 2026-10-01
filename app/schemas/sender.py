@@ -24,6 +24,11 @@ class Sender(StrictModel):
         description="The low-friction ask the email ends with.",
     )
 
+    @property
+    def is_placeholder(self) -> bool:
+        """True for the committed example profile, which must never write real emails."""
+        return self.name == "Your Name" or any("EXAMPLE ONLY" in o for o in self.outcomes)
+
 
 def load_sender(path: Path) -> Sender:
     return Sender.model_validate_json(path.read_text(encoding="utf-8"))

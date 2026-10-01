@@ -8,6 +8,8 @@ bounded by its own token budget).
 
 from __future__ import annotations
 
+import asyncio
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 
 
@@ -29,3 +31,28 @@ class SpendTracker:
     @property
     def remaining_usd(self) -> float | None:
         return None if self.limit_usd is None else max(0.0, self.limit_usd - self.spent_usd)
+
+
+async def run_capped[T, R](
+    items: list[T],
+    fn: Callable[[T], Awaitable[R]],
+    *,
+    tracker: SpendTracker,
+    concurrency: int,
+    cost_of: Callable[[R], float | None],
+    on_skip: Callable[[T], R],
+) -> list[R]:
+    """Run `fn` over items with limited concurrency; once the cap is hit, items that
+    haven't started yet get `on_skip(item)` instead of being run."""
+    sem = asyncio.Semaphore(concurrency)
+
+    async def one(item: T) -> R:
+        async with sem:
+            # Checked when a slot frees up, i.e. right before this item would start.
+            if tracker.exhausted:
+                return on_skip(item)
+            result = await fn(item)
+            tracker.add(cost_of(result))
+            return result
+
+    return list(await asyncio.gather(*(one(i) for i in items)))

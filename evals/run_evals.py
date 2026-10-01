@@ -35,7 +35,7 @@ from app.agents.research import ResearchAgent, ResearchRun
 from app.config import get_settings
 from app.pricing import PRICES, estimate_cost_usd
 from app.schemas import Lead, ResearchReport
-from app.spend import SpendTracker
+from app.spend import SpendTracker, run_capped
 from evals.golden import GoldenCompany, load_golden_set
 from evals.judge import Judgement, judge_report
 
@@ -164,19 +164,14 @@ async def run_companies(
     concurrency: int,
 ) -> list[CompanyResult]:
     """Evaluate companies with limited concurrency, stopping new starts at the spend cap."""
-    sem = asyncio.Semaphore(concurrency)
-
-    async def one(c: GoldenCompany) -> CompanyResult:
-        async with sem:
-            # Checked when a slot frees up, i.e. right before this company would start.
-            if tracker.exhausted:
-                return CompanyResult(c.domain, False, "skipped_budget", skipped=True)
-            r = await evaluate_one(c)
-            tracker.add(r.research_cost_usd)
-            tracker.add(r.judge_cost_usd)
-            return r
-
-    return list(await asyncio.gather(*(one(c) for c in companies)))
+    return await run_capped(
+        companies,
+        evaluate_one,
+        tracker=tracker,
+        concurrency=concurrency,
+        cost_of=lambda r: (r.research_cost_usd or 0.0) + (r.judge_cost_usd or 0.0),
+        on_skip=lambda c: CompanyResult(c.domain, False, "skipped_budget", skipped=True),
+    )
 
 
 def summarize(results: list[CompanyResult]) -> dict[str, Any]:

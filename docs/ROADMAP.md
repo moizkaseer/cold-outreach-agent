@@ -23,7 +23,7 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] Pain point agent (sequential, evidence-based) — unit-tested with fakes; no real run yet
 - [x] Writer agent (email rules from CLAUDE.md) — unit-tested with fakes; no real run yet
 - [x] Verifier + revise loop (max 2) — unit-tested with fakes; no real run yet
-- [ ] LLM-as-judge rubric for email quality in evals
+- [x] LLM-as-judge rubric for email quality in evals (built + tested; uncalibrated, never run for real)
 
 ## Week 4 — Backend
 - [ ] Postgres models: runs, steps, leads, research cache, emails (+ Alembic)
@@ -169,3 +169,11 @@ Progress log after every working session (what was built, what broke, what's nex
   the email verbatim (code-checked; fake quotes turn a pass into a fail). AgentResult now
   records its model; `app/pricing.total_cost_usd` prices mixed-model runs (None if any
   price unknown). 141 tests. Needs calibration before its numbers are quoted.
+- 2026-10-02 — End-to-end email eval (`evals/run_email_evals.py`): research -> pain points
+  -> write/verify/revise -> rubric per company, under the shared spend cap
+  (`app/spend.run_capped`, now also used by run_evals). Reports status mix, verified rate,
+  avg revisions, rubric pass rate per criterion, mixed-model cost. Refuses the example
+  sender profile (`Sender.is_placeholder`) and explains a missing sender.json. 146 tests,
+  fakes only. Week 3 code complete; nothing in Week 3 has run against the real API.
+  Blocked on Moiz for real numbers: sender.json, 24 calibration labels, golden verification.
+  Next (no API needed): Week 4 — Postgres models + Alembic, orchestrator with resume.
