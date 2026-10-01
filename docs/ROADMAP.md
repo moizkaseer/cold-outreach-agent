@@ -16,7 +16,8 @@ Progress log after every working session (what was built, what broke, what's nex
   (`search` = Exa behind `SearchProvider` in `app/tools/search.py`; `fetch_page` and
   `finish` done earlier — research agent wiring next)
 - [x] Research agent returns cited `ResearchReport` (built + unit-tested; first real run pending API keys)
-- [ ] `evals/run_evals.py`: fact accuracy + citation validity vs golden set
+- [x] `evals/run_evals.py`: fact accuracy + citation validity vs golden set (built + tested;
+  no real eval run yet — needs API keys and verified golden facts)
 
 ## Week 3 — Rest of the chain
 - [ ] Pain point agent (sequential, evidence-based)
@@ -92,3 +93,11 @@ Progress log after every working session (what was built, what broke, what's nex
   150k (history is re-sent each turn); evidence capped at 500 chars. `Researcher` protocol
   for swapping implementations. 72 tests. Real run: `scripts/research_smoke.py` (needs
   ANTHROPIC_API_KEY + EXA_API_KEY). Next: run_evals.py.
+- 2026-10-02 — Step 7: `evals/run_evals.py` + `evals/judge.py`. Metrics: grounding (code:
+  kept/submitted facts), faithfulness (Haiku judge: claim matches its quote), coverage
+  (Haiku judge: verified golden facts found), plus finished-rate, turns, latency and
+  estimated cost (`app/pricing.py`, prices as of 2026-09-25). Results saved to
+  `evals/results/<timestamp>.json` with git commit + config. Default scores only verified
+  golden facts; `--include-unverified` for dev runs. Loop gained `refusal_fallback` flag
+  (off for the Haiku judge). 82 tests. NO real metrics yet.
+  Next: add keys, run research_smoke on 1-2 companies, then a small eval run.

@@ -145,6 +145,7 @@ async def run_agent_loop[T: BaseModel](
     output_model: type[T],
     max_turns: int,
     token_budget: int,
+    refusal_fallback: bool = True,
 ) -> AgentResult[T]:
     tools_by_name = {t.name: t for t in tools}
     if FINISH_TOOL_NAME in tools_by_name:
@@ -152,6 +153,11 @@ async def run_agent_loop[T: BaseModel](
     api_tools = [t.to_api() for t in tools] + [_finish_tool_schema(output_model)]
 
     messages: list[dict[str, Any]] = [{"role": "user", "content": user_message}]
+    # The "default" fallback mode is documented for the current Sonnet/Opus/Fable models;
+    # callers on other models (e.g. a Haiku judge) can turn it off.
+    fallback_kwargs: dict[str, Any] = (
+        {"betas": [FALLBACK_BETA], "fallbacks": "default"} if refusal_fallback else {}
+    )
     usage = Usage()
     records: list[ToolCallRecord] = []
     finish_failures = 0
@@ -195,8 +201,7 @@ async def run_agent_loop[T: BaseModel](
             system=system,
             tools=api_tools,
             messages=messages,
-            betas=[FALLBACK_BETA],
-            fallbacks="default",
+            **fallback_kwargs,
             # Auto prompt caching: caches the longest stable prefix (tools, system, history
             # so far). Each turn re-sends everything, so this makes repeat input ~10x cheaper.
             cache_control={"type": "ephemeral"},
