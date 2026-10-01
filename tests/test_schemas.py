@@ -146,3 +146,12 @@ def test_fact_evidence_is_one_to_three_quotes() -> None:
         make_fact(evidence=["a", "b", "c", "d"])
     with pytest.raises(ValidationError):
         make_fact(evidence=["x" * 501])
+
+
+def test_sender_example_file_is_valid() -> None:
+    from pathlib import Path
+
+    from app.schemas import load_sender
+
+    s = load_sender(Path(__file__).parent.parent / "sender.example.json")
+    assert s.outcomes and s.ask

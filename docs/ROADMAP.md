@@ -20,7 +20,7 @@ Progress log after every working session (what was built, what broke, what's nex
   no real eval run yet — needs API keys and verified golden facts)
 
 ## Week 3 — Rest of the chain
-- [ ] Pain point agent (sequential, evidence-based)
+- [x] Pain point agent (sequential, evidence-based) — unit-tested with fakes; no real run yet
 - [ ] Writer agent (email rules from CLAUDE.md)
 - [ ] Verifier + revise loop (max 2)
 - [ ] LLM-as-judge rubric for email quality in evals
@@ -141,3 +141,9 @@ Progress log after every working session (what was built, what broke, what's nex
   with a cap if model prices are unknown; skipped companies excluded from metrics. Caught
   a float bug (0.04+0.01+0.04+0.01 < 0.10). Session spend so far ≈ $0.67 estimated
   (≈$0.60 Anthropic + ≈$0.07 Exa). From now on: no real API calls without Moiz's OK.
+- 2026-10-02 — Step: pain point agent (`app/agents/painpoints/`). Added `Sender` schema +
+  `sender.example.json` (gap in CLAUDE.md: the writer's "one concrete outcome" needs real,
+  sender-provided outcomes; models may only use these). Pain points are framed as
+  hypotheses citing fact ids; code drops any that cite unknown ids and re-ranks. Shared
+  `app/agents/formatting.py` keeps fact quotes wrapped as untrusted data downstream.
+  109 tests. No API calls (Moiz's request). Moiz to provide a real sender profile.
