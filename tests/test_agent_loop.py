@@ -232,3 +232,46 @@ async def test_refused_or_truncated_turn_runs_no_tools(stop: str, expected: Stop
 async def test_finish_name_is_reserved() -> None:
     with pytest.raises(ValueError, match="reserved"):
         await run(FakeClient(), tools=[Tool(FINISH_TOOL_NAME, "d", AddInput, add)])
+
+
+# --- strict finish schema ---
+
+
+def test_finish_tool_is_strict_with_clean_schema() -> None:
+    from app.agents.loop import _finish_tool_schema
+    from app.schemas import ResearchReport
+
+    tool = _finish_tool_schema(ResearchReport)
+    assert tool["strict"] is True
+    dumped = str(tool["input_schema"])
+    for kw in ("minLength", "maxLength", "pattern", "minItems"):
+        assert kw not in dumped
+
+    def objects(node):
+        if isinstance(node, dict):
+            if node.get("type") == "object":
+                yield node
+            for v in node.values():
+                yield from objects(v)
+        elif isinstance(node, list):
+            for v in node:
+                yield from objects(v)
+
+    objs = list(objects(tool["input_schema"]))
+    assert objs and all(o["additionalProperties"] is False for o in objs)
+
+
+def test_strict_schema_keeps_structure() -> None:
+    from app.agents.loop import strict_schema
+
+    s = {
+        "type": "object",
+        "properties": {"a": {"type": "string", "minLength": 1, "enum": ["x"]}},
+        "required": ["a"],
+    }
+    assert strict_schema(s) == {
+        "type": "object",
+        "properties": {"a": {"type": "string", "enum": ["x"]}},
+        "required": ["a"],
+        "additionalProperties": False,
+    }

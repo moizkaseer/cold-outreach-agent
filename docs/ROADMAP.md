@@ -101,3 +101,18 @@ Progress log after every working session (what was built, what broke, what's nex
   golden facts; `--include-unverified` for dev runs. Loop gained `refusal_fallback` flag
   (off for the Haiku judge). 82 tests. NO real metrics yet.
   Next: add keys, run research_smoke on 1-2 companies, then a small eval run.
+- 2026-10-02 — First real runs (keys added). Loop smoke OK (prompt caching confirmed).
+  Research smoke on posthog.com: 27s, 4 turns, 8 grounded facts, ~$0.07 (my estimate from
+  token counts). Eval, 3 companies (posthog/stripe/deel), scored vs UNVERIFIED golden
+  facts — tiny sample, treat as indicative only:
+  - run 1 `evals/results/20261002-004931.json`: grounding 1.00, faithfulness 0.54,
+    coverage 0.25, 4.3 turns, ~$0.047/company. Bug: first `finish` failed in 3/3 runs
+    (model sent `facts` as a malformed string).
+  - fix: `strict: true` on `finish` (schema copy stripped of unsupported keywords; Pydantic
+    still enforces them) + prompt "one fact, one quote; quote must be self-explanatory".
+  - run 2 `evals/results/20261002-005112.json`: finish OK first try 3/3; 3.0 turns;
+    faithfulness 0.58 (within noise); grounding 0.68 because deel URLs had trailing
+    debris (`/','`) -> 8 facts correctly rejected. Added debris-tolerant lookup (cleaned URL
+    must still match a fetched page). Also caught one genuinely unfetched citation.
+  - Remaining issue: model merges details into claims beyond its single quote.
+    Next experiment: allow 1-3 verified quotes per fact, then re-measure.

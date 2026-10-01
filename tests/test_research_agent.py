@@ -168,3 +168,28 @@ def test_from_settings_requires_exa_key(monkeypatch: pytest.MonkeyPatch) -> None
 )
 def test_canonical_url(a: str, b: str) -> None:
     assert canonical_url(a) == canonical_url(b)
+
+
+def test_url_debris_is_cleaned_but_still_must_be_fetched() -> None:
+    from app.agents.research.agent import check_grounding
+    from app.schemas import Fact
+
+    page = "Acme now serves over 4,000 customers across Europe."
+    seen = {canonical_url("https://acme.com/blog/post/"): page}
+
+    def f(fid: str, url: str) -> Fact:
+        return Fact(
+            id=fid,
+            claim="c",
+            category="customers",
+            source_url=url,
+            evidence="serves over 4,000 customers",
+        )
+
+    kept, rejected = check_grounding(
+        [f("f1", "https://acme.com/blog/post/','"), f("f2", "https://acme.com/other/','")],
+        seen,
+    )
+    assert [k.id for k in kept] == ["f1"]
+    assert str(kept[0].source_url) == "https://acme.com/blog/post/"
+    assert [r.fact.id for r in rejected] == ["f2"]  # debris stripped, still not fetched

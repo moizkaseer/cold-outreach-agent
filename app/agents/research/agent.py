@@ -190,17 +190,39 @@ class ResearchAgent:
         return ResearchRun(report, agent, rejected, search_cost)
 
 
+# Formatting debris models sometimes leave on the end of a URL (seen in evals:
+# "https://acme.com/blog/post/','"). Only used as a fallback lookup, see below.
+_URL_DEBRIS = "'\",;)]} "
+
+
+def _find_fetched(url: str, seen_pages: dict[str, str]) -> tuple[str, str] | None:
+    """Return (url, page_text) for a cited URL, or None if it wasn't fetched this run.
+
+    Tries the URL as given first, then with trailing debris stripped. Either way the
+    result must exactly match a page fetched in this run, so grounding is not weakened.
+    """
+    for candidate in (url, url.rstrip(_URL_DEBRIS)):
+        page = seen_pages.get(canonical_url(candidate))
+        if page is not None:
+            return candidate, page
+    return None
+
+
 def check_grounding(
     facts: list[Fact], seen_pages: dict[str, str]
 ) -> tuple[list[Fact], list[RejectedFact]]:
     kept: list[Fact] = []
     rejected: list[RejectedFact] = []
     for f in facts:
-        page = seen_pages.get(canonical_url(str(f.source_url)))
-        if page is None:
+        found = _find_fetched(str(f.source_url), seen_pages)
+        if found is None:
             rejected.append(RejectedFact(f, "source_url was not fetched in this run"))
-        elif not quote_in_text(f.evidence, page):
+            continue
+        url, page = found
+        if not quote_in_text(f.evidence, page):
             rejected.append(RejectedFact(f, "evidence quote not found on the fetched page"))
-        else:
-            kept.append(f)
+            continue
+        if url != str(f.source_url):  # store the clean URL, not the debris
+            f = Fact.model_validate({**f.model_dump(), "source_url": url})
+        kept.append(f)
     return kept, rejected

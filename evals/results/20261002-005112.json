@@ -1,0 +1,794 @@
+{
+  "config": {
+    "git_commit": "94bc0e6",
+    "research_model": "claude-sonnet-5-5",
+    "judge_model": "claude-haiku-4-5-20251001",
+    "max_turns": 10,
+    "token_budget": 150000,
+    "include_unverified": true
+  },
+  "summary": {
+    "companies": 3,
+    "finished": 3,
+    "errors": 0,
+    "grounding": 0.679,
+    "faithfulness": 0.579,
+    "coverage": 0.25,
+    "avg_kept_facts": 6.3,
+    "avg_turns": 3,
+    "median_seconds": 24.6,
+    "avg_research_cost_usd": 0.0511,
+    "total_cost_usd": 0.1667
+  },
+  "results": [
+    {
+      "domain": "deel.com",
+      "finished": true,
+      "stop_reason": "finished",
+      "error": null,
+      "kept": 1,
+      "rejected": 8,
+      "faithful": 0,
+      "golden_total": 2,
+      "golden_covered": 0,
+      "turns": 3,
+      "seconds": 24.6,
+      "research_cost_usd": 0.0459737,
+      "judge_cost_usd": 0.00342,
+      "details": {
+        "tool_calls": [
+          {
+            "turn": 1,
+            "tool": "search",
+            "input": {
+              "query": "Deel news funding ARR launch 2025"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://www.deel.com/about"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://www.deel.com"
+            },
+            "error": false
+          },
+          {
+            "turn": 2,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://www.deel.com/blog/new-investment-valuation/"
+            },
+            "error": false
+          },
+          {
+            "turn": 2,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://www.deel.com/careers/"
+            },
+            "error": false
+          },
+          {
+            "turn": 3,
+            "tool": "finish",
+            "input": {
+              "domain": "deel.com",
+              "company_name": "Deel",
+              "summary": "Deel is a global HR, payroll and compliance platform founded by two MIT graduates. It announced a $300M Series E at a $17.3B valuation in October 2025 and has passed $1B ARR. It is expanding its own payroll infrastructure and AI products, and it has 248 open roles.",
+              "facts": [
+                {
+                  "id": "f1",
+                  "claim": "Deel announced a $300M Series E at a $17.3B valuation, co-led by new investor Ribbit Capital with Andreessen Horowitz and Coatue.",
+                  "category": "funding",
+                  "source_url": "https://www.deel.com/blog/new-investment-valuation/','",
+                  "evidence": "Today, Deel announced a $300 million Series E funding round, valuing the company at $17.3 billion."
+                },
+                {
+                  "id": "f2",
+                  "claim": "Deel surpassed $1B in ARR in 2025 and has had three consecutive years of profitability, including its first $100M revenue month in September.",
+                  "category": "news",
+                  "source_url": "https://www.deel.com/blog/new-investment-valuation/','",
+                  "evidence": "In September, we marked three consecutive years of profitability and a major milestone - our first $100 million revenue month."
+                },
+                {
+                  "id": "f3",
+                  "claim": "Deel plans to use the Series E to expand infrastructure, advance AI-powered payroll and HR products, and serve 100 million employees.",
+                  "category": "news",
+                  "source_url": "https://www.deel.com/blog/new-investment-valuation/','",
+                  "evidence": "we’ll double down on expanding our infrastructure, advancing AI-powered payroll and HR products, and laying the foundation to serve 100 million employees worldwide."
+                },
+                {
+                  "id": "f4",
+                  "claim": "Deel says multi-product adoption is rising: customers using four or more products are up 1,200%.",
+                  "category": "product",
+                  "source_url": "https://www.deel.com/blog/new-investment-valuation/','",
+                  "evidence": "we’ve seen a 480% increase in customers using three or more products and a 1,200% increase in those using four or more."
+                },
+                {
+                  "id": "f5",
+                  "claim": "Deel's HR products have grown 600% and Engage has grown 1,400% since early last year, and its US payroll and PEO products are up 1,500%.",
+                  "category": "product",
+                  "source_url": "https://www.deel.com/blog/new-investment-valuation/','",
+                  "evidence": "HR suite growth: Our HR products have grown by 600%, and Engage surged by 1,400%"
+                },
+                {
+                  "id": "f6",
+                  "claim": "Deel's own global payroll engine is live in 55+ countries. The company owns 250+ legal entities and targets real-time native payroll in 100+ countries by 2029.",
+                  "category": "tech",
+                  "source_url": "https://www.deel.com/blog/new-investment-valuation/','",
+                  "evidence": "We own 250+ legal entities, hold financial licenses in the US, Canada, the UK, and the EU, and are on track to reach real-time native payroll processing in 100+ countries by 2029."
+                },
+                {
+                  "id": "f7",
+                  "claim": "Deel's homepage says it is trusted by 40,000+ companies and supports payroll in 150+ countries.",
+                  "category": "customers",
+                  "source_url": "https://www.deel.com",
+                  "evidence": "Trusted by 40,000+ companies from startups to enterprise"
+                },
+                {
+                  "id": "f8",
+                  "claim": "Deel has 248 open positions across all teams.",
+                  "category": "hiring",
+                  "source_url": "https://www.deel.com/careers/','",
+                  "evidence": "248 open positions across all teams"
+                },
+                {
+                  "id": "f9",
+                  "claim": "Named Deel customers include Shopify, Nike and Klarna.",
+                  "category": "customers",
+                  "source_url": "https://www.deel.com/about','",
+                  "evidence": "has 35,000+ customers including Shopify, Nike, and Klarna."
+                }
+              ]
+            },
+            "error": false
+          }
+        ],
+        "rejected": [
+          {
+            "id": "f1",
+            "claim": "Deel announced a $300M Series E at a $17.3B valuation, co-led by new investor Ribbit Capital with Andreessen Horowitz and Coatue.",
+            "url": "https://www.deel.com/blog/new-investment-valuation/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f2",
+            "claim": "Deel surpassed $1B in ARR in 2025 and has had three consecutive years of profitability, including its first $100M revenue month in September.",
+            "url": "https://www.deel.com/blog/new-investment-valuation/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f3",
+            "claim": "Deel plans to use the Series E to expand infrastructure, advance AI-powered payroll and HR products, and serve 100 million employees.",
+            "url": "https://www.deel.com/blog/new-investment-valuation/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f4",
+            "claim": "Deel says multi-product adoption is rising: customers using four or more products are up 1,200%.",
+            "url": "https://www.deel.com/blog/new-investment-valuation/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f5",
+            "claim": "Deel's HR products have grown 600% and Engage has grown 1,400% since early last year, and its US payroll and PEO products are up 1,500%.",
+            "url": "https://www.deel.com/blog/new-investment-valuation/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f6",
+            "claim": "Deel's own global payroll engine is live in 55+ countries. The company owns 250+ legal entities and targets real-time native payroll in 100+ countries by 2029.",
+            "url": "https://www.deel.com/blog/new-investment-valuation/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f8",
+            "claim": "Deel has 248 open positions across all teams.",
+            "url": "https://www.deel.com/careers/','",
+            "reason": "source_url was not fetched in this run"
+          },
+          {
+            "id": "f9",
+            "claim": "Named Deel customers include Shopify, Nike and Klarna.",
+            "url": "https://www.deel.com/about','",
+            "reason": "source_url was not fetched in this run"
+          }
+        ],
+        "usage": {
+          "input_tokens": 8,
+          "output_tokens": 1611,
+          "cache_read_input_tokens": 8101,
+          "cache_creation_input_tokens": 8491
+        },
+        "facts": [
+          {
+            "id": "f7",
+            "claim": "Deel's homepage says it is trusted by 40,000+ companies and supports payroll in 150+ countries.",
+            "url": "https://www.deel.com/",
+            "evidence": "Trusted by 40,000+ companies from startups to enterprise"
+          }
+        ],
+        "judge": {
+          "facts": [
+            {
+              "fact_id": "f7",
+              "faithful": false,
+              "reason": "The claim adds 'supports payroll in 150+ countries' which is not supported by the provided quote."
+            }
+          ],
+          "golden": [
+            {
+              "golden_id": "g1",
+              "covered": false,
+              "matched_fact_ids": [],
+              "reason": "While f7 mentions 40,000+ companies, f7 is unfaithful and thus cannot reliably cover this golden fact."
+            },
+            {
+              "golden_id": "g2",
+              "covered": false,
+              "matched_fact_ids": [],
+              "reason": "No agent facts provide information about Deel's co-founders."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "domain": "posthog.com",
+      "finished": true,
+      "stop_reason": "finished",
+      "error": null,
+      "kept": 8,
+      "rejected": 1,
+      "faithful": 4,
+      "golden_total": 4,
+      "golden_covered": 1,
+      "turns": 3,
+      "seconds": 22.7,
+      "research_cost_usd": 0.0526354,
+      "judge_cost_usd": 0.004855,
+      "details": {
+        "tool_calls": [
+          {
+            "turn": 1,
+            "tool": "search",
+            "input": {
+              "query": "PostHog funding announcement 2025"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://posthog.com/about"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://posthog.com/careers"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://posthog.com"
+            },
+            "error": false
+          },
+          {
+            "turn": 2,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://posthog.com/blog/series-e"
+            },
+            "error": false
+          },
+          {
+            "turn": 3,
+            "tool": "finish",
+            "input": {
+              "domain": "posthog.com",
+              "company_name": "PostHog",
+              "summary": "PostHog is an open-source product and data platform for engineers, used by 500,000+ teams, and it grows mainly through inbound and reputation rather than outbound sales. It raised a $75M Series E at a $1.4B valuation in September 2025 and is moving toward AI-driven \"self-driving\" product tooling. It has a dedicated Growth team and is hiring.",
+              "facts": [
+                {
+                  "id": "f1",
+                  "claim": "PostHog raised a $75M Series E at a $1.4B valuation, led by Peak XV Partners (announced Sep 29, 2025).",
+                  "category": "funding",
+                  "source_url": "https://posthog.com/blog/series-e",
+                  "evidence": "We raised a Series E – $75M at $1.4Bn, led by Peak XV Partners with significant participation from existing investors."
+                },
+                {
+                  "id": "f2",
+                  "claim": "PostHog calls its next phase 'Act 2': going deeper into being a devtool and generating pull requests automatically for engineers.",
+                  "category": "product",
+                  "source_url": "https://posthog.com/blog/series-e",
+                  "evidence": "We are starting Act 2 of PostHog. We are going deeper into being a devtool, not \"just\" analytics."
+                },
+                {
+                  "id": "f3",
+                  "claim": "PostHog says it is used by 500,000+ teams, and 65% of every Y Combinator batch use its products.",
+                  "category": "customers",
+                  "source_url": "https://posthog.com/about",
+                  "evidence": "65% of every Y Combinator batch (the world's best accelerator for startups) use our products."
+                },
+                {
+                  "id": "f4",
+                  "claim": "PostHog says it grows via reputation on the internet rather than salespeople, and runs an inbound-led sales model.",
+                  "category": "other",
+                  "source_url": "https://posthog.com/about",
+                  "evidence": "we grow because of our reputation on the internet, whereas every single competitor grows by salespeople."
+                },
+                {
+                  "id": "f5",
+                  "claim": "PostHog positions itself as the 'product's context layer' that ingests analytics, errors, replays and business data so engineers and agents can query and act on it.",
+                  "category": "product",
+                  "source_url": "https://posthog.com",
+                  "evidence": "PostHog ingests and stores your analytics, errors, replays, and business data so you and your agents can query and act on it."
+                },
+                {
+                  "id": "f6",
+                  "claim": "98% of PostHog customers use it for free; all paid products are pay-per-use with free tiers.",
+                  "category": "product",
+                  "source_url": "https://posthog.com",
+                  "evidence": "In fact, 98% of our customers use PostHog for free."
+                },
+                {
+                  "id": "f7",
+                  "claim": "PostHog states revenue is over $50 million a year and it is 'default alive'.",
+                  "category": "other",
+                  "source_url": "https://posthog.com/careers",
+                  "evidence": "Our revenue is over $50 million a year"
+                },
+                {
+                  "id": "f8",
+                  "claim": "PostHog has 230+ employees organised in small teams (including Growth, Demand Gen, Onboarding), and is looking to add 8 team members.",
+                  "category": "hiring",
+                  "source_url": "https://posthog.com/careers",
+                  "evidence": "Our small teams are looking to add 8 team members."
+                },
+                {
+                  "id": "f9",
+                  "claim": "PostHog raised $70M at a $920M valuation led by Stripe in June 2025.",
+                  "category": "funding",
+                  "source_url": "https://posthog.com/blog/series-d",
+                  "evidence": "We've raised $70m in primary capital at a \"unicorn adjacent\" valuation of $920M, led by Stripe"
+                }
+              ]
+            },
+            "error": false
+          }
+        ],
+        "rejected": [
+          {
+            "id": "f9",
+            "claim": "PostHog raised $70M at a $920M valuation led by Stripe in June 2025.",
+            "url": "https://posthog.com/blog/series-d",
+            "reason": "source_url was not fetched in this run"
+          }
+        ],
+        "usage": {
+          "input_tokens": 8,
+          "output_tokens": 1497,
+          "cache_read_input_tokens": 12147,
+          "cache_creation_input_tokens": 11288
+        },
+        "facts": [
+          {
+            "id": "f1",
+            "claim": "PostHog raised a $75M Series E at a $1.4B valuation, led by Peak XV Partners (announced Sep 29, 2025).",
+            "url": "https://posthog.com/blog/series-e",
+            "evidence": "We raised a Series E – $75M at $1.4Bn, led by Peak XV Partners with significant participation from existing investors."
+          },
+          {
+            "id": "f2",
+            "claim": "PostHog calls its next phase 'Act 2': going deeper into being a devtool and generating pull requests automatically for engineers.",
+            "url": "https://posthog.com/blog/series-e",
+            "evidence": "We are starting Act 2 of PostHog. We are going deeper into being a devtool, not \"just\" analytics."
+          },
+          {
+            "id": "f3",
+            "claim": "PostHog says it is used by 500,000+ teams, and 65% of every Y Combinator batch use its products.",
+            "url": "https://posthog.com/about",
+            "evidence": "65% of every Y Combinator batch (the world's best accelerator for startups) use our products."
+          },
+          {
+            "id": "f4",
+            "claim": "PostHog says it grows via reputation on the internet rather than salespeople, and runs an inbound-led sales model.",
+            "url": "https://posthog.com/about",
+            "evidence": "we grow because of our reputation on the internet, whereas every single competitor grows by salespeople."
+          },
+          {
+            "id": "f5",
+            "claim": "PostHog positions itself as the 'product's context layer' that ingests analytics, errors, replays and business data so engineers and agents can query and act on it.",
+            "url": "https://posthog.com/",
+            "evidence": "PostHog ingests and stores your analytics, errors, replays, and business data so you and your agents can query and act on it."
+          },
+          {
+            "id": "f6",
+            "claim": "98% of PostHog customers use it for free; all paid products are pay-per-use with free tiers.",
+            "url": "https://posthog.com/",
+            "evidence": "In fact, 98% of our customers use PostHog for free."
+          },
+          {
+            "id": "f7",
+            "claim": "PostHog states revenue is over $50 million a year and it is 'default alive'.",
+            "url": "https://posthog.com/careers",
+            "evidence": "Our revenue is over $50 million a year"
+          },
+          {
+            "id": "f8",
+            "claim": "PostHog has 230+ employees organised in small teams (including Growth, Demand Gen, Onboarding), and is looking to add 8 team members.",
+            "url": "https://posthog.com/careers",
+            "evidence": "Our small teams are looking to add 8 team members."
+          }
+        ],
+        "judge": {
+          "facts": [
+            {
+              "fact_id": "f1",
+              "faithful": true,
+              "reason": "The claim accurately matches the quote about the Series E funding."
+            },
+            {
+              "fact_id": "f2",
+              "faithful": false,
+              "reason": "The quote only mentions 'going deeper into being a devtool' but does not mention 'generating pull requests automatically for engineers'."
+            },
+            {
+              "fact_id": "f3",
+              "faithful": false,
+              "reason": "The claim states PostHog is 'used by 500,000+ teams' but the quote only mentions '65% of every Y Combinator batch use our products', omitting the 500,000 figure."
+            },
+            {
+              "fact_id": "f4",
+              "faithful": true,
+              "reason": "The claim accurately reflects the quote about growing through reputation rather than salespeople."
+            },
+            {
+              "fact_id": "f5",
+              "faithful": true,
+              "reason": "The claim accurately matches the quote's description of PostHog's data ingestion and querying capabilities."
+            },
+            {
+              "fact_id": "f6",
+              "faithful": false,
+              "reason": "The quote states '98% of our customers use PostHog for free' but does not mention that 'all paid products are pay-per-use with free tiers'."
+            },
+            {
+              "fact_id": "f7",
+              "faithful": true,
+              "reason": "The claim accurately quotes the revenue figure, though 'default alive' is not in the provided quote."
+            },
+            {
+              "fact_id": "f8",
+              "faithful": false,
+              "reason": "The quote mentions 'looking to add 8 team members' but does not state there are '230+ employees' or describe specific team names."
+            }
+          ],
+          "golden": [
+            {
+              "golden_id": "g1",
+              "covered": false,
+              "matched_fact_ids": [],
+              "reason": "No agent facts mention Hacker News, MVP launch, or 2020."
+            },
+            {
+              "golden_id": "g2",
+              "covered": true,
+              "matched_fact_ids": [
+                "f3"
+              ],
+              "reason": "Agent fact f3 mentions the 500,000+ teams figure."
+            },
+            {
+              "golden_id": "g3",
+              "covered": false,
+              "matched_fact_ids": [],
+              "reason": "No agent facts mention open source codebase."
+            },
+            {
+              "golden_id": "g4",
+              "covered": false,
+              "matched_fact_ids": [],
+              "reason": "No agent facts mention layoffs policy."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "domain": "stripe.com",
+      "finished": true,
+      "stop_reason": "finished",
+      "error": null,
+      "kept": 10,
+      "rejected": 0,
+      "faithful": 7,
+      "golden_total": 2,
+      "golden_covered": 1,
+      "turns": 3,
+      "seconds": 27.6,
+      "research_cost_usd": 0.0545449,
+      "judge_cost_usd": 0.005276,
+      "details": {
+        "tool_calls": [
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://stripe.com/about"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://stripe.com"
+            },
+            "error": false
+          },
+          {
+            "turn": 1,
+            "tool": "search",
+            "input": {
+              "query": "Stripe announces 2025 launch"
+            },
+            "error": false
+          },
+          {
+            "turn": 2,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://stripe.com/newsroom/news/agentic-commerce-suite"
+            },
+            "error": false
+          },
+          {
+            "turn": 2,
+            "tool": "fetch_page",
+            "input": {
+              "url": "https://stripe.com/newsroom/news/sessions-2025"
+            },
+            "error": false
+          },
+          {
+            "turn": 3,
+            "tool": "finish",
+            "input": {
+              "domain": "stripe.com",
+              "company_name": "Stripe",
+              "summary": "Stripe is programmable financial infrastructure used by more than 5 million businesses, with $1.9T processed in 2025. Its recent focus is AI and stablecoins, including the Agentic Commerce Protocol and Agentic Commerce Suite, a Payments Foundation Model, and stablecoin accounts in Treasury.",
+              "facts": [
+                {
+                  "id": "f1",
+                  "claim": "More than 5 million businesses build on Stripe.",
+                  "category": "customers",
+                  "source_url": "https://stripe.com/about",
+                  "evidence": "More than 5 million businesses build on Stripe, spanning the economic frontier—from solo founders to established enterprises—united by a practical focus on growth."
+                },
+                {
+                  "id": "f2",
+                  "claim": "Businesses on Stripe generated $1.9T in 2025, as highlighted in Stripe's annual letter.",
+                  "category": "news",
+                  "source_url": "https://stripe.com",
+                  "evidence": "Businesses on Stripe generated $1.9T in 2025."
+                },
+                {
+                  "id": "f3",
+                  "claim": "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B with 99.9999% uptime.",
+                  "category": "news",
+                  "source_url": "https://stripe.com",
+                  "evidence": "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B for businesses while maintaining a 99.9999% uptime."
+                },
+                {
+                  "id": "f4",
+                  "claim": "In December 2025 Stripe launched the Agentic Commerce Suite, letting businesses sell across multiple AI agents with a single integration.",
+                  "category": "product",
+                  "source_url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
+                  "evidence": "Agentic Commerce Suite removes that complexity with a low-code solution for businesses, letting them sell across AI agents with a single integration."
+                },
+                {
+                  "id": "f5",
+                  "claim": "Agentic Commerce Suite users include Coach, Kate Spade, URBN, Revolve, Ashley Furniture, and platforms such as Squarespace, Wix, Etsy and BigCommerce.",
+                  "category": "customers",
+                  "source_url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
+                  "evidence": "Businesses including Coach, Kate Spade, URBN (including Anthropologie, Free People, and Urban Outfitters), Revolve, Ashley Furniture, Halara, ABT Electronics, and Nectar"
+                },
+                {
+                  "id": "f6",
+                  "claim": "At Sessions 2025, Stripe unveiled what it calls the world's first AI foundation model for payments, trained on tens of billions of transactions.",
+                  "category": "product",
+                  "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+                  "evidence": "Stripe’s Payments Foundation Model is trained on tens of billions of transactions, and captures hundreds of subtle signals about each payment that specialized models can’t."
+                },
+                {
+                  "id": "f7",
+                  "claim": "The new foundation model raised Stripe's detection rate for card testing attacks on large businesses by 64% practically overnight.",
+                  "category": "product",
+                  "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+                  "evidence": "By applying the new foundation model, Stripe increased its detection rate for attacks on large businesses by 64% practically overnight."
+                },
+                {
+                  "id": "f8",
+                  "claim": "Stripe added 25 new payment methods (including UPI and PIX) in 2025, bringing its total to over 125.",
+                  "category": "product",
+                  "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+                  "evidence": "Support for 25 new payment methods, including UPI and PIX, bringing its total to over 125 payment methods."
+                },
+                {
+                  "id": "f9",
+                  "claim": "NVIDIA migrated its GeForce Now subscriber base to Stripe Billing in six weeks, the fastest-ever migration to Stripe Billing.",
+                  "category": "customers",
+                  "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+                  "evidence": "NVIDIA migrated their entire subscriber base to Stripe Billing in just six weeks, making it the fastest-ever migration to Stripe Billing."
+                },
+                {
+                  "id": "f10",
+                  "claim": "Stripe launched Orchestration to help businesses manage and optimize performance across multiple payment providers from the Stripe Dashboard.",
+                  "category": "product",
+                  "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+                  "evidence": "Stripe launched Orchestration, which helps businesses set up, manage, and optimize performance across multiple payment providers—all from the Stripe Dashboard."
+                }
+              ]
+            },
+            "error": false
+          }
+        ],
+        "rejected": [],
+        "usage": {
+          "input_tokens": 8,
+          "output_tokens": 1916,
+          "cache_read_input_tokens": 8832,
+          "cache_creation_input_tokens": 10641
+        },
+        "facts": [
+          {
+            "id": "f1",
+            "claim": "More than 5 million businesses build on Stripe.",
+            "url": "https://stripe.com/about",
+            "evidence": "More than 5 million businesses build on Stripe, spanning the economic frontier—from solo founders to established enterprises—united by a practical focus on growth."
+          },
+          {
+            "id": "f2",
+            "claim": "Businesses on Stripe generated $1.9T in 2025, as highlighted in Stripe's annual letter.",
+            "url": "https://stripe.com/",
+            "evidence": "Businesses on Stripe generated $1.9T in 2025."
+          },
+          {
+            "id": "f3",
+            "claim": "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B with 99.9999% uptime.",
+            "url": "https://stripe.com/",
+            "evidence": "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B for businesses while maintaining a 99.9999% uptime."
+          },
+          {
+            "id": "f4",
+            "claim": "In December 2025 Stripe launched the Agentic Commerce Suite, letting businesses sell across multiple AI agents with a single integration.",
+            "url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
+            "evidence": "Agentic Commerce Suite removes that complexity with a low-code solution for businesses, letting them sell across AI agents with a single integration."
+          },
+          {
+            "id": "f5",
+            "claim": "Agentic Commerce Suite users include Coach, Kate Spade, URBN, Revolve, Ashley Furniture, and platforms such as Squarespace, Wix, Etsy and BigCommerce.",
+            "url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
+            "evidence": "Businesses including Coach, Kate Spade, URBN (including Anthropologie, Free People, and Urban Outfitters), Revolve, Ashley Furniture, Halara, ABT Electronics, and Nectar"
+          },
+          {
+            "id": "f6",
+            "claim": "At Sessions 2025, Stripe unveiled what it calls the world's first AI foundation model for payments, trained on tens of billions of transactions.",
+            "url": "https://stripe.com/newsroom/news/sessions-2025",
+            "evidence": "Stripe’s Payments Foundation Model is trained on tens of billions of transactions, and captures hundreds of subtle signals about each payment that specialized models can’t."
+          },
+          {
+            "id": "f7",
+            "claim": "The new foundation model raised Stripe's detection rate for card testing attacks on large businesses by 64% practically overnight.",
+            "url": "https://stripe.com/newsroom/news/sessions-2025",
+            "evidence": "By applying the new foundation model, Stripe increased its detection rate for attacks on large businesses by 64% practically overnight."
+          },
+          {
+            "id": "f8",
+            "claim": "Stripe added 25 new payment methods (including UPI and PIX) in 2025, bringing its total to over 125.",
+            "url": "https://stripe.com/newsroom/news/sessions-2025",
+            "evidence": "Support for 25 new payment methods, including UPI and PIX, bringing its total to over 125 payment methods."
+          },
+          {
+            "id": "f9",
+            "claim": "NVIDIA migrated its GeForce Now subscriber base to Stripe Billing in six weeks, the fastest-ever migration to Stripe Billing.",
+            "url": "https://stripe.com/newsroom/news/sessions-2025",
+            "evidence": "NVIDIA migrated their entire subscriber base to Stripe Billing in just six weeks, making it the fastest-ever migration to Stripe Billing."
+          },
+          {
+            "id": "f10",
+            "claim": "Stripe launched Orchestration to help businesses manage and optimize performance across multiple payment providers from the Stripe Dashboard.",
+            "url": "https://stripe.com/newsroom/news/sessions-2025",
+            "evidence": "Stripe launched Orchestration, which helps businesses set up, manage, and optimize performance across multiple payment providers—all from the Stripe Dashboard."
+          }
+        ],
+        "judge": {
+          "facts": [
+            {
+              "fact_id": "f1",
+              "faithful": true,
+              "reason": "The claim directly matches the quote's statement about more than 5 million businesses building on Stripe."
+            },
+            {
+              "fact_id": "f2",
+              "faithful": true,
+              "reason": "The quote states 'Businesses on Stripe generated $1.9T in 2025' which matches the claim."
+            },
+            {
+              "fact_id": "f3",
+              "faithful": true,
+              "reason": "The claim accurately reflects the quote about processing over $40B with 99.9999% uptime during that period."
+            },
+            {
+              "fact_id": "f4",
+              "faithful": false,
+              "reason": "The claim specifies 'In December 2025 Stripe launched' but the quote only mentions the suite's features without stating the launch date."
+            },
+            {
+              "fact_id": "f5",
+              "faithful": false,
+              "reason": "The claim includes 'platforms such as Squarespace, Wix, Etsy and BigCommerce' but the quote only lists individual businesses, not these platforms."
+            },
+            {
+              "fact_id": "f6",
+              "faithful": false,
+              "reason": "The quote doesn't state this was unveiled 'at Sessions 2025' or call it 'the world's first AI foundation model for payments'—it only describes the model's training."
+            },
+            {
+              "fact_id": "f7",
+              "faithful": true,
+              "reason": "The claim accurately reflects the quote about the 64% increase in detection rate for attacks on large businesses."
+            },
+            {
+              "fact_id": "f8",
+              "faithful": true,
+              "reason": "The claim matches the quote about adding 25 new payment methods and bringing the total to over 125."
+            },
+            {
+              "fact_id": "f9",
+              "faithful": true,
+              "reason": "The claim accurately reflects the quote about NVIDIA's migration in six weeks being the fastest-ever to Stripe Billing."
+            },
+            {
+              "fact_id": "f10",
+              "faithful": true,
+              "reason": "The claim accurately reflects the quote about Orchestration helping businesses manage multiple payment providers from the Dashboard."
+            }
+          ],
+          "golden": [
+            {
+              "golden_id": "g1",
+              "covered": true,
+              "matched_fact_ids": [],
+              "reason": "Agent fact f1 directly states 'More than 5 million businesses build on Stripe' matching this golden fact exactly."
+            },
+            {
+              "golden_id": "g2",
+              "covered": false,
+              "matched_fact_ids": [],
+              "reason": "Agent fact f2 states $1.9T in 2025 but lacks the comparison to global GDP (1.7%) that the golden fact requires."
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

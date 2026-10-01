@@ -119,6 +119,28 @@ class AgentResult[T: BaseModel]:
         return self.stop_reason is StopReason.FINISHED
 
 
+# JSON Schema keywords strict tool use doesn't support. Stripping them from the schema we
+# SEND is safe: Pydantic still enforces every one of them when validating the result.
+_STRICT_UNSUPPORTED = {
+    "minLength", "maxLength", "pattern",
+    "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf",
+    "minItems", "maxItems", "uniqueItems",
+}  # fmt: skip
+
+
+def strict_schema(schema: Any) -> Any:
+    """Make a Pydantic JSON schema acceptable for `strict: true` tools: drop unsupported
+    constraints and close every object (additionalProperties: false)."""
+    if isinstance(schema, dict):
+        out = {k: strict_schema(v) for k, v in schema.items() if k not in _STRICT_UNSUPPORTED}
+        if out.get("type") == "object":
+            out["additionalProperties"] = False
+        return out
+    if isinstance(schema, list):
+        return [strict_schema(v) for v in schema]
+    return schema
+
+
 def _finish_tool_schema(output_model: type[BaseModel]) -> dict[str, Any]:
     return {
         "name": FINISH_TOOL_NAME,
@@ -126,7 +148,10 @@ def _finish_tool_schema(output_model: type[BaseModel]) -> dict[str, Any]:
             "Submit your final answer and end the task. Call this exactly once, only when "
             "you are done. The input must match the schema exactly."
         ),
-        "input_schema": output_model.model_json_schema(),
+        # strict: the API constrains generation to the schema. Without it, models sometimes
+        # emit large nested arguments (a list of facts) as a malformed string.
+        "strict": True,
+        "input_schema": strict_schema(output_model.model_json_schema()),
     }
 
 
