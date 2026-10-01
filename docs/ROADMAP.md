@@ -13,7 +13,8 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 2 — Research agent
 - [ ] Tools: `search` (behind interface), `fetch_page` (httpx + trafilatura), `finish`
-  (`fetch_page` core + `finish` done early: `app/tools/fetch.py`, `app/agents/loop.py`)
+  (`search` = Exa behind `SearchProvider` in `app/tools/search.py`; `fetch_page` and
+  `finish` done earlier — research agent wiring next)
 - [ ] Research agent returns cited `ResearchReport`
 - [ ] `evals/run_evals.py`: fact accuracy + citation validity vs golden set
 
@@ -79,3 +80,7 @@ Progress log after every working session (what was built, what broke, what's nex
   403 our fetcher, JS-rendered numbers vanish (GitLab), pages contradict themselves (Deel),
   About pages embed stale third-party press (Wise). 56 tests passing.
   Next: Moiz verifies facts; then Week 2 (search tool + research agent + run_evals.py).
+- 2026-10-02 — Step 5: `app/tools/search.py` — `SearchProvider` protocol + `ExaSearch`
+  (REST via httpx, checked against Exa docs; returns provider cost for tracing). Search
+  results are discovery-only; facts must cite fetched pages. `EXA_API_KEY` optional in
+  config. 63 tests passing. Not yet run against real Exa (no key yet).

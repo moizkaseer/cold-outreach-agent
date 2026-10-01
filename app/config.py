@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     model_smart: str = "claude-sonnet-5-5"
     model_fast: str = "claude-haiku-4-5-20251001"
 
+    # --- Search (Exa). Optional so unit tests and non-search code run without it;
+    # the research agent fails fast if it's missing.
+    exa_api_key: SecretStr | None = None
+
     # --- Research agent budget (hard limits on the autonomous loop) ---
     research_max_turns: int = Field(default=10, ge=1, le=30)
     research_max_tokens: int = Field(default=60_000, ge=1_000)
