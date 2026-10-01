@@ -1,7 +1,7 @@
 """Alembic environment (async).
 
 URL precedence: an explicit `sqlalchemy.url` set by the caller (tests do this), else
-DATABASE_URL from env/.env via DatabaseSettings — which needs no API keys.
+DATABASE_URL from env/.env via InfraSettings — which needs no API keys.
 """
 
 import asyncio
@@ -11,7 +11,7 @@ from alembic import context
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from app.config import DatabaseSettings
+from app.config import InfraSettings
 from app.db.models import Base
 
 config = context.config
@@ -22,7 +22,7 @@ target_metadata = Base.metadata
 
 
 def database_url() -> str:
-    return config.get_main_option("sqlalchemy.url") or DatabaseSettings().database_url
+    return config.get_main_option("sqlalchemy.url") or InfraSettings().database_url
 
 
 def run_migrations_offline() -> None:

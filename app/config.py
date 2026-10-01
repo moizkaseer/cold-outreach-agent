@@ -10,8 +10,8 @@ from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class DatabaseSettings(BaseSettings):
-    """Just the database URL, so migrations can run without any API keys."""
+class InfraSettings(BaseSettings):
+    """Database + Redis URLs only, so migrations and worker setup need no API keys."""
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -23,8 +23,11 @@ class DatabaseSettings(BaseSettings):
     # postgresql+asyncpg://user:pass@host:5432/postgres (Supabase).
     database_url: str = "sqlite+aiosqlite:///./dev.db"
 
+    # Arq job queue. Production: the managed Redis URL from Railway/Render/Fly.
+    redis_url: str = "redis://localhost:6379"
 
-class Settings(DatabaseSettings):
+
+class Settings(InfraSettings):
     # --- Anthropic ---
     # SecretStr keeps the key out of logs/reprs; call .get_secret_value() to use it.
     anthropic_api_key: SecretStr

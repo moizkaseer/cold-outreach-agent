@@ -29,7 +29,7 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — tested on
   SQLite only; must run `alembic upgrade head` against Supabase before deploy
 - [x] Orchestrator state machine with resume-from-failed-step (fakes + SQLite; no real run yet)
-- [ ] Redis + Arq worker
+- [x] Redis + Arq worker (job + enqueue tested with fakes; no real Redis run yet)
 - [ ] FastAPI: create run, get run, SSE progress stream
 
 ## Week 5 — Production hardening
@@ -201,3 +201,10 @@ Progress log after every working session (what was built, what broke, what's nex
   are cached). Draft saves an `emails` row (verified / needs_human) for human review.
   `StepFailed(cost_usd=...)` records money spent before a failure (closes 2a gap).
   170 tests. Next: Redis + Arq worker, then FastAPI + SSE.
+- 2026-10-02 — Week 4 step 3: Arq worker (`app/workers/worker.py`: job = orchestrator
+  .execute(run_id); job_timeout 600s, max_jobs 4, max_tries 1 because failures are
+  persisted and resumed explicitly) + `app/workers/queue.py` (deterministic job ids make
+  enqueue idempotent: double-clicks can't start a run twice). `InfraSettings` (DB + Redis
+  URLs, no API keys) replaces DatabaseSettings. 173 tests. Redis isn't installed locally,
+  so no real queue round-trip yet. Run: `uv run arq app.workers.worker.WorkerSettings`.
+  Next: FastAPI (create run, get run, SSE progress, resume).
