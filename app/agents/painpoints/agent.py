@@ -48,6 +48,7 @@ class PainPointAgent:
         if not report.facts:
             raise ValueError("cannot infer pain points from a report with no facts")
         agent = await run_agent_loop(
+            name="painpoints",
             client=self._client,
             model=self._model,
             system=SYSTEM_PROMPT,

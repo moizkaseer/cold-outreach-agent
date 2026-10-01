@@ -33,8 +33,8 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] FastAPI: create run, get run, SSE progress stream (+ resume) — in-process tests; no auth yet
 
 ## Week 5 — Production hardening
-- [ ] Tracing (Langfuse or Logfire) with cost per run
-- [ ] Per-domain research cache, prompt caching, model routing
+- [x] Tracing (Langfuse or Logfire) with cost per run — Logfire; tested in-memory, no account yet
+- [x] Per-domain research cache, prompt caching, model routing (cache: Week 4 step 2b; prompt caching: loop; routing: Sonnet research/writing, Haiku scoring/verification)
 - [ ] Prompt-injection test pages in evals
 
 ## Week 6 — Ship the demo
@@ -218,3 +218,11 @@ Progress log after every working session (what was built, what broke, what's nex
   WEEK 4 CODE COMPLETE — but never run end-to-end for real (no Redis locally, no Postgres
   run, no real LLM calls since the user paused API spend). No auth/rate limits: not
   deployable publicly until Week 6.
+- 2026-10-02 — Week 5 step 1: tracing with Logfire (`app/observability.py`), chosen over
+  Langfuse: OpenTelemetry-based (not vendor-locked), covers API + worker, sends nothing
+  without a token. Spans: pipeline run -> step -> agent -> llm call / tool, metadata only
+  (model, turn, stop reason, tokens, estimated cost, tool name, error flag). Prompts and
+  page text deliberately NOT traced (a test asserts canary strings never appear); that's
+  why logfire.instrument_anthropic isn't used. Setup in worker, API (+ FastAPI request
+  spans) and eval runners; LOGFIRE_TOKEN optional. Moved `Usage` to `app/agents/usage.py`
+  to break a pricing<->loop import cycle. 186 tests. Next: prompt-injection eval pages.

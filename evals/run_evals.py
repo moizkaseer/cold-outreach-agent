@@ -33,6 +33,7 @@ import anthropic
 
 from app.agents.research import ResearchAgent, ResearchRun
 from app.config import get_settings
+from app.observability import setup_tracing
 from app.pricing import PRICES, estimate_cost_usd
 from app.schemas import Lead, ResearchReport
 from app.spend import SpendTracker, run_capped
@@ -211,6 +212,7 @@ def _git_commit() -> str | None:
 
 async def main(args: argparse.Namespace) -> None:
     s = get_settings()
+    setup_tracing("outreach-evals", s.logfire_token)
     judge_model = args.judge_model or s.model_fast
     companies = load_golden_set()
     if args.domains:

@@ -17,6 +17,7 @@ from arq.connections import RedisSettings
 
 from app.config import InfraSettings, get_settings
 from app.db.session import make_engine, make_sessionmaker
+from app.observability import setup_tracing
 from app.pipeline.factory import build_orchestrator
 
 JOB_TIMEOUT_S = 600  # a full pipeline incl. 2 revisions; well above the expected 1-4 min
@@ -25,6 +26,7 @@ MAX_JOBS = 4  # concurrent pipelines per worker: keeps API rate limits and spend
 
 async def startup(ctx: dict[str, Any]) -> None:
     settings = get_settings()
+    setup_tracing("outreach-worker", settings.logfire_token)
     engine = make_engine(settings.database_url)
     ctx["engine"] = engine
     ctx["orchestrator"] = build_orchestrator(settings, make_sessionmaker(engine))

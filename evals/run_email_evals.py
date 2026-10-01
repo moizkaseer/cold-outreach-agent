@@ -32,6 +32,7 @@ from app.agents.research import ResearchAgent, ResearchRun
 from app.agents.verifier import VerifierAgent
 from app.agents.writer import WriterAgent
 from app.config import get_settings
+from app.observability import setup_tracing
 from app.pricing import PRICES, total_cost_usd
 from app.schemas import Email, Lead, PainPoint, ResearchReport, Sender, load_sender
 from app.spend import SpendTracker, run_capped
@@ -149,6 +150,7 @@ def summarize_emails(results: list[EmailEvalResult]) -> dict[str, Any]:
 
 async def main(args: argparse.Namespace) -> None:
     s = get_settings()
+    setup_tracing("outreach-email-evals", s.logfire_token)
     if not args.sender.exists():
         raise SystemExit(
             f"{args.sender} not found. Copy sender.example.json to sender.json and fill in "

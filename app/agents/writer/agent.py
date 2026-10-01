@@ -68,6 +68,7 @@ class WriterAgent:
             )
 
         agent = await run_agent_loop(
+            name="writer",
             client=self._client,
             model=self._model,
             system=SYSTEM_PROMPT,

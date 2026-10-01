@@ -26,6 +26,9 @@ class InfraSettings(BaseSettings):
     # Arq job queue. Production: the managed Redis URL from Railway/Render/Fly.
     redis_url: str = "redis://localhost:6379"
 
+    # Tracing (Logfire). Unset = traces stay in-process; nothing is sent anywhere.
+    logfire_token: SecretStr | None = None
+
 
 class Settings(InfraSettings):
     # --- Anthropic ---

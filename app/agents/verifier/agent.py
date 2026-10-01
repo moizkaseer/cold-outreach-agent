@@ -74,6 +74,7 @@ class VerifierAgent:
     async def verify(self, email: Email, report: ResearchReport, sender: Sender) -> VerifyRun:
         outcomes = "\n".join(f"{i}. {o}" for i, o in enumerate(sender.outcomes, 1))
         agent = await run_agent_loop(
+            name="verifier",
             client=self._client,
             model=self._model,
             system=SYSTEM_PROMPT,

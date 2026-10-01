@@ -22,6 +22,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
+import logfire
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ValidationError
@@ -149,9 +150,12 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
 
         from app.config import get_settings
         from app.db.session import make_engine, make_sessionmaker
+        from app.observability import setup_tracing
         from app.workers.queue import enqueue_run
 
         s = get_settings()
+        setup_tracing("outreach-api", s.logfire_token)
+        logfire.instrument_fastapi(app)  # request spans; agent spans come from the worker
         engine = make_engine(s.database_url)
         redis = await create_pool(RedisSettings.from_dsn(s.redis_url))
         sender = await asyncio.to_thread(_load_sender_if_present, Path("sender.json"))

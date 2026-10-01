@@ -6,8 +6,9 @@ table when prices change; unknown models return None rather than a guessed numbe
 """
 
 from collections.abc import Iterable
+from typing import Protocol
 
-from app.agents.loop import AgentResult, Usage
+from app.agents.usage import Usage
 
 # model id -> (input $/MTok, output $/MTok)
 PRICES: dict[str, tuple[float, float]] = {
@@ -34,7 +35,12 @@ def estimate_cost_usd(model: str, usage: Usage) -> float | None:
     return total / 1_000_000
 
 
-def total_cost_usd(results: Iterable[AgentResult]) -> float | None:
+class _Priced(Protocol):
+    model: str
+    usage: Usage
+
+
+def total_cost_usd(results: Iterable[_Priced]) -> float | None:
     """Sum the estimated cost of several agent runs, each priced by its own model.
     Returns None if any model's price is unknown (never a silently low number)."""
     total = 0.0

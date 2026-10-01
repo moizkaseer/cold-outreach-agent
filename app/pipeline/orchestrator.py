@@ -19,6 +19,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any
 
+import logfire
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
@@ -114,6 +115,12 @@ class Orchestrator:
 
     async def execute(self, run_id: uuid.UUID) -> RunStatus:
         """Run (or resume) a run. Returns its final status; never raises for step errors."""
+        with logfire.span("pipeline run", run_id=str(run_id)) as span:
+            status = await self._execute(run_id)
+            span.set_attribute("status", status.value)
+            return status
+
+    async def _execute(self, run_id: uuid.UUID) -> RunStatus:
         if not await self._claim(run_id):
             async with self._sessions() as s:
                 run = await s.get(Run, run_id)
@@ -152,9 +159,21 @@ class Orchestrator:
                 run.current_step = name
                 await s.commit()  # persist "running" before doing any work
 
-                try:
-                    result = await fn(ctx)
-                except Exception as e:  # any step error: save it, fail the run, stop
+                with logfire.span("step {step_name}", step_name=name,
+                                  attempt=step.attempts) as span:  # fmt: skip
+                    try:
+                        result = await fn(ctx)
+                    except Exception as e:
+                        span.set_attributes({"status": "failed", "error": str(e)[:500],
+                                             "cost_usd": getattr(e, "cost_usd", 0.0)})  # fmt: skip
+                        error: Exception | None = e
+                    else:
+                        span.set_attributes({"status": "stopped" if result.stop else "succeeded",
+                                             "cost_usd": result.cost_usd})  # fmt: skip
+                        error = None
+
+                if error is not None:  # any step error: save it, fail the run, stop
+                    e = error
                     step.status, step.error = StepStatus.FAILED, f"{type(e).__name__}: {e}"
                     step.finished_at = utcnow()
                     spent = getattr(e, "cost_usd", 0.0)  # StepFailed carries real spend

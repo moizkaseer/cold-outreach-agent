@@ -167,6 +167,7 @@ class ResearchAgent:
         ]
 
         agent = await run_agent_loop(
+            name="research",
             client=self._client,
             model=self._model,
             system=SYSTEM_PROMPT,

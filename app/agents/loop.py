@@ -19,7 +19,11 @@ from enum import StrEnum
 from typing import Any
 
 import anthropic
+import logfire
 from pydantic import BaseModel, ValidationError
+
+from app.agents.usage import Usage
+from app.pricing import estimate_cost_usd
 
 FINISH_TOOL_NAME = "finish"
 
@@ -69,31 +73,6 @@ class Tool:
             "description": self.description,
             "input_schema": self.input_model.model_json_schema(),
         }
-
-
-@dataclass
-class Usage:
-    input_tokens: int = 0
-    output_tokens: int = 0
-    cache_read_input_tokens: int = 0
-    cache_creation_input_tokens: int = 0
-
-    @property
-    def total(self) -> int:
-        # Every turn re-sends the whole history, so input tokens grow each turn. That's
-        # real spend, so it counts towards the budget.
-        return (
-            self.input_tokens
-            + self.output_tokens
-            + self.cache_read_input_tokens
-            + self.cache_creation_input_tokens
-        )
-
-    def add(self, u: Any) -> None:
-        self.input_tokens += u.input_tokens
-        self.output_tokens += u.output_tokens
-        self.cache_read_input_tokens += getattr(u, "cache_read_input_tokens", None) or 0
-        self.cache_creation_input_tokens += getattr(u, "cache_creation_input_tokens", None) or 0
 
 
 @dataclass(frozen=True)
@@ -172,6 +151,38 @@ async def run_agent_loop[T: BaseModel](
     max_turns: int,
     token_budget: int,
     refusal_fallback: bool = True,
+    name: str = "agent",
+) -> AgentResult[T]:
+    """Run the loop inside an "agent" trace span; `name` labels the agent in traces."""
+    with logfire.span("agent {agent_name}", agent_name=name, model=model) as span:
+        result = await _run_loop(
+            client=client, model=model, system=system, user_message=user_message,
+            tools=tools, output_model=output_model, max_turns=max_turns,
+            token_budget=token_budget, refusal_fallback=refusal_fallback,
+        )  # fmt: skip
+        span.set_attributes({
+            "stop_reason": result.stop_reason.value,
+            "turns": result.turns,
+            "tool_calls": len(result.tool_calls),
+            "input_tokens": result.usage.input_tokens,
+            "output_tokens": result.usage.output_tokens,
+            "cache_read_tokens": result.usage.cache_read_input_tokens,
+            "cost_usd": estimate_cost_usd(model, result.usage) or 0.0,
+        })  # fmt: skip
+        return result
+
+
+async def _run_loop[T: BaseModel](
+    *,
+    client: anthropic.AsyncAnthropic,
+    model: str,
+    system: str,
+    user_message: str,
+    tools: list[Tool],
+    output_model: type[T],
+    max_turns: int,
+    token_budget: int,
+    refusal_fallback: bool = True,
 ) -> AgentResult[T]:
     tools_by_name = {t.name: t for t in tools}
     if FINISH_TOOL_NAME in tools_by_name:
@@ -196,16 +207,18 @@ async def run_agent_loop[T: BaseModel](
         """Run one tool call. Failures become is_error results the model can react to —
         a broken tool should never crash the run."""
         tool = tools_by_name.get(block.name)
-        if tool is None:
-            text, is_error = f"Unknown tool '{block.name}'.", True
-        else:
-            try:
-                args = tool.input_model.model_validate(block.input)
-                text, is_error = await tool.handler(args), False
-            except ValidationError as e:
-                text, is_error = _error_text(e), True
-            except Exception as e:  # tool bug or network error: report it, keep going
-                text, is_error = f"Tool error: {type(e).__name__}: {e}", True
+        with logfire.span("tool {tool_name}", tool_name=block.name, turn=turn) as span:
+            if tool is None:
+                text, is_error = f"Unknown tool '{block.name}'.", True
+            else:
+                try:
+                    args = tool.input_model.model_validate(block.input)
+                    text, is_error = await tool.handler(args), False
+                except ValidationError as e:
+                    text, is_error = _error_text(e), True
+                except Exception as e:  # tool bug or network error: report it, keep going
+                    text, is_error = f"Tool error: {type(e).__name__}: {e}", True
+            span.set_attributes({"is_error": is_error, "output_chars": len(text)})
         records.append(ToolCallRecord(turn, block.name, dict(block.input), text, is_error))
         return {
             "type": "tool_result",
@@ -221,17 +234,29 @@ async def run_agent_loop[T: BaseModel](
 
         # No forced tool_choice: Sonnet 5.5 rejects `any`/`tool` with a 400. The default
         # ("auto") plus the prompt steers it; the nudge below handles the rest.
-        response = await client.beta.messages.create(
-            model=model,
-            max_tokens=MAX_TOKENS_PER_CALL,
-            system=system,
-            tools=api_tools,
-            messages=messages,
-            **fallback_kwargs,
-            # Auto prompt caching: caches the longest stable prefix (tools, system, history
-            # so far). Each turn re-sends everything, so this makes repeat input ~10x cheaper.
-            cache_control={"type": "ephemeral"},
-        )
+        with logfire.span("llm call", model=model, turn=turn) as span:
+            response = await client.beta.messages.create(
+                model=model,
+                max_tokens=MAX_TOKENS_PER_CALL,
+                system=system,
+                tools=api_tools,
+                messages=messages,
+                **fallback_kwargs,
+                # Auto prompt caching: caches the longest stable prefix (tools, system,
+                # history so far). Each turn re-sends everything, so this makes repeat
+                # input ~10x cheaper.
+                cache_control={"type": "ephemeral"},
+            )
+            call = Usage()
+            call.add(response.usage)
+            span.set_attributes({
+                "stop_reason": str(response.stop_reason),
+                "input_tokens": call.input_tokens,
+                "output_tokens": call.output_tokens,
+                "cache_read_tokens": call.cache_read_input_tokens,
+                "cache_write_tokens": call.cache_creation_input_tokens,
+                "cost_usd": estimate_cost_usd(model, call) or 0.0,
+            })  # fmt: skip
         usage.add(response.usage)
         # Append the full content (not just text): tool_use and thinking blocks must be
         # sent back unchanged on the next call.

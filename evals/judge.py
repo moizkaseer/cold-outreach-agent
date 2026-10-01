@@ -130,6 +130,7 @@ async def judge_report(
         f"Golden facts:\n{json.dumps(golden, indent=2, ensure_ascii=False)}"
     )
     result = await run_agent_loop(
+        name="fact_judge",
         client=client,
         model=model,
         system=JUDGE_SYSTEM,

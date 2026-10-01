@@ -122,6 +122,7 @@ async def judge_email(
         f"Email subject: {email.subject}\n<email>\n{email.body}\n</email>"
     )
     result = await run_agent_loop(
+        name="email_judge",
         client=client,
         model=model,
         system=JUDGE_SYSTEM,

@@ -30,6 +30,7 @@ class LeadScorer:
 
     async def score(self, lead: Lead, sender: Sender) -> ScoreRun:
         agent = await run_agent_loop(
+            name="scorer",
             client=self._client,
             model=self._model,
             system=SYSTEM_PROMPT,
