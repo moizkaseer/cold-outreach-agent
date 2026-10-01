@@ -32,7 +32,9 @@ class Settings(BaseSettings):
 
     # --- Research agent budget (hard limits on the autonomous loop) ---
     research_max_turns: int = Field(default=10, ge=1, le=30)
-    research_max_tokens: int = Field(default=60_000, ge=1_000)
+    # Counts ALL input tokens across turns (history is re-sent each turn), so it must cover
+    # ~8 turns of growing context. ~150k ≈ $0.30 worst case on Sonnet 5.5 before caching.
+    research_max_tokens: int = Field(default=150_000, ge=1_000)
 
 
 @lru_cache

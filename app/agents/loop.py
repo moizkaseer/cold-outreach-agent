@@ -197,6 +197,9 @@ async def run_agent_loop[T: BaseModel](
             messages=messages,
             betas=[FALLBACK_BETA],
             fallbacks="default",
+            # Auto prompt caching: caches the longest stable prefix (tools, system, history
+            # so far). Each turn re-sends everything, so this makes repeat input ~10x cheaper.
+            cache_control={"type": "ephemeral"},
         )
         usage.add(response.usage)
         # Append the full content (not just text): tool_use and thinking blocks must be

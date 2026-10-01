@@ -24,7 +24,8 @@ class Fact(StrictModel):
     )
     evidence: str = Field(
         min_length=1,
-        description="Verbatim quote from the source page that supports the claim.",
+        max_length=500,
+        description="Short verbatim quote, copied exactly from the source page.",
     )
 
 
