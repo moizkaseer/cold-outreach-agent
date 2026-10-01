@@ -11,7 +11,8 @@ Metrics (micro-averaged over all companies):
 plus run health (finished / total), turns, latency and estimated cost.
 
 Results are written to evals/results/<timestamp>.json, so runs can be compared over time.
-Every run spends real money (research plus judge); start small with --limit.
+Every run spends real money (research plus judge). A spending cap (--max-cost, default
+$1.00) stops new companies from starting once estimated spend reaches it.
 """
 
 from __future__ import annotations
@@ -32,8 +33,9 @@ import anthropic
 
 from app.agents.research import ResearchAgent, ResearchRun
 from app.config import get_settings
-from app.pricing import estimate_cost_usd
+from app.pricing import PRICES, estimate_cost_usd
 from app.schemas import Lead, ResearchReport
+from app.spend import SpendTracker
 from evals.golden import GoldenCompany, load_golden_set
 from evals.judge import Judgement, judge_report
 
@@ -52,6 +54,7 @@ class CompanyResult:
     finished: bool
     stop_reason: str
     error: str | None = None
+    skipped: bool = False  # not run because the spending cap was reached
     kept: int = 0
     rejected: int = 0
     faithful: int = 0
@@ -153,12 +156,38 @@ def _ratio(num: int, den: int) -> float | None:
     return round(num / den, 3) if den else None
 
 
+async def run_companies(
+    companies: list[GoldenCompany],
+    evaluate_one: Callable[[GoldenCompany], Awaitable[CompanyResult]],
+    *,
+    tracker: SpendTracker,
+    concurrency: int,
+) -> list[CompanyResult]:
+    """Evaluate companies with limited concurrency, stopping new starts at the spend cap."""
+    sem = asyncio.Semaphore(concurrency)
+
+    async def one(c: GoldenCompany) -> CompanyResult:
+        async with sem:
+            # Checked when a slot frees up, i.e. right before this company would start.
+            if tracker.exhausted:
+                return CompanyResult(c.domain, False, "skipped_budget", skipped=True)
+            r = await evaluate_one(c)
+            tracker.add(r.research_cost_usd)
+            tracker.add(r.judge_cost_usd)
+            return r
+
+    return list(await asyncio.gather(*(one(c) for c in companies)))
+
+
 def summarize(results: list[CompanyResult]) -> dict[str, Any]:
+    skipped = sum(r.skipped for r in results)
+    results = [r for r in results if not r.skipped]  # skipped companies aren't scored
     finished = [r for r in results if r.finished]
     costs = [r.research_cost_usd for r in results if r.research_cost_usd is not None]
     judge_costs = [r.judge_cost_usd for r in results if r.judge_cost_usd is not None]
     return {
         "companies": len(results),
+        "skipped_budget": skipped,
         "finished": len(finished),
         "errors": sum(r.error is not None for r in results),
         "grounding": _ratio(
@@ -200,6 +229,11 @@ async def main(args: argparse.Namespace) -> None:
             "evals/golden_set/README.md) or pass --include-unverified."
         )
 
+    tracker = SpendTracker(args.max_cost if args.max_cost > 0 else None)
+    if tracker.limit_usd is not None and not {s.model_smart, judge_model} <= PRICES.keys():
+        # With unknown prices every run would count as $0 and the cap could never trigger.
+        raise SystemExit("--max-cost needs known prices for both models (see app/pricing.py)")
+
     researcher = ResearchAgent.from_settings(s)
     judge_client = anthropic.AsyncAnthropic(api_key=s.anthropic_api_key.get_secret_value())
 
@@ -208,27 +242,26 @@ async def main(args: argparse.Namespace) -> None:
             client=judge_client, model=judge_model, report=report, golden_claims=golden
         )
 
-    sem = asyncio.Semaphore(args.concurrency)
+    async def evaluate_one(c: GoldenCompany) -> CompanyResult:
+        r = await evaluate_company(
+            c,
+            run_research=researcher.run,
+            judge=judge,
+            research_model=s.model_smart,
+            judge_model=judge_model,
+            include_unverified=args.include_unverified,
+        )
+        print(
+            f"{r.domain:<18} {r.stop_reason:<14} kept={r.kept:<2} rejected={r.rejected:<2} "
+            f"faithful={r.faithful:<2} covered={r.golden_covered}/{r.golden_total} "
+            f"{r.seconds:>5.0f}s{'  ERROR ' + r.error if r.error else ''}",
+            flush=True,
+        )
+        return r
 
-    async def one(c: GoldenCompany) -> CompanyResult:
-        async with sem:
-            r = await evaluate_company(
-                c,
-                run_research=researcher.run,
-                judge=judge,
-                research_model=s.model_smart,
-                judge_model=judge_model,
-                include_unverified=args.include_unverified,
-            )
-            print(
-                f"{r.domain:<18} {r.stop_reason:<14} kept={r.kept:<2} rejected={r.rejected:<2} "
-                f"faithful={r.faithful:<2} covered={r.golden_covered}/{r.golden_total} "
-                f"{r.seconds:>5.0f}s{'  ERROR ' + r.error if r.error else ''}",
-                flush=True,
-            )
-            return r
-
-    results = await asyncio.gather(*(one(c) for c in companies))
+    results = await run_companies(
+        companies, evaluate_one, tracker=tracker, concurrency=args.concurrency
+    )
     summary = summarize(list(results))
 
     RESULTS_DIR.mkdir(exist_ok=True)
@@ -244,6 +277,8 @@ async def main(args: argparse.Namespace) -> None:
                     "max_turns": s.research_max_turns,
                     "token_budget": s.research_max_tokens,
                     "include_unverified": args.include_unverified,
+                    "max_cost_usd": tracker.limit_usd,
+                    "estimated_spend_usd": round(tracker.spent_usd, 4),
                 },
                 "summary": summary,
                 "results": [asdict(r) for r in results],
@@ -253,7 +288,11 @@ async def main(args: argparse.Namespace) -> None:
         )
     )
     print("\n" + json.dumps(summary, indent=2))
-    print(f"\nwrote {out}")
+    print(
+        f"\nestimated spend ${tracker.spent_usd:.4f}"
+        + (f" of ${tracker.limit_usd:.2f} cap" if tracker.limit_usd else "")
+    )
+    print(f"wrote {out}")
     if args.include_unverified:
         print("NOTE: scored against UNVERIFIED golden facts; coverage is indicative only.")
 
@@ -263,6 +302,12 @@ if __name__ == "__main__":
     p.add_argument("--domains", nargs="*")
     p.add_argument("--limit", type=int)
     p.add_argument("--concurrency", type=int, default=3)
+    p.add_argument(
+        "--max-cost",
+        type=float,
+        default=1.0,
+        help="USD cap on estimated spend; no new companies start once reached (0 = no cap)",
+    )
     p.add_argument("--include-unverified", action="store_true")
     p.add_argument("--judge-model", help="defaults to MODEL_FAST from config")
     asyncio.run(main(p.parse_args()))

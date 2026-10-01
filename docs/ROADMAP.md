@@ -38,7 +38,7 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 6 — Ship the demo
 - [ ] Connect "Run" button on moizali.vercel.app
-- [ ] Rate limiting + daily spending cap
+- [ ] Rate limiting + daily spending cap (`app/spend.py` SpendTracker exists; used by evals)
 - [ ] Docker + deploy
 
 ## Week 7 — Close the loop
@@ -136,3 +136,8 @@ Progress log after every working session (what was built, what broke, what's nex
   old Haiku judge 0.92, new Haiku 0.67 (~$0.02), new Sonnet 0.42 (~$0.06). Judge choice
   alone moves faithfulness by 50 points -> must calibrate before quoting any number.
   `evals/calibration/labels.csv` (24 facts) exported, awaiting Moiz's labels.
+- 2026-10-02 — Cost guard: `app/spend.py` SpendTracker; `run_evals --max-cost` (default
+  $1.00, 0 = off) stops new companies once estimated spend reaches the cap; refuses to run
+  with a cap if model prices are unknown; skipped companies excluded from metrics. Caught
+  a float bug (0.04+0.01+0.04+0.01 < 0.10). Session spend so far ≈ $0.67 estimated
+  (≈$0.60 Anthropic + ≈$0.07 Exa). From now on: no real API calls without Moiz's OK.
