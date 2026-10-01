@@ -26,7 +26,8 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] LLM-as-judge rubric for email quality in evals (built + tested; uncalibrated, never run for real)
 
 ## Week 4 — Backend
-- [ ] Postgres models: runs, steps, leads, research cache, emails (+ Alembic)
+- [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — tested on
+  SQLite only; must run `alembic upgrade head` against Supabase before deploy
 - [ ] Orchestrator state machine with resume-from-failed-step
 - [ ] Redis + Arq worker
 - [ ] FastAPI: create run, get run, SSE progress stream
@@ -177,3 +178,10 @@ Progress log after every working session (what was built, what broke, what's nex
   fakes only. Week 3 code complete; nothing in Week 3 has run against the real API.
   Blocked on Moiz for real numbers: sender.json, 24 calibration labels, golden verification.
   Next (no API needed): Week 4 — Postgres models + Alembic, orchestrator with resume.
+- 2026-10-02 — Week 4 step 1: DB layer. `app/db/models.py` (leads, runs, steps with
+  unique (run_id, name), research_cache, emails with review status), portable types (Uuid,
+  JSON->JSONB on PG, tz-aware DateTime, enums stored as strings), `app/db/session.py`,
+  async Alembic in `app/db/migrations` (initial migration; fixed autogenerate's missing
+  `Text` import). `DatabaseSettings` split out so migrations need no API keys;
+  DATABASE_URL defaults to local SQLite. Found SQLite drops timezones -> `as_utc()` helper.
+  152 tests. NOT yet run on Postgres. Next: orchestrator state machine with resume.

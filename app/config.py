@@ -10,13 +10,21 @@ from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
+class DatabaseSettings(BaseSettings):
+    """Just the database URL, so migrations can run without any API keys."""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",  # unrelated vars in .env shouldn't crash startup
     )
 
+    # Local default needs no setup; production sets a Postgres URL, e.g.
+    # postgresql+asyncpg://user:pass@host:5432/postgres (Supabase).
+    database_url: str = "sqlite+aiosqlite:///./dev.db"
+
+
+class Settings(DatabaseSettings):
     # --- Anthropic ---
     # SecretStr keeps the key out of logs/reprs; call .get_secret_value() to use it.
     anthropic_api_key: SecretStr
