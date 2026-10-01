@@ -116,3 +116,13 @@ Progress log after every working session (what was built, what broke, what's nex
     must still match a fetched page). Also caught one genuinely unfetched citation.
   - Remaining issue: model merges details into claims beyond its single quote.
     Next experiment: allow 1-3 verified quotes per fact, then re-measure.
+- 2026-10-02 — Experiment: facts carry 1-3 verbatim quotes from one page (every quote
+  code-checked; quotes together must support the whole claim). Judge prompt updated to
+  "quotes, taken together" (same standard; note the instrument changed slightly).
+  run 3 `evals/results/20261002-005546.json` (same 3 companies, unverified golden):
+  grounding 0.96, faithfulness 0.92 (judge), coverage 0.50, 3.0 turns, ~$0.054/company.
+  Quotes per fact: 1 quote x7, 2 x14, 3 x3. CAVEAT: manual review of the 24 kept facts
+  found ~6 the judge wrongly passed (dates or numbers not in any quote, e.g. "500,000+
+  teams", "Sep 29, 2025"), so true faithfulness is closer to ~0.75 by that review. The
+  judge looks more lenient with multiple quotes. Next: make the judge decompose claims
+  into atomic details and calibrate it against human labels before trusting its numbers.

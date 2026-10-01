@@ -1,4 +1,5 @@
 from enum import StrEnum
+from typing import Annotated
 
 from pydantic import Field, HttpUrl, model_validator
 
@@ -22,10 +23,13 @@ class Fact(StrictModel):
     source_url: HttpUrl = Field(
         description="Page the fact came from. Required: no source, no fact."
     )
-    evidence: str = Field(
+    evidence: list[Annotated[str, Field(min_length=1, max_length=500)]] = Field(
         min_length=1,
-        max_length=500,
-        description="Short verbatim quote, copied exactly from the source page.",
+        max_length=3,
+        description=(
+            "1-3 short verbatim quotes, each copied exactly from the source page. "
+            "Together they must support every part of the claim."
+        ),
     )
 
 

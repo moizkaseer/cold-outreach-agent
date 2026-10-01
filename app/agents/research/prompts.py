@@ -27,15 +27,14 @@ are low value.
 ## Rules for every fact
 - `source_url` must be the exact URL you passed to `fetch_page` (or the final URL it \
 reported after redirects).
-- `evidence` must be copied EXACTLY, character for character, from that page's text: one \
-short sentence or phrase, under 300 characters. Do not paraphrase, fix typos, or join \
-text from different parts of the page. Code checks this, and facts that fail the check \
-are discarded.
-- One fact, one quote. The `claim` must be fully supported by its quote ALONE: someone \
-who reads only the quote must agree with every part of the claim, including every \
-number, name, date, and qualifier. If you want to say more, make a separate fact with its \
-own quote. Never merge details from elsewhere on the page into a claim.
-- The quote must be self-explanatory. A bare number or fragment such as "$1.9T" or \
+- `evidence` is a list of 1 to 3 quotes from that one page. Each quote must be copied \
+EXACTLY, character for character, from the page text: a short sentence or phrase under \
+300 characters. Do not paraphrase, fix typos, or stitch text together inside a quote. \
+Code checks every quote, and a fact with any quote that fails is discarded.
+- The quotes TOGETHER must support every part of the claim: every number, name, date, \
+and qualifier. Someone who reads only the quotes must agree with the whole claim. If a \
+detail needs a quote you did not include, add the quote (up to 3) or drop the detail.
+- Each quote must be self-explanatory. A bare number or fragment such as "$1.9T" or \
 "200M+" is not enough; quote the sentence that says what the number measures.
 - Prefer the company's own current statements. Skip old press snippets embedded in a \
 page, undated statistics that look stale, and anything the page contradicts elsewhere.

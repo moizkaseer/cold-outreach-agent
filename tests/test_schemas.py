@@ -19,7 +19,7 @@ def make_fact(fid: str = "f1", **kw) -> Fact:
         "claim": "Acme launched a usage-based pricing tier in 2026.",
         "category": "product",
         "source_url": "https://acme.com/blog/pricing",
-        "evidence": "Today we're launching usage-based pricing.",
+        "evidence": ["Today we're launching usage-based pricing."],
     } | kw
     return Fact.model_validate(data)
 
@@ -136,3 +136,13 @@ def test_verification_passed_is_derived() -> None:
 )
 def test_json_round_trip(obj) -> None:
     assert type(obj).model_validate_json(obj.model_dump_json()) == obj
+
+
+def test_fact_evidence_is_one_to_three_quotes() -> None:
+    assert len(make_fact(evidence=["a", "b", "c"]).evidence) == 3
+    with pytest.raises(ValidationError):
+        make_fact(evidence=[])
+    with pytest.raises(ValidationError):
+        make_fact(evidence=["a", "b", "c", "d"])
+    with pytest.raises(ValidationError):
+        make_fact(evidence=["x" * 501])

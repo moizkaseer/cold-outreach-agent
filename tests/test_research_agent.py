@@ -43,13 +43,13 @@ def http() -> httpx.AsyncClient:
     return make_client(transport=httpx.MockTransport(handler))
 
 
-def fact(fid: str, url: str, evidence: str) -> dict[str, Any]:
+def fact(fid: str, url: str, *evidence: str) -> dict[str, Any]:
     return {
         "id": fid,
         "claim": "c",
         "category": "customers",
         "source_url": url,
-        "evidence": evidence,
+        "evidence": list(evidence),
     }
 
 
@@ -183,7 +183,7 @@ def test_url_debris_is_cleaned_but_still_must_be_fetched() -> None:
             claim="c",
             category="customers",
             source_url=url,
-            evidence="serves over 4,000 customers",
+            evidence=["serves over 4,000 customers"],
         )
 
     kept, rejected = check_grounding(
@@ -193,3 +193,28 @@ def test_url_debris_is_cleaned_but_still_must_be_fetched() -> None:
     assert [k.id for k in kept] == ["f1"]
     assert str(kept[0].source_url) == "https://acme.com/blog/post/"
     assert [r.fact.id for r in rejected] == ["f2"]  # debris stripped, still not fetched
+
+
+def test_every_quote_must_be_on_the_page() -> None:
+    from app.agents.research.agent import check_grounding
+    from app.schemas import Fact
+
+    seen = {canonical_url("https://acme.com/about"): "Founded in 2019. Serves 4,000 customers."}
+
+    def f(fid: str, *quotes: str) -> Fact:
+        return Fact(
+            id=fid,
+            claim="c",
+            category="other",
+            source_url="https://acme.com/about",
+            evidence=list(quotes),
+        )
+
+    kept, rejected = check_grounding(
+        [
+            f("f1", "Founded in 2019", "Serves 4,000 customers"),
+            f("f2", "Founded in 2019", "Serves 5,000 customers"),
+        ],  # one bad quote sinks it
+        seen,
+    )
+    assert [k.id for k in kept] == ["f1"] and [r.fact.id for r in rejected] == ["f2"]

@@ -27,7 +27,7 @@ def fact(fid: str) -> Fact:
         claim=f"claim {fid}",
         category="customers",
         source_url="https://acme.com/about",
-        evidence=f"quote {fid}",
+        evidence=[f"quote {fid}"],
     )
 
 

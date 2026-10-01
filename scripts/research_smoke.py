@@ -36,7 +36,8 @@ async def main(domain: str, name: str, role: str) -> None:
         print(f"\n--- {run.report.company_name}: {len(run.report.facts)} grounded facts ---")
         print(run.report.summary)
         for f in run.report.facts:
-            print(f'\n[{f.id}] ({f.category}) {f.claim}\n     {f.source_url}\n     "{f.evidence}"')
+            quotes = "\n     ".join(f'"{q}"' for q in f.evidence)
+            print(f"\n[{f.id}] ({f.category}) {f.claim}\n     {f.source_url}\n     {quotes}")
     for r in run.rejected:
         print(f"\nREJECTED [{r.fact.id}] {r.fact.claim}\n     reason: {r.reason}")
 

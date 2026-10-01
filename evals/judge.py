@@ -22,12 +22,12 @@ from app.schemas import ResearchReport
 JUDGE_SYSTEM = """\
 You grade the output of a company-research agent. Be strict and literal.
 
-You get the agent's facts (each a claim plus the exact quote it was based on) and a list \
-of golden facts that a human verified.
+You get the agent's facts (each a claim plus the exact quotes it was based on) and a \
+list of golden facts that a human verified.
 
 1. Faithfulness, for every agent fact: faithful=true only if the claim says nothing more \
-than the quote supports. Overstated numbers, added dates, wider scope, or details that are \
-not in the quote all make it false.
+than its quotes, taken together, support. Overstated numbers, added dates, wider scope, \
+or details that are not in the quotes all make it false.
 2. Coverage, for every golden fact: covered=true only if one or more agent facts state the \
 same information (same number, entity, or event). Merely being on a related topic is not \
 enough. List the matching agent fact ids.
@@ -73,7 +73,7 @@ async def judge_report(
     golden_claims: list[str],
 ) -> Judgement:
     golden = [{"id": f"g{i}", "claim": c} for i, c in enumerate(golden_claims, 1)]
-    facts = [{"id": f.id, "claim": f.claim, "quote": f.evidence} for f in report.facts]
+    facts = [{"id": f.id, "claim": f.claim, "quotes": f.evidence} for f in report.facts]
 
     if not facts:  # nothing to judge: nothing faithful, nothing covered
         return Judgement(

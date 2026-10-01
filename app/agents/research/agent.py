@@ -4,7 +4,7 @@ Tools: `search`, `fetch_page`, `finish`, and nothing else. It cannot send email,
 the CRM, or touch the DB (least privilege: its inputs are untrusted web pages).
 
 After the model calls `finish`, code re-checks grounding. A fact is kept only if its
-`source_url` was fetched in this run AND its `evidence` quote appears in the text the
+`source_url` was fetched in this run AND every `evidence` quote appears in the text the
 model was shown. Ungrounded facts are dropped and recorded, never silently kept.
 """
 
@@ -219,7 +219,7 @@ def check_grounding(
             rejected.append(RejectedFact(f, "source_url was not fetched in this run"))
             continue
         url, page = found
-        if not quote_in_text(f.evidence, page):
+        if not all(quote_in_text(q, page) for q in f.evidence):
             rejected.append(RejectedFact(f, "evidence quote not found on the fetched page"))
             continue
         if url != str(f.source_url):  # store the clean URL, not the debris
