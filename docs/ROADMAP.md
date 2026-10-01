@@ -22,7 +22,7 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 3 — Rest of the chain
 - [x] Pain point agent (sequential, evidence-based) — unit-tested with fakes; no real run yet
 - [x] Writer agent (email rules from CLAUDE.md) — unit-tested with fakes; no real run yet
-- [ ] Verifier + revise loop (max 2)
+- [x] Verifier + revise loop (max 2) — unit-tested with fakes; no real run yet
 - [ ] LLM-as-judge rubric for email quality in evals
 
 ## Week 4 — Backend
@@ -154,3 +154,12 @@ Progress log after every working session (what was built, what broke, what's nex
   outcome from sender list) left to verifier/evals. Supports revisions (previous draft +
   problems). 124 tests. Open question for Moiz: "never mention AI" also blocks openers about
   AI companies' own products (e.g. ElevenLabs) — kept strict for now.
+- 2026-10-02 — Step: verifier (`app/agents/verifier/`) + revise loop
+  (`app/agents/drafting.py`). Verifier maps each factual claim to a source (fact id +
+  quote number, or sender outcome number); CODE decides support and writes the writer
+  feedback (same design as judge v2). "No claims found" is an error, not a pass. Loop:
+  write -> code lint (fail = revise without paying for verifier) -> verify -> revise, max
+  2 revisions -> VERIFIED / NEEDS_HUMAN (last draft + problems kept) / FAILED. Nothing is
+  sent; all results go to human review. 134 tests, fakes only.
+  Week 3 remaining: LLM-as-judge email-quality rubric in evals. Verifier uses Haiku per
+  CLAUDE.md; revisit after judge calibration (Haiku was lenient as a fact judge).
