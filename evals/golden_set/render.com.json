@@ -1,0 +1,32 @@
+{
+  "domain": "render.com",
+  "company_name": "Render",
+  "segment": "dev-tools",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Render has raised $258M from investors.",
+      "category": "funding",
+      "source_url": "https://render.com/about",
+      "evidence": "We have raised $258M from world-class investors",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Render is headquartered in San Francisco, California.",
+      "category": "other",
+      "source_url": "https://render.com/about",
+      "evidence": "Render is headquartered in San Francisco, California",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Render offers up to $10K in migration credits for teams migrating production infrastructure.",
+      "category": "product",
+      "source_url": "https://render.com/about",
+      "evidence": "Migrating production infrastructure? Get up to $10K in migration credits.",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

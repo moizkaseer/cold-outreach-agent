@@ -1,0 +1,32 @@
+{
+  "domain": "retool.com",
+  "company_name": "Retool",
+  "segment": "dev-tools",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Tens of thousands of companies use Retool.",
+      "category": "customers",
+      "source_url": "https://retool.com/about",
+      "evidence": "Tens of thousands of companies use Retool to help run their business",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Retool's CEO is David Hsu.",
+      "category": "other",
+      "source_url": "https://retool.com/about",
+      "evidence": "Listen to our CEO, David Hsu",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Retool builds tools for companies to develop software faster.",
+      "category": "product",
+      "source_url": "https://retool.com/about",
+      "evidence": "We're building tools for companies to develop better software faster.",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

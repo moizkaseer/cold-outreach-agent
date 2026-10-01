@@ -1,0 +1,32 @@
+{
+  "domain": "supabase.com",
+  "company_name": "Supabase",
+  "segment": "dev-tools",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Supabase has raised $1 billion in funding.",
+      "category": "funding",
+      "source_url": "https://supabase.com/company",
+      "evidence": "We've raised $1 billion in funding",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Supabase has 10,000,000+ registered developers.",
+      "category": "customers",
+      "source_url": "https://supabase.com/company",
+      "evidence": "10,000,000+\nRegistered developers",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Supabase has 100,000+ GitHub stars.",
+      "category": "tech",
+      "source_url": "https://supabase.com/company",
+      "evidence": "100,000+\nGitHub stars",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

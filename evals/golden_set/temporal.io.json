@@ -1,0 +1,40 @@
+{
+  "domain": "temporal.io",
+  "company_name": "Temporal",
+  "segment": "dev-tools",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Temporal has 2,900+ customers.",
+      "category": "customers",
+      "source_url": "https://temporal.io/about",
+      "evidence": "2,900+ Customers",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Temporal is open source under the MIT license.",
+      "category": "tech",
+      "source_url": "https://temporal.io/about",
+      "evidence": "released under the MIT license",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Samar Abbas is Temporal's CEO and co-founder.",
+      "category": "other",
+      "source_url": "https://temporal.io/about",
+      "evidence": "Samar is the CEO and co-founder of Temporal",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Temporal's founders co-created the Cadence workflow engine at Uber.",
+      "category": "other",
+      "source_url": "https://temporal.io/about",
+      "evidence": "they reunited at Uber to co-create Cadence",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

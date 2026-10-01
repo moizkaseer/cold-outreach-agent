@@ -1,0 +1,40 @@
+{
+  "domain": "posthog.com",
+  "company_name": "PostHog",
+  "segment": "dev-tools",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "PostHog launched on Hacker News with its MVP in 2020.",
+      "category": "news",
+      "source_url": "https://posthog.com/about",
+      "evidence": "We launched on Hacker News with our MVP in 2020",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "PostHog says its product and data toolkit is used by 500,000+ teams.",
+      "category": "customers",
+      "source_url": "https://posthog.com/about",
+      "evidence": "into an entire product & data toolkit – used by 500,000+ teams",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "PostHog's codebase is open source.",
+      "category": "tech",
+      "source_url": "https://posthog.com/about",
+      "evidence": "Our codebase is open source",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "PostHog says it has never had layoffs.",
+      "category": "other",
+      "source_url": "https://posthog.com/about",
+      "evidence": "This means we've never had layoffs",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "domain": "sentry.io",
+  "company_name": "Sentry",
+  "segment": "dev-tools",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Sentry supports more than 100 coding languages.",
+      "category": "product",
+      "source_url": "https://sentry.io/about/",
+      "evidence": "Sentry supports more than 100 coding languages",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Sentry has raised $217M across 6 funding rounds.",
+      "category": "funding",
+      "source_url": "https://sentry.io/about/",
+      "evidence": "$217M raised in 6 rounds of funding",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Sentry is used by 200K organizations across 146 countries.",
+      "category": "customers",
+      "source_url": "https://sentry.io/about/",
+      "evidence": "200K organizations across 146 countries",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Sentry integrates with GitHub, Slack, and Jira.",
+      "category": "tech",
+      "source_url": "https://sentry.io/about/",
+      "evidence": "including but definitely not limited to GitHub, Slack, and Jira",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Sentry started out as an open-source project.",
+      "category": "other",
+      "source_url": "https://sentry.io/about/",
+      "evidence": "Sentry started out as an open-source project",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

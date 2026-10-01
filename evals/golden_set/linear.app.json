@@ -1,0 +1,32 @@
+{
+  "domain": "linear.app",
+  "company_name": "Linear",
+  "segment": "saas",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Linear was founded in 2019.",
+      "category": "other",
+      "source_url": "https://linear.app/about",
+      "evidence": "Founded in 2019, Linear has become",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Linear is used by more than 40,000 companies, including OpenAI, Coinbase, and Ramp.",
+      "category": "customers",
+      "source_url": "https://linear.app/about",
+      "evidence": "the tool of choice for more than 40,000 companies (including OpenAI, Coinbase, and Ramp)",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Linear's team is distributed across North America and Europe.",
+      "category": "hiring",
+      "source_url": "https://linear.app/about",
+      "evidence": "Our team is distributed across North America and Europe",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "domain": "railway.com",
+  "company_name": "Railway",
+  "segment": "dev-tools",
+  "size": "startup",
+  "facts": [
+    {
+      "claim": "Railway's mission is to build a cloud computing stack that unburdens developers.",
+      "category": "product",
+      "source_url": "https://railway.com/about",
+      "evidence": "Is to build the cloud computing stack that unburdens you",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Railway is a remote team.",
+      "category": "hiring",
+      "source_url": "https://railway.com/about",
+      "evidence": "We're a remote team",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Railway's investors include Erica Brescia, Managing Director at Redpoint.",
+      "category": "funding",
+      "source_url": "https://railway.com/about",
+      "evidence": "Erica Brescia\nManaging Director @ Redpoint",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}
