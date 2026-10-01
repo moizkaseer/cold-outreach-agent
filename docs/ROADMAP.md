@@ -21,7 +21,7 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 3 — Rest of the chain
 - [x] Pain point agent (sequential, evidence-based) — unit-tested with fakes; no real run yet
-- [ ] Writer agent (email rules from CLAUDE.md)
+- [x] Writer agent (email rules from CLAUDE.md) — unit-tested with fakes; no real run yet
 - [ ] Verifier + revise loop (max 2)
 - [ ] LLM-as-judge rubric for email quality in evals
 
@@ -147,3 +147,10 @@ Progress log after every working session (what was built, what broke, what's nex
   hypotheses citing fact ids; code drops any that cite unknown ids and re-ranks. Shared
   `app/agents/formatting.py` keeps fact quotes wrapped as untrusted data downstream.
   109 tests. No API calls (Moiz's request). Moiz to provide a real sender profile.
+- 2026-10-02 — Step: writer agent (`app/agents/writer/`). Code-checked rules in
+  `rules.py`: <120 words (schema, retried by loop), known fact ids, banned openers, no
+  AI/automation words (subject too), plain text (no markdown/bullets/links/HTML), and the
+  sender's ask included verbatim. Judgement rules (specific opener, one pain point,
+  outcome from sender list) left to verifier/evals. Supports revisions (previous draft +
+  problems). 124 tests. Open question for Moiz: "never mention AI" also blocks openers about
+  AI companies' own products (e.g. ElevenLabs) — kept strict for now.
