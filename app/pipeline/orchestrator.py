@@ -49,6 +49,14 @@ class StepResult:
 StepFn = Callable[[StepContext], Awaitable[StepResult]]
 
 
+class StepFailed(Exception):
+    """Raise from a step to fail it while still recording money it already spent."""
+
+    def __init__(self, message: str, *, cost_usd: float = 0.0) -> None:
+        super().__init__(message)
+        self.cost_usd = cost_usd
+
+
 class Orchestrator:
     def __init__(
         self,
@@ -142,6 +150,9 @@ class Orchestrator:
                 except Exception as e:  # any step error: save it, fail the run, stop
                     step.status, step.error = StepStatus.FAILED, f"{type(e).__name__}: {e}"
                     step.finished_at = utcnow()
+                    spent = getattr(e, "cost_usd", 0.0)  # StepFailed carries real spend
+                    step.cost_usd += spent
+                    run.cost_usd += spent
                     run.status, run.error = RunStatus.FAILED, f"step '{name}' failed: {e}"
                     await s.commit()
                     return RunStatus.FAILED

@@ -28,7 +28,7 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 4 — Backend
 - [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — tested on
   SQLite only; must run `alembic upgrade head` against Supabase before deploy
-- [~] Orchestrator state machine with resume-from-failed-step (engine done; real steps next)
+- [x] Orchestrator state machine with resume-from-failed-step (fakes + SQLite; no real run yet)
 - [ ] Redis + Arq worker
 - [ ] FastAPI: create run, get run, SSE progress stream
 
@@ -193,3 +193,11 @@ Progress log after every working session (what was built, what broke, what's nex
   UPDATE (two workers can't run the same run; verified by a concurrency test); RUNNING runs
   older than 15 min are reclaimable. 7 engine tests (159 total). Known gap: cost spent by a
   step that then raises isn't recorded yet — handle in 2b.
+- 2026-10-02 — Week 4 step 2b: real steps (`app/pipeline/steps.py`) validate -> dedupe ->
+  score -> research -> painpoints -> draft, wired by `app/pipeline/factory.py`. Cheap
+  gates first: placeholder sender stops at validate; same person+domain within 30 days
+  stops at dedupe; Haiku `LeadScorer` (new, `app/agents/scorer/`) stops fit < 3/5 before
+  research is paid for. Research uses the 7-day per-domain cache (only reports with facts
+  are cached). Draft saves an `emails` row (verified / needs_human) for human review.
+  `StepFailed(cost_usd=...)` records money spent before a failure (closes 2a gap).
+  170 tests. Next: Redis + Arq worker, then FastAPI + SSE.
