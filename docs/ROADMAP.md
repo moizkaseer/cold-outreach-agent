@@ -5,7 +5,7 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 1 — Fundamentals
 - [x] Repo setup: `uv`, ruff, pytest, `.env.example`, `app/config.py`
-- [ ] Pydantic schemas: `Lead`, `ResearchReport` (facts with `source_url`), `PainPoints`, `Email`, `Verification`
+- [x] Pydantic schemas: `Lead`, `ResearchReport` (facts with `source_url`), `PainPoints`, `Email`, `Verification`
 - [ ] Raw agent loop on the Anthropic SDK (tools → results → repeat, turn + token budget)
 - [ ] Golden set: 30 real companies with hand-verified facts in `evals/golden_set/`
 
@@ -51,3 +51,10 @@ Progress log after every working session (what was built, what broke, what's nex
   `app/config.py` (pydantic-settings, SecretStr key, model IDs + research budget),
   `.env.example`, `.gitignore`, 3 config tests passing. Moved ROADMAP.md into `docs/`
   so CLAUDE.md's `@docs/ROADMAP.md` import resolves. Next: Pydantic schemas.
+- 2026-10-01 — Step 2 done: schemas in `app/schemas/` (`Lead`, `Fact`/`ResearchReport`,
+  `PainPoints`, `Email`, `Verification`) on a shared `StrictModel` (extra=forbid). Grounding
+  enforced in types: every fact needs `source_url` + verbatim `evidence`; pain points and
+  emails reference fact ids; `Verification.passed` is derived, not LLM-set; email word limit
+  enforced in code. Caught a bug: `computed_field` broke dump→reload under extra=forbid
+  (would break resume) — switched to plain properties + round-trip tests. 23 tests passing.
+  Next: raw agent loop on the Anthropic SDK.
