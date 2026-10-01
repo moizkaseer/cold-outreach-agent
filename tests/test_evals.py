@@ -260,3 +260,31 @@ def test_summarize_micro_averages() -> None:
 def test_summarize_empty_denominators() -> None:
     s = summarize([CompanyResult("a.com", False, "refused")])
     assert s["grounding"] is None and s["faithfulness"] is None and s["coverage"] is None
+
+
+def test_total_cost_prices_each_model_and_refuses_unknown() -> None:
+    from app.pricing import total_cost_usd
+
+    u = Usage(input_tokens=1_000_000)
+    a = AgentResult(None, StopReason.FINISHED, 1, u, model="claude-sonnet-5-5")
+    b = AgentResult(None, StopReason.FINISHED, 1, u, model="claude-haiku-4-5")
+    assert total_cost_usd([a, b]) == pytest.approx(2.0 + 1.0)
+    assert total_cost_usd([a, AgentResult(None, StopReason.FINISHED, 1, u, model="?")]) is None
+
+
+async def test_loop_records_model() -> None:
+    client = FakeClient(response(tool_use(FINISH_TOOL_NAME, {"facts": [], "golden": []})))
+    from app.agents.loop import run_agent_loop
+    from evals.judge import JudgeOutput
+
+    r = await run_agent_loop(
+        client=client,
+        model="m-1",
+        system="s",
+        user_message="u",  # type: ignore[arg-type]
+        tools=[],
+        output_model=JudgeOutput,
+        max_turns=2,
+        token_budget=10_000,
+    )
+    assert r.model == "m-1"

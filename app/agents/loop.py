@@ -113,6 +113,7 @@ class AgentResult[T: BaseModel]:
     usage: Usage
     tool_calls: list[ToolCallRecord] = field(default_factory=list)
     messages: list[dict[str, Any]] = field(default_factory=list)
+    model: str = ""  # which model ran this, so cost can be priced per model
 
     @property
     def ok(self) -> bool:
@@ -189,7 +190,7 @@ async def run_agent_loop[T: BaseModel](
     nudges = 0
 
     def done(reason: StopReason, turns: int, output: T | None = None) -> AgentResult[T]:
-        return AgentResult(output, reason, turns, usage, records, messages)
+        return AgentResult(output, reason, turns, usage, records, messages, model)
 
     async def run_tool(turn: int, block: Any) -> dict[str, Any]:
         """Run one tool call. Failures become is_error results the model can react to —

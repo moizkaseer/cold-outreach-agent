@@ -163,3 +163,9 @@ Progress log after every working session (what was built, what broke, what's nex
   sent; all results go to human review. 134 tests, fakes only.
   Week 3 remaining: LLM-as-judge email-quality rubric in evals. Verifier uses Haiku per
   CLAUDE.md; revisit after judge calibration (Haiku was lenient as a fact judge).
+- 2026-10-02 — Email rubric judge (`evals/email_judge.py`): 6 binary LLM criteria
+  (specific opener, single pain point, pain as hypothesis, one sender outcome, relevant to
+  role, human tone) + the code-checked rules as a 7th. Passes that need evidence must quote
+  the email verbatim (code-checked; fake quotes turn a pass into a fail). AgentResult now
+  records its model; `app/pricing.total_cost_usd` prices mixed-model runs (None if any
+  price unknown). 141 tests. Needs calibration before its numbers are quoted.
