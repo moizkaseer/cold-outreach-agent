@@ -15,7 +15,7 @@ Progress log after every working session (what was built, what broke, what's nex
 - [ ] Tools: `search` (behind interface), `fetch_page` (httpx + trafilatura), `finish`
   (`search` = Exa behind `SearchProvider` in `app/tools/search.py`; `fetch_page` and
   `finish` done earlier — research agent wiring next)
-- [ ] Research agent returns cited `ResearchReport`
+- [x] Research agent returns cited `ResearchReport` (built + unit-tested; first real run pending API keys)
 - [ ] `evals/run_evals.py`: fact accuracy + citation validity vs golden set
 
 ## Week 3 — Rest of the chain
@@ -84,3 +84,11 @@ Progress log after every working session (what was built, what broke, what's nex
   (REST via httpx, checked against Exa docs; returns provider cost for tracing). Search
   results are discovery-only; facts must cite fetched pages. `EXA_API_KEY` optional in
   config. 63 tests passing. Not yet run against real Exa (no key yet).
+- 2026-10-02 — Step 6: research agent in `app/agents/research/` (static cacheable system
+  prompt in `prompts.py`; tools = search, fetch_page, finish only). Code re-checks
+  grounding after `finish`: fact kept only if its source_url was fetched this run AND the
+  evidence quote is in the text the model saw; others dropped with a reason. Tool output
+  wrapped as `<untrusted_content>`. Prompt caching on in the loop; token budget raised to
+  150k (history is re-sent each turn); evidence capped at 500 chars. `Researcher` protocol
+  for swapping implementations. 72 tests. Real run: `scripts/research_smoke.py` (needs
+  ANTHROPIC_API_KEY + EXA_API_KEY). Next: run_evals.py.

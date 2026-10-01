@@ -21,9 +21,8 @@ async def main(domain: str, name: str, role: str) -> None:
     print("\n--- tool calls ---")
     for c in a.tool_calls:
         arg = c.input.get("query") or c.input.get("url") or ""
-        print(
-            f"turn {c.turn:>2} {c.name:<10} {arg[:80]}{'  [ERROR] ' + c.output[:80] if c.is_error else ''}"
-        )
+        err = f"  [ERROR] {c.output[:80]}" if c.is_error else ""
+        print(f"turn {c.turn:>2} {c.name:<10} {arg[:80]}{err}")
 
     print(f"\nstop={a.stop_reason} turns={a.turns}")
     print(
