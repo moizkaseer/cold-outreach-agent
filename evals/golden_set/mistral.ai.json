@@ -1,0 +1,32 @@
+{
+  "domain": "mistral.ai",
+  "company_name": "Mistral AI",
+  "segment": "ai",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Mistral was founded in April 2023.",
+      "category": "other",
+      "source_url": "https://mistral.ai/about/",
+      "evidence": "In April 2023, Mistral was born",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Arthur Mensch is Mistral's co-founder and CEO.",
+      "category": "other",
+      "source_url": "https://mistral.ai/about/",
+      "evidence": "Arthur Mensch\nCo-founder and CEO.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Mistral works with organizations in finance, manufacturing, defense, energy, and the public sector.",
+      "category": "customers",
+      "source_url": "https://mistral.ai/about/",
+      "evidence": "high-stakes industries like finance, manufacturing, defense, energy, and the public sector",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "domain": "etsy.com",
+  "company_name": "Etsy",
+  "segment": "ecommerce",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "It costs 20 cents to start selling on Etsy.",
+      "category": "product",
+      "source_url": "https://www.etsy.com/about",
+      "evidence": "All it takes is 20 cents to get started.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Sellers can sell handmade, vintage or craft items on Etsy.",
+      "category": "product",
+      "source_url": "https://www.etsy.com/about",
+      "evidence": "If you want to sell your handmade, vintage or craft items on Etsy",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

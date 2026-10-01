@@ -1,0 +1,24 @@
+{
+  "domain": "deel.com",
+  "company_name": "Deel",
+  "segment": "saas",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "Deel is trusted by 40,000+ companies.",
+      "category": "customers",
+      "source_url": "https://www.deel.com/about/",
+      "evidence": "Trusted by 40,000+ companies from startups to enterprise",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Deel was co-founded by Alex Bouaziz (CEO) and Shuo Wang (CRO).",
+      "category": "other",
+      "source_url": "https://www.deel.com/about/",
+      "evidence": "Co-Founders Alex Bouaziz (CEO) and Shuo Wang (CRO)",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

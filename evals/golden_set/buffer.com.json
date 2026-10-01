@@ -1,0 +1,32 @@
+{
+  "domain": "buffer.com",
+  "company_name": "Buffer",
+  "segment": "saas",
+  "size": "startup",
+  "facts": [
+    {
+      "claim": "Buffer is a remote team spread around the world.",
+      "category": "hiring",
+      "source_url": "https://buffer.com/about",
+      "evidence": "group of remote workers scattered around the world",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Joel Gascoigne is Buffer's founder and CEO.",
+      "category": "other",
+      "source_url": "https://buffer.com/about",
+      "evidence": "our Founder and CEO, Joel Gascoigne",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Transparency is the value Buffer is best known for.",
+      "category": "other",
+      "source_url": "https://buffer.com/about",
+      "evidence": "Transparency is the value we’re best known for",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

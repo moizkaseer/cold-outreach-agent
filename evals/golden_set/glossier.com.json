@@ -1,0 +1,32 @@
+{
+  "domain": "glossier.com",
+  "company_name": "Glossier",
+  "segment": "ecommerce",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Glossier launched in 2014.",
+      "category": "other",
+      "source_url": "https://www.glossier.com/pages/about",
+      "evidence": "Before we launched Glossier in 2014",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Glossier started as Into The Gloss, a beauty website and community.",
+      "category": "other",
+      "source_url": "https://www.glossier.com/pages/about",
+      "evidence": "we started as Into The Gloss. A beauty website and community",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Glossier's philosophy is 'Skin First. Makeup Second.'",
+      "category": "product",
+      "source_url": "https://www.glossier.com/pages/about",
+      "evidence": "This ethos gave birth to our philosophy: Skin First. Makeup Second™.",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

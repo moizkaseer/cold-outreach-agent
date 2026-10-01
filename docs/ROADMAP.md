@@ -7,10 +7,13 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] Repo setup: `uv`, ruff, pytest, `.env.example`, `app/config.py`
 - [x] Pydantic schemas: `Lead`, `ResearchReport` (facts with `source_url`), `PainPoints`, `Email`, `Verification`
 - [x] Raw agent loop on the Anthropic SDK (tools → results → repeat, turn + token budget)
-- [ ] Golden set: 30 real companies with hand-verified facts in `evals/golden_set/`
+- [~] Golden set: 30 real companies with hand-verified facts in `evals/golden_set/`
+  (30 companies / 101 facts drafted with verbatim quotes, all quotes machine-checked;
+  **human verification pending** — see `evals/golden_set/README.md`)
 
 ## Week 2 — Research agent
 - [ ] Tools: `search` (behind interface), `fetch_page` (httpx + trafilatura), `finish`
+  (`fetch_page` core + `finish` done early: `app/tools/fetch.py`, `app/agents/loop.py`)
 - [ ] Research agent returns cited `ResearchReport`
 - [ ] `evals/run_evals.py`: fact accuracy + citation validity vs golden set
 
@@ -67,3 +70,12 @@ Progress log after every working session (what was built, what broke, what's nex
   `AgentResult` with transcript + tool-call log (for evals/tracing). 15 loop tests with a
   scripted fake client (38 total). NOT yet run against the real API — needs a key in `.env`
   (`uv run python -m scripts.loop_smoke`). Next: golden set.
+- 2026-10-02 — Step 4 (golden set) drafted, not yet verified. Built `evals/golden.py`
+  (one JSON per company; facts `verified: false` until a human checks them; evals use
+  verified facts only), `app/tools/fetch.py` (httpx + trafilatura; SSRF guard on every
+  redirect hop; size/type limits) and `app/tools/text.py` (formatting-tolerant verbatim
+  quote matching), plus `scripts/check_golden.py`. Drafted 30 companies / 101 facts from
+  live About pages; 0 missing quotes. Real-world findings for the research agent: 5 sites
+  403 our fetcher, JS-rendered numbers vanish (GitLab), pages contradict themselves (Deel),
+  About pages embed stale third-party press (Wise). 56 tests passing.
+  Next: Moiz verifies facts; then Week 2 (search tool + research agent + run_evals.py).

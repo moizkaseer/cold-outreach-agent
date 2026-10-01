@@ -1,0 +1,48 @@
+{
+  "domain": "cohere.com",
+  "company_name": "Cohere",
+  "segment": "ai",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Cohere was founded in 2019 in Toronto.",
+      "category": "other",
+      "source_url": "https://cohere.com/about",
+      "evidence": "Cohere was founded in 2019 in Toronto",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Cohere raised nearly $1 billion across Series A to D between 2021 and 2024.",
+      "category": "funding",
+      "source_url": "https://cohere.com/about",
+      "evidence": "Between 2021 and 2024, we secured four major funding rounds (Series A through D), raising nearly $1 billion.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Cohere launched North, its AI platform for workplace productivity, in 2025.",
+      "category": "product",
+      "source_url": "https://cohere.com/about",
+      "evidence": "In 2025, we launched North, our turnkey AI platform for workplace productivity.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Cohere launched Cohere Labs, its open science initiative, in 2022.",
+      "category": "news",
+      "source_url": "https://cohere.com/about",
+      "evidence": "In 2022, we launched Cohere Labs, our open science initiative",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Joelle Pineau is Cohere's Chief AI Officer.",
+      "category": "other",
+      "source_url": "https://cohere.com/about",
+      "evidence": "Joelle Pineau\nChief AI Officer",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

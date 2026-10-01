@@ -1,0 +1,32 @@
+{
+  "domain": "basecamp.com",
+  "company_name": "Basecamp",
+  "segment": "saas",
+  "size": "startup",
+  "facts": [
+    {
+      "claim": "Jason Fried co-founded 37signals, the company that makes Basecamp.",
+      "category": "other",
+      "source_url": "https://basecamp.com/about",
+      "evidence": "I’m Jason Fried, one of the co-founders here. I’ve been running 37signals — the business that makes Basecamp",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "37signals was a design firm before it built Basecamp.",
+      "category": "other",
+      "source_url": "https://basecamp.com/about",
+      "evidence": "Way back when, we used to be a design firm.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "37signals stopped doing web design to focus on Basecamp.",
+      "category": "other",
+      "source_url": "https://basecamp.com/about",
+      "evidence": "So we stopped doing web design and have been focused on building Basecamp ever since.",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

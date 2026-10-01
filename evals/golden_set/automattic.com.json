@@ -1,0 +1,40 @@
+{
+  "domain": "automattic.com",
+  "company_name": "Automattic",
+  "segment": "other",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "Automattic is the company behind WordPress.com, WooCommerce, and Tumblr.",
+      "category": "product",
+      "source_url": "https://automattic.com/about/",
+      "evidence": "We’re the people behind WordPress.com, WooCommerce, Tumblr",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Automattic has 1,413 employees speaking 107 languages.",
+      "category": "hiring",
+      "source_url": "https://automattic.com/about/",
+      "evidence": "There are 1,413 of us Automatticians in nearly every corner of the globe, speaking 107 different languages.",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Automattic has been remote-first since its founding in 2005.",
+      "category": "hiring",
+      "source_url": "https://automattic.com/about/",
+      "evidence": "we’ve been a remote-first company since our founding in 2005",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Automattic says its founding product powers over 40% of all websites.",
+      "category": "customers",
+      "source_url": "https://automattic.com/about/",
+      "evidence": "it powers over 40% of all websites",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

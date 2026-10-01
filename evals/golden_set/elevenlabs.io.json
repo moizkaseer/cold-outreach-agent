@@ -1,0 +1,40 @@
+{
+  "domain": "elevenlabs.io",
+  "company_name": "ElevenLabs",
+  "segment": "ai",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "ElevenLabs describes itself as an AI research and product company.",
+      "category": "other",
+      "source_url": "https://elevenlabs.io/about",
+      "evidence": "ElevenLabs is an AI research and product company",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "ElevenLabs gives free licenses through its ElevenLabs Impact program.",
+      "category": "product",
+      "source_url": "https://elevenlabs.io/about",
+      "evidence": "We provide free licenses to those who need it most through The ElevenLabs Impact program",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "ElevenLabs has a dedicated AI safety team.",
+      "category": "other",
+      "source_url": "https://elevenlabs.io/about",
+      "evidence": "We have a dedicated safety team combining research, engineering, and policy",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "ElevenLabs released Eleven v4, which it calls its most emotive model yet.",
+      "category": "news",
+      "source_url": "https://elevenlabs.io/about",
+      "evidence": "Meet Eleven v4, our most emotive model yet",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "domain": "gitlab.com",
+  "company_name": "GitLab",
+  "segment": "dev-tools",
+  "size": "enterprise",
+  "facts": [
+    {
+      "claim": "GitLab started in 2011 as an open source project.",
+      "category": "other",
+      "source_url": "https://about.gitlab.com/company/",
+      "evidence": "What started in 2011 as an open source project",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "GitLab became a public company on Nasdaq (GTLB) in 2021.",
+      "category": "news",
+      "source_url": "https://about.gitlab.com/company/",
+      "evidence": "2021\nGitLab Inc. became a publicly traded company on the Nasdaq Global Market (NASDAQ: GTLB)",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "GitLab joined Y Combinator in 2015.",
+      "category": "funding",
+      "source_url": "https://about.gitlab.com/company/",
+      "evidence": "2015\nJoined Y Combinator",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "GitLab releases a new version on the 22nd of every month.",
+      "category": "product",
+      "source_url": "https://about.gitlab.com/company/",
+      "evidence": "We started releasing a new version of GitLab on the 22nd of every month",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}

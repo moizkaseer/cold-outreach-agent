@@ -1,0 +1,40 @@
+{
+  "domain": "webflow.com",
+  "company_name": "Webflow",
+  "segment": "saas",
+  "size": "scaleup",
+  "facts": [
+    {
+      "claim": "Webflow was founded in 2013.",
+      "category": "other",
+      "source_url": "https://webflow.com/company/about",
+      "evidence": "2013\nYear Founded",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Webflow has 900+ team members in 25 countries.",
+      "category": "hiring",
+      "source_url": "https://webflow.com/company/about",
+      "evidence": "900+\nTeam members in 25 countries",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Webflow has raised $335M in total funding.",
+      "category": "funding",
+      "source_url": "https://webflow.com/company/about",
+      "evidence": "$335M\nIn total funding",
+      "verified": false,
+      "verified_on": null
+    },
+    {
+      "claim": "Linda Tong is Webflow's CEO.",
+      "category": "other",
+      "source_url": "https://webflow.com/company/about",
+      "evidence": "Linda Tong Chief Executive Officer",
+      "verified": false,
+      "verified_on": null
+    }
+  ]
+}
