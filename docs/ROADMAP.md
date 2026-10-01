@@ -6,7 +6,7 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 1 — Fundamentals
 - [x] Repo setup: `uv`, ruff, pytest, `.env.example`, `app/config.py`
 - [x] Pydantic schemas: `Lead`, `ResearchReport` (facts with `source_url`), `PainPoints`, `Email`, `Verification`
-- [ ] Raw agent loop on the Anthropic SDK (tools → results → repeat, turn + token budget)
+- [x] Raw agent loop on the Anthropic SDK (tools → results → repeat, turn + token budget)
 - [ ] Golden set: 30 real companies with hand-verified facts in `evals/golden_set/`
 
 ## Week 2 — Research agent
@@ -58,3 +58,12 @@ Progress log after every working session (what was built, what broke, what's nex
   enforced in code. Caught a bug: `computed_field` broke dump→reload under extra=forbid
   (would break resume) — switched to plain properties + round-trip tests. 23 tests passing.
   Next: raw agent loop on the Anthropic SDK.
+- 2026-10-01 — Step 3 done: generic agent loop in `app/agents/loop.py` (own loop on the
+  async Anthropic SDK, no framework). `Tool` = name + Pydantic input model + async handler;
+  `finish` tool generated from the output model. Hard stops: max turns, token budget
+  (checked before each call), refusal, truncation, invalid output after 1 retry, no-finish
+  after 2 nudges. Tool errors/bad inputs go back as `is_error` results; parallel calls run
+  concurrently, results in one message. Server-side refusal fallback enabled. Returns
+  `AgentResult` with transcript + tool-call log (for evals/tracing). 15 loop tests with a
+  scripted fake client (38 total). NOT yet run against the real API — needs a key in `.env`
+  (`uv run python -m scripts.loop_smoke`). Next: golden set.
