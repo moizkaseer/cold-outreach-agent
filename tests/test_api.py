@@ -9,6 +9,7 @@ import httpx
 import pytest
 from sqlalchemy import update
 
+from app.api.limits import Limits
 from app.api.main import AppDeps, create_app
 from app.db.models import Base, Run, RunStatus
 from app.db.session import make_engine, make_sessionmaker
@@ -21,14 +22,20 @@ BODY = {"domain": "https://www.Acme.com/about", "person_name": "Ana Silva",
         "person_role": "Head of People"}  # fmt: skip
 
 
+NO_LIMITS = Limits(runs_per_client_per_hour=None, daily_spend_usd=None)
+
+
 class Env:
-    def __init__(self, sessions) -> None:
+    def __init__(self, sessions, limits: Limits = NO_LIMITS) -> None:
         self.sessions = sessions
         self.enqueued: list[tuple[uuid.UUID, int]] = []
-        self.deps = AppDeps(sessions, self.enqueue, SENDER, poll_seconds=0.01)
-        self.client = httpx.AsyncClient(
-            transport=httpx.ASGITransport(app=create_app(self.deps)), base_url="http://t"
-        )
+        self.deps = AppDeps(sessions, self.enqueue, SENDER, limits, poll_seconds=0.01)
+        self.app = create_app(self.deps)
+        self.client = self.client_from("127.0.0.1")
+
+    def client_from(self, ip: str) -> httpx.AsyncClient:
+        transport = httpx.ASGITransport(app=self.app, client=(ip, 1234))
+        return httpx.AsyncClient(transport=transport, base_url="http://t")
 
     async def enqueue(self, run_id: uuid.UUID, attempt: int) -> bool:
         self.enqueued.append((run_id, attempt))

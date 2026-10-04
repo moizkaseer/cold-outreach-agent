@@ -78,6 +78,7 @@ class Lead(Base):
 
 class Run(Base):
     __tablename__ = "runs"
+    __table_args__ = (Index("ix_runs_client_key_created_at", "client_key", "created_at"),)
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)  # run_id
     lead_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("leads.id"), index=True)
@@ -87,6 +88,9 @@ class Run(Base):
     # Snapshot of the sender profile used, so a resumed run writes with the same inputs.
     sender: Mapped[dict[str, Any]] = mapped_column(JSONType)
     cost_usd: Mapped[float] = mapped_column(Float, default=0.0)
+    # Hashed client IP for the public demo's rate limit (app/api/limits.py); None for runs
+    # not created through the API (evals, scripts).
+    client_key: Mapped[str | None] = mapped_column(String(32))
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow, onupdate=utcnow

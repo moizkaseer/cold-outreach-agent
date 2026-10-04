@@ -39,7 +39,7 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 6 — Ship the demo
 - [ ] Connect "Run" button on moizali.vercel.app
-- [ ] Rate limiting + daily spending cap (`app/spend.py` SpendTracker exists; used by evals)
+- [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; tested with SQLite only)
 - [ ] Docker + deploy
 
 ## Week 7 — Close the loop
@@ -239,3 +239,13 @@ Progress log after every working session (what was built, what broke, what's nex
   and pass grounding; only the model's judgement + this eval guard it. 197 tests.
   WEEK 5 CODE COMPLETE. Run (costs ~$0.20-0.40, my estimate): `uv run python -m
   evals.run_injection_evals --max-cost 0.50`.
+- 2026-10-04 — Week 6 step 1: public-demo guards (`app/api/limits.py`). Per-client rate
+  limit (default 3 new runs/hour, keyed by a hashed IP stored in new `runs.client_key`,
+  migration `95b7c19827fa`) -> 429 + Retry-After. Daily spending cap (default $2/UTC day,
+  estimated): spend = cost of steps that FINISHED today + a worst-case reserve ($0.50) per
+  in-flight run, since in-flight spend isn't in the DB yet; runs untouched for 1h stop
+  holding a reserve. New runs and resumes refused with 503 once the cap would be crossed.
+  Both answered from the DB (no new infra; survives restarts). Known gaps: check+insert
+  isn't atomic (simultaneous requests can overshoot by ~1 run); IP-based limits are weak
+  against rotating IPs; still no auth. Behind a proxy uvicorn needs `--proxy-headers`.
+  Migration tested up/down on SQLite only. 205 tests. Next: Dockerfile + deploy.

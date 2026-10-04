@@ -8,7 +8,8 @@
     POST /runs/{id}/resume     re-enqueue a FAILED run (resumes at the failed step)
     GET  /health
 
-No auth or rate limiting yet (Week 6) — do not expose this publicly as-is.
+Guards (app/api/limits.py): new runs are rate-limited per client (429) and everything
+that spends money respects a daily spending cap (503). Still no auth.
 """
 
 from __future__ import annotations
@@ -24,12 +25,13 @@ from pathlib import Path
 
 import logfire
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, ValidationError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
 
+from app.api.limits import Limits, Refusal, check_new_run, check_resume, client_key
 from app.db.models import Run, RunStatus
 from app.pipeline.orchestrator import create_run
 from app.pipeline.steps import STEP_NAMES
@@ -45,7 +47,13 @@ class AppDeps:
     sessions: async_sessionmaker[AsyncSession]
     enqueue: Callable[[uuid.UUID, int], Awaitable[bool]]
     sender: Sender | None  # None = not configured; creating runs is refused
+    limits: Limits = Limits()  # guarded by default; tests pass their own
     poll_seconds: float = 1.0
+
+
+def refused(r: Refusal) -> JSONResponse:
+    return JSONResponse({"detail": r.detail}, status_code=r.status_code,
+                        headers={"Retry-After": str(r.retry_after_s)})  # fmt: skip
 
 
 # --- request / response models ---
@@ -163,7 +171,12 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
         async def enqueue(run_id: uuid.UUID, attempt: int) -> bool:
             return await enqueue_run(redis, run_id, attempt)
 
-        app.state.deps = AppDeps(make_sessionmaker(engine), enqueue, sender)
+        limits = Limits(
+            runs_per_client_per_hour=s.demo_runs_per_client_per_hour or None,
+            daily_spend_usd=s.demo_daily_spend_usd or None,
+            reserve_per_run_usd=s.demo_reserve_per_run_usd,
+        )
+        app.state.deps = AppDeps(make_sessionmaker(engine), enqueue, sender, limits)
         yield
         await redis.aclose()
         await engine.dispose()
@@ -179,8 +192,8 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
     async def health() -> dict[str, str]:
         return {"status": "ok"}
 
-    @app.post("/runs", status_code=202)
-    async def post_run(body: CreateRun, request: Request) -> dict[str, str]:
+    @app.post("/runs", status_code=202, response_model=None)
+    async def post_run(body: CreateRun, request: Request) -> dict[str, str] | JSONResponse:
         d = get_deps(request)
         if d.sender is None or d.sender.is_placeholder:
             raise HTTPException(503, "sender profile not configured (sender.json)")
@@ -191,7 +204,12 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             # include_context=False: the context holds exception objects that can't be
             # JSON-encoded (that turned a clean 422 into a 500 before this fix).
             raise HTTPException(422, e.errors(include_url=False, include_context=False)) from e
-        run_id = await create_run(d.sessions, lead, d.sender, STEP_NAMES)
+        # request.client is the direct peer; behind the host's proxy uvicorn must run with
+        # --proxy-headers so this is the real client IP, not the proxy's.
+        key = client_key(request.client.host if request.client else None)
+        if refusal := await check_new_run(d.sessions, d.limits, key):
+            return refused(refusal)
+        run_id = await create_run(d.sessions, lead, d.sender, STEP_NAMES, client_key=key)
         await d.enqueue(run_id, 0)
         return {"run_id": str(run_id), "status": RunStatus.PENDING.value}
 
@@ -202,14 +220,16 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             raise HTTPException(404, "run not found")
         return view
 
-    @app.post("/runs/{run_id}/resume", status_code=202)
-    async def resume_run(run_id: uuid.UUID, request: Request) -> dict[str, str]:
+    @app.post("/runs/{run_id}/resume", status_code=202, response_model=None)
+    async def resume_run(run_id: uuid.UUID, request: Request) -> dict[str, str] | JSONResponse:
         d = get_deps(request)
         view = await load_run_view(d.sessions, run_id)
         if view is None:
             raise HTTPException(404, "run not found")
         if view.status != RunStatus.FAILED.value:
             raise HTTPException(409, f"only failed runs can be resumed (status: {view.status})")
+        if refusal := await check_resume(d.sessions, d.limits):
+            return refused(refusal)
         # New job id per resume attempt, so it isn't swallowed as a duplicate enqueue.
         attempt = max((st.attempts for st in view.steps), default=0)
         await d.enqueue(run_id, attempt)

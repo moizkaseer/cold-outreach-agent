@@ -29,6 +29,15 @@ class InfraSettings(BaseSettings):
     # Tracing (Logfire). Unset = traces stay in-process; nothing is sent anywhere.
     logfire_token: SecretStr | None = None
 
+    # --- Public demo guards (app/api/limits.py). 0 disables a guard.
+    demo_runs_per_client_per_hour: int = Field(default=3, ge=0)
+    # Estimated USD per UTC day across all runs. Keep it at or below what you're willing
+    # to lose if the demo is hammered; it is also worth setting a limit in the Anthropic
+    # console as a second, provider-side backstop.
+    demo_daily_spend_usd: float = Field(default=2.0, ge=0)
+    # Worst-case cost assumed for each run still in flight (its spend isn't in the DB yet).
+    demo_reserve_per_run_usd: float = Field(default=0.50, gt=0)
+
 
 class Settings(InfraSettings):
     # --- Anthropic ---

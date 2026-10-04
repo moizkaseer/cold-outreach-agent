@@ -59,13 +59,18 @@ class StepFailed(Exception):
 
 
 async def create_run(
-    sessions: async_sessionmaker[AsyncSession], lead: Lead, sender: Sender, step_names: list[str]
+    sessions: async_sessionmaker[AsyncSession],
+    lead: Lead,
+    sender: Sender,
+    step_names: list[str],
+    *,
+    client_key: str | None = None,
 ) -> uuid.UUID:
     """Insert the lead, the run (with a snapshot of the sender) and one PENDING row per step."""
     async with sessions() as s:
         row = LeadRow(domain=lead.domain, person_name=lead.person_name,
                       person_role=lead.person_role)  # fmt: skip
-        run = Run(lead=row, sender=sender.model_dump(mode="json"))
+        run = Run(lead=row, sender=sender.model_dump(mode="json"), client_key=client_key)
         run.steps = [Step(name=n, position=i) for i, n in enumerate(step_names, 1)]
         s.add(run)
         await s.commit()
