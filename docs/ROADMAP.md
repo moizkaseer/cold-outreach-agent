@@ -40,7 +40,7 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 6 — Ship the demo
 - [ ] Connect "Run" button on moizali.vercel.app
 - [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; tested with SQLite only)
-- [ ] Docker + deploy
+- [~] Docker + deploy (Dockerfile written, never built: no Docker locally; deploy needs Moiz's accounts)
 
 ## Week 7 — Close the loop
 - [ ] Review UI (approve / edit / reject)
@@ -249,3 +249,12 @@ Progress log after every working session (what was built, what broke, what's nex
   isn't atomic (simultaneous requests can overshoot by ~1 run); IP-based limits are weak
   against rotating IPs; still no auth. Behind a proxy uvicorn needs `--proxy-headers`.
   Migration tested up/down on SQLite only. 205 tests. Next: Dockerfile + deploy.
+- 2026-10-04 — Week 6 step 2: `Dockerfile` + `.dockerignore`. One image (uv, lockfile,
+  --no-dev, non-root) with three commands: API (default; uvicorn on $PORT with
+  --proxy-headers, FORWARDED_ALLOW_IPS=* so the rate limit sees real client IPs behind the
+  host's proxy), worker (`arq app.workers.worker.WorkerSettings`), migrations (`alembic
+  upgrade head` as a release command, not on boot, so replicas can't race). NOT BUILT:
+  Docker isn't installed here. Approximated instead: copied only what .dockerignore allows,
+  fresh `uv sync --frozen --no-dev`, both entrypoints import, migrations run, pytest absent.
+  Next (needs Moiz): install Docker and build; pick host (Railway/Render/Fly) + Supabase +
+  managed Redis; create sender.json; then wire the Run button on moizali.vercel.app.

@@ -1,0 +1,16 @@
+# Keep the build context small and secrets out of the image. Config comes from env vars.
+.env
+.env.*
+.git
+.venv
+**/__pycache__
+.pytest_cache
+.ruff_cache
+*.db
+*.db-journal
+
+# Not needed at runtime
+tests
+evals
+docs
+scripts
