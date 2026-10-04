@@ -258,3 +258,8 @@ Progress log after every working session (what was built, what broke, what's nex
   fresh `uv sync --frozen --no-dev`, both entrypoints import, migrations run, pytest absent.
   Next (needs Moiz): install Docker and build; pick host (Railway/Render/Fly) + Supabase +
   managed Redis; create sender.json; then wire the Run button on moizali.vercel.app.
+- 2026-10-04 — Migration `b3f1a2c4d5e6`: enable RLS (no policies) on all tables on Postgres,
+  so Supabase's auto REST API (public anon key) can't read/write our data; the app connects
+  as table owner and is unaffected. No-op on SQLite. Tested up/down on SQLite only; RLS
+  itself not yet verified on Supabase. Moiz created the Supabase project; next: set
+  DATABASE_URL (session pooler) and run `alembic upgrade head`.
