@@ -26,8 +26,8 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] LLM-as-judge rubric for email quality in evals (built + tested; uncalibrated, never run for real)
 
 ## Week 4 — Backend
-- [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — tested on
-  SQLite only; must run `alembic upgrade head` against Supabase before deploy
+- [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — applied to
+  Supabase 2026-10-07 (schema + RLS at head); app itself not yet run against Postgres
 - [x] Orchestrator state machine with resume-from-failed-step (fakes + SQLite; no real run yet)
 - [x] Redis + Arq worker (job + enqueue tested with fakes; no real Redis run yet)
 - [x] FastAPI: create run, get run, SSE progress stream (+ resume) — in-process tests; no auth yet
@@ -263,3 +263,15 @@ Progress log after every working session (what was built, what broke, what's nex
   as table owner and is unaffected. No-op on SQLite. Tested up/down on SQLite only; RLS
   itself not yet verified on Supabase. Moiz created the Supabase project; next: set
   DATABASE_URL (session pooler) and run `alembic upgrade head`.
+- 2026-10-07 — Status check: 205 tests pass, ruff clean. Applied all 3 migrations to the
+  Supabase project (now at head `b3f1a2c4d5e6`). This network blocks outbound TCP 5432/6543
+  (checked against an unrelated host too), so `alembic upgrade head` can't connect from this
+  machine. Instead: `alembic upgrade head --sql` (offline mode) -> reviewed SQL -> applied via
+  the Supabase connector over HTTPS, including the `alembic_version` row, so future
+  `alembic upgrade` runs from the deploy host see the DB as current. Security advisor
+  confirms RLS on all 6 tables with no policies (deny-all for the anon key, as intended).
+  Advisor also flags `public.rls_auto_enable()` (SECURITY DEFINER, callable by anon). Not
+  ours; looks Supabase-created. Left untouched for Moiz to decide. Docker is now installed but
+  the user isn't in the `docker` group yet (`sudo usermod -aG docker $USER`, then re-login).
+  Still blocked on Moiz: golden-fact verification (0/101), 24 calibration labels,
+  sender.json. Next (no API spend): Week 7 review API (approve / edit / reject).
