@@ -1,0 +1,105 @@
+domain,role,subject,body,would_send (yes/no),why
+posthog.com,Head of Growth,PostHog's free-to-paid onboarding,"Hi Alex,
+
+PostHog says 98% of its customers use it for free, and that people can use it without talking to anyone.
+
+With a self-serve, inbound-led model and 10+ paid products, many free users probably stall before they reach a first paid use case. In-product onboarding likely carries most of that load.
+
+Onboardly finds and fixes the onboarding steps where new users drop off. We lifted trial-to-paid conversion 18% in 10 weeks for a 40-person analytics startup.
+
+Open to a 15-minute call next week?
+
+Sam",,
+deel.com,VP Customer Success,Onboarding across Deel's product bundles,"Hi Jordan,
+
+Deel's customers using four or more products are up 1,200% since early last year, and those using three or more are up 480%.
+
+With products like Anytime Pay joining the line-up, teams growing that fast often find each product needs its own onboarding, and new users can stall before they reach value.
+
+Onboardly finds and fixes the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
+stripe.com,"Director of Product, Onboarding",Connect onboarding drop-off,"Hi Riley,
+
+Stripe Connect promises to get platforms live ""in weeks instead of quarters,"" while also handling identity verification, KYC and sanctions checks during onboarding.
+
+Compliance steps like those are often where users stall, and with more than 5 million businesses on Stripe, even small drop-off rates likely add up. Balancing that friction against activation speed is probably a real tension in your role.
+
+At Onboardly, we help B2B software companies find and fix the onboarding steps where new users drop off. For a payroll software company, we cut time-to-first-value from 9 days to 3.
+
+Open to a 15-minute call next week?
+
+Sam",,
+notion.com,Head of Product Growth,Getting new users to a first useful Agent result,"Hi Casey,
+
+Notion 3.1 let Agents read comments and CSVs and search calendars and Slack. With Custom Agents coming soon, teams shipping at that pace often find each launch adds setup and discovery steps, so new users may never reach a first useful Agent result.
+
+That's the kind of drop-off we find and fix for B2B software companies. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
+linear.app,Head of Customer Experience,Onboarding new workspaces onto Intake,"Hi Morgan,
+
+Linear's homepage now puts Intake front and center, turning customer feedback into issues that are routed, labeled and prioritized for the right team.
+
+Teams adding surfaces like Intake and Linear Agent often find that new workspaces get comfortable with the core issue tracker but stall before reaching the newer pieces, which delays first value.
+
+At Onboardly we find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
+webflow.com,"VP Product, Activation",First value across a broader Webflow,"Hi Taylor,
+
+At Webflow Conf you announced prompt-to-production apps alongside a next-gen CMS. When a product widens that much, new signups often struggle to find the right first-value path, and the onboarding flow gets harder to keep coherent.
+
+Onboardly helps B2B software companies find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
+retool.com,Director of Customer Onboarding,Onboarding to Assist in the Retool editor,"Hi Jamie,
+
+I saw Assist (Beta) is now live in the Retool editor, alongside the guided onboarding prompts and in-product CSAT surveys you're rolling out to understand how people work with it.
+
+When a new way of building lands, teams often find that users stall somewhere before their first app comes together, and it's hard to tell which step is the culprit.
+
+That's what we do at Onboardly: we find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
+sentry.io,Head of Growth,Logs GA and new-user activation,"Hi Drew,
+
+Sentry Logs going GA after more than 5,000 companies used it in beta caught my eye, especially alongside MCP Server Monitoring landing a few weeks earlier.
+
+With a product surface growing that fast, new signups often struggle to work out which capability to pick, install and configure before they see any value. That's usually where activation quietly leaks.
+
+At Onboardly we find and fix those drop-off steps. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
+mercury.com,Head of Onboarding,"Onboarding at 200,000+ customers","Hi Avery,
+
+Mercury passing 200,000 customers, with customer growth running 40% year over year, caught my eye.
+
+Teams growing that fast often find that small drop-offs in account opening and activation quietly add up to a lot of customers who stall or never finish setup.
+
+At Onboardly we help B2B software companies find and fix the onboarding steps where new users drop off. For a payroll software company, we cut time-to-first-value from 9 days to 3.
+
+Open to a 15-minute call next week?
+
+Sam",,
+cal.com,Head of Product,Setup steps after Round-Robin Groups,"Hi Quinn,
+
+Cal.com's latest update added Round-Robin Groups and private links with expiry. Both are useful, but with Teams and Organizations tiers on top, every new feature likely adds another setup step before a team sees value, and that's often where new signups stall.
+
+At Onboardly we help B2B software companies find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.
+
+Open to a 15-minute call next week?
+
+Sam",,
