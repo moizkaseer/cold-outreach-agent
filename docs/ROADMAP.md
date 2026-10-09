@@ -405,3 +405,13 @@ Progress log after every working session (what was built, what broke, what's nex
   a batch-level code check; define "asserted" precisely (a plain claim about THIS company;
   general statements about teams like them = hypothesis); evidence must come from the
   email, not the context; save raw judge output. Spend 2026-10-09 ≈ $2.79 estimated.
+- 2026-10-09 — Judge v2.2 BUILT, NOT MEASURED (Moiz paused paid runs until we find a
+  cheaper way to measure). human_tone now derived by code from a list of concrete tone
+  defects (hype / superlative / guarantee / flattery / buzzword) that must be verbatim in
+  the email and outside the sender's own offer/outcomes/ask; "!" counted by code. Precise
+  "asserted" = a plain claim that THIS company has the problem. Quotes must come from the
+  email, not the context. run_judge_check now saves the judge's raw output. 238 tests.
+  Cost notes (checked against the API docs, not memory): Message Batches API = 50% off
+  every token and stacks with caching; prompt caching can't help because Haiku 4.5 only
+  caches prompts >= 4096 tokens and the judge prompt is ~1.5k; at $1/$5 per MTok the
+  judge's cost is mostly OUTPUT tokens (lists + reasons), so trimming context won't help.
