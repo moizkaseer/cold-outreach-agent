@@ -2,6 +2,7 @@
 
     uv run python -m scripts.pipeline_smoke                      # built-in test leads
     uv run python -m scripts.pipeline_smoke --max-cost 0.5 posthog.com:"Alex":"Head of Growth"
+    uv run python -m scripts.pipeline_smoke --save evals/results/smoke.json  # for redraft
 
 Same orchestrator + steps the worker runs (validate -> dedupe -> score -> research ->
 painpoints -> draft), but in-process against a throwaway SQLite DB, so no Redis or
@@ -15,6 +16,7 @@ prints must never be sent. It only exercises the pipeline.
 
 import argparse
 import asyncio
+import json
 import tempfile
 import time
 from pathlib import Path
@@ -26,7 +28,7 @@ from app.db.models import Base, EmailDraft, Run, Step
 from app.db.session import make_engine, make_sessionmaker
 from app.observability import setup_tracing
 from app.pipeline.factory import build_orchestrator
-from app.schemas import Lead, Sender
+from app.schemas import Lead, PainPoints, Sender
 
 TEST_SENDER = Sender(
     name="Sam Test",
@@ -48,7 +50,7 @@ DEFAULT_LEADS = [
 ]
 
 
-async def run_one(orch, sessions, lead: Lead) -> float:
+async def run_one(orch, sessions, lead: Lead) -> tuple[float, dict]:
     t0 = time.monotonic()
     run_id = await orch.create_run(lead, TEST_SENDER)
     status = await orch.execute(run_id)
@@ -77,12 +79,32 @@ async def run_one(orch, sessions, lead: Lead) -> float:
         print(f"\n  words: {len(email.body.split())}")
         for p in email.problems:
             print(f"  PROBLEM: {p}")
-    return run.cost_usd
+
+    # Everything scripts.redraft needs to re-draft from the SAME research, so writer
+    # changes can be compared without paying for (or varying) research again.
+    outputs = {st.name: st.output or {} for st in steps}
+    pps = outputs.get("painpoints", {}).get("pain_points")
+    record = {
+        "lead": lead.model_dump(),
+        "status": status.value,
+        "report": outputs.get("research", {}).get("report"),
+        "pain_point": PainPoints.model_validate(pps).top.model_dump() if pps else None,
+        "email": {
+            "subject": email.subject,
+            "body": email.body,
+            "used_fact_ids": email.used_fact_ids,
+        }
+        if email
+        else None,  # fmt: skip
+        "cost_usd": run.cost_usd,
+    }
+    return run.cost_usd, record
 
 
 async def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--max-cost", type=float, default=0.75)
+    ap.add_argument("--save", type=Path, help="write research + drafts here (JSON)")
     ap.add_argument("leads", nargs="*", help='domain:"Name":"Role"')
     args = ap.parse_args()
     raw = [tuple(x.split(":", 2)) for x in args.leads] or DEFAULT_LEADS
@@ -97,13 +119,19 @@ async def main() -> None:
         sessions = make_sessionmaker(engine)
         orch = build_orchestrator(settings, sessions)
 
-        spent = 0.0
+        spent, records = 0.0, []
         for lead in leads:
             if spent >= args.max_cost:
                 print(f"\nSKIPPED {lead.domain}: spend ${spent:.4f} reached cap ${args.max_cost}")
                 continue
-            spent += await run_one(orch, sessions, lead)
+            cost, record = await run_one(orch, sessions, lead)
+            spent += cost
+            records.append(record)
         print(f"\nTOTAL estimated spend: ${spent:.4f}")
+        if args.save:
+            args.save.parent.mkdir(parents=True, exist_ok=True)
+            args.save.write_text(json.dumps(records, indent=2, ensure_ascii=False))
+            print(f"saved {len(records)} leads -> {args.save}")
         await engine.dispose()
 
 

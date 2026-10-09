@@ -305,4 +305,20 @@ Progress log after every working session (what was built, what broke, what's nex
   specific; deel email crams 4 stats into 2 sentences; stripe email has an awkward hedge
   ("I can't see your data"). Next: tune writer prompt for one stat + natural hypothesis
   tone (measure with email rubric), then Docker build + deploy.
+- 2026-10-09 — Writer tuning loop (cheap): `pipeline_smoke --save` stores research + drafts;
+  new `scripts/redraft.py` re-drafts from the SAME research and scores with the rubric
+  (`--baseline` scores saved drafts), so writer changes cost ~$0.07 for 3 leads instead
+  of ~$0.28 and research variance is held fixed. Rubric gained `few_numbers`, a CODE check
+  (<=2 company numbers; sender's own outcome/ask numbers excluded). Fixed a real judge bug:
+  Haiku returned an empty results list -> crash; `EmailJudgeOutput.results` now requires
+  exactly one row per criterion so the loop retries. Writer prompt: at most one company
+  number; pain framed inside the sentence, no "I can't see your data" disclaimers.
+  Fixture `evals/results/smoke-20261009.json` (smoke run 2: $0.280, 3/3 verified).
+  Rubric, n=3, uncalibrated judge: baseline 23/24 -> after 23/24 (failure moved: pain
+  hypothesis false-fail -> stripe opener quotes product marketing, a fair hit). Emails
+  shorter (79-86 vs 85-103 words), one company number each. The first run's issues did
+  not recur in run 2's baseline, so they're intermittent; n=3 can't show improvement.
+  Spend 2026-10-09 ≈ $0.62 estimated (2 smoke runs $0.55 + judging/redraft $0.08).
+  Next ideas: prefer news (launch/hire/funding) over marketing copy for the opener;
+  grow the fixture to ~10 leads before trusting rubric deltas; then Docker + deploy.
 

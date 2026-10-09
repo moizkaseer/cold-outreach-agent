@@ -1,0 +1,337 @@
+[
+  {
+    "lead": {
+      "domain": "posthog.com",
+      "person_name": "Alex Morgan",
+      "person_role": "Head of Growth"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "posthog.com",
+      "company_name": "PostHog",
+      "summary": "PostHog is an open-source product and data platform used by 500,000+ teams, now positioning itself as a \"context layer\" for products and AI agents. It raised a $75M Series E at a $1.4B valuation in Sept 2025 and is growing through inbound, usage-based, free-tier-led adoption rather than outbound sales. It has 230+ employees, over $50M in revenue and a Growth small team.",
+      "facts": [
+        {
+          "id": "f2",
+          "claim": "PostHog says it is starting 'Act 2': going deeper into being a devtool and working on automatically generating pull requests for engineers.",
+          "category": "product",
+          "source_url": "https://posthog.com/blog/series-e",
+          "evidence": [
+            "We are starting Act 2 of PostHog. We are going deeper into being a devtool, not \"just\" analytics.",
+            "we're also going to start working on generating pull requests for you."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "PostHog's homepage positions it as 'your product's context layer', ingesting analytics, errors, replays and business data so people and agents can query and act on it.",
+          "category": "product",
+          "source_url": "https://posthog.com/",
+          "evidence": [
+            "PostHog ingests and stores your analytics, errors, replays, and business data so you and your agents can query and act on it.",
+            "Join 500,000+ teams already shipping with PostHog."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "PostHog is used by 500,000+ teams, and 65% of every Y Combinator batch uses its products.",
+          "category": "customers",
+          "source_url": "https://posthog.com/about",
+          "evidence": [
+            "We have over 500,000+ teams using our products.",
+            "65% of every Y Combinator batch (the world's best accelerator for startups) use our products."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "PostHog's growth model is inbound-led and reputation-driven, with generous free tiers and no need to talk to sales.",
+          "category": "other",
+          "source_url": "https://posthog.com/about",
+          "evidence": [
+            "we grow because of our reputation on the internet, whereas every single competitor grows by salespeople.",
+            "Inbound-led sales",
+            "Use it without talking to us."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "98% of PostHog's customers use it for free; all paid products are pay-per-use with monthly free tiers.",
+          "category": "product",
+          "source_url": "https://posthog.com/",
+          "evidence": [
+            "All our paid products are pay-per-use with generous monthly free tiers. In fact, 98% of our customers use PostHog for free."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "PostHog is hiring (11 open team member slots), is a company of 230+ people, has revenue over $50 million a year, and has dedicated small teams including Growth and Demand Gen.",
+          "category": "hiring",
+          "source_url": "https://posthog.com/careers",
+          "evidence": [
+            "Our small teams are looking to add 11 team members.",
+            "Starting a job at a company of 230+ people can be intimidating!",
+            "Our revenue is over $50 million a year"
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "PostHog offers 10+ paid products and says it plans to keep adding more.",
+          "category": "product",
+          "source_url": "https://posthog.com/about",
+          "evidence": [
+            "We have 10+ paid products today, and even if we don't offer it yet, we will eventually."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Converting a 98% free base into paying, multi-product users",
+      "rationale": "PostHog says 98% of customers use it for free (f6), and all paid products are pay-per-use with free tiers. Growth is inbound-led and self-serve, with no sales needed (f5). So the conversion from free to paid, and from one product to the next, probably depends on in-product onboarding rather than people. As Head of Growth, Alex likely owns this. It is a hypothesis that many free users stall before reaching a paid use case. Onboardly's work on finding and fixing onboarding drop-off, and its trial-to-paid result, could plausibly help.",
+      "supporting_fact_ids": [
+        "f6",
+        "f5"
+      ]
+    },
+    "email": {
+      "subject": "PostHog's free-to-paid onboarding",
+      "body": "Hi Alex,\n\nPostHog says 98% of its customers use it for free, and that people can use it without talking to anyone.\n\nWith a self-serve, inbound-led model and 10+ paid products, many free users probably stall before they reach a first paid use case. In-product onboarding likely carries most of that load.\n\nOnboardly finds and fixes the onboarding steps where new users drop off. We lifted trial-to-paid conversion 18% in 10 weeks for a 40-person analytics startup.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f6",
+        "f5",
+        "f8"
+      ]
+    },
+    "cost_usd": 0.0805815
+  },
+  {
+    "lead": {
+      "domain": "deel.com",
+      "person_name": "Jordan Lee",
+      "person_role": "VP Customer Success"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "deel.com",
+      "company_name": "Deel",
+      "summary": "Deel is a global HR, payroll and compliance platform that announced a $300M Series E at a $17.3B valuation in October 2025, with over $1B ARR. It is scaling quickly across multiple products and countries, and plans to invest in AI-powered payroll/HR and infrastructure. It also advertises a 90+ NPS for enterprise customers and 261 open roles.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Deel announced a $300M Series E round valuing the company at $17.3B, co-led by new investor Ribbit Capital with Andreessen Horowitz and Coatue.",
+          "category": "funding",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "Today, Deel announced a $300 million Series E funding round, valuing the company at $17.3 billion.",
+            "We’re thrilled to welcome Ribbit Capital as a new investor, co-leading this round alongside our long-time partners Andreessen Horowitz and Coatue Management."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Deel surpassed $1B in ARR in 2025, has had three consecutive years of profitability, and hit its first $100M revenue month in September.",
+          "category": "news",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "Earlier this year, we surpassed $1 billion in annual recurring revenue (ARR). In September, we marked three consecutive years of profitability and a major milestone - our first $100 million revenue month."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Series E funds will go to expanding infrastructure, AI-powered payroll and HR products, and serving 100 million employees worldwide.",
+          "category": "product",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "With our Series E, we’ll double down on expanding our infrastructure, advancing AI-powered payroll and HR products, and laying the foundation to serve 100 million employees worldwide."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Deel's own global payroll engine is live in 55+ countries, and it targets real-time native payroll in 100+ countries by 2029; it also launched Anytime Pay for early access to net earnings.",
+          "category": "product",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "We’re building the world's first global payroll processing engine which is live in 55+ countries, including the US, Canada, Singapore, South Africa, and Brazil.",
+            "are on track to reach real-time native payroll processing in 100+ countries by 2029.",
+            "Anytime Pay, which lets employees access their actual net earnings at any point during the month."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Customers are consolidating onto more Deel products: a 480% increase in customers using three or more products and 1,200% for four or more, since early last year.",
+          "category": "customers",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "we’ve seen a 480% increase in customers using three or more products and a 1,200% increase in those using four or more."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Deel's homepage claims 40,000+ customers, 150+ countries, and a 90+ NPS for enterprise customers.",
+          "category": "customers",
+          "source_url": "https://www.deel.com/",
+          "evidence": [
+            "+40,000",
+            "90+\nNPS for enterprise customers"
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Deel has 261 open positions and describes itself as going from zero to $1B+ ARR in six years.",
+          "category": "hiring",
+          "source_url": "https://www.deel.com/careers/",
+          "evidence": [
+            "261 open positions across all teams",
+            "We went from zero to $1B+ ARR in six years across 160+ countries."
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Named customers include Shopify, Nike, and Klarna, per the CRO's bio on Deel's About page.",
+          "category": "customers",
+          "source_url": "https://www.deel.com/about",
+          "evidence": [
+            "has 35,000+ customers including Shopify, Nike, and Klarna."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Driving adoption of multi-product bundles across a fast-growing base",
+      "rationale": "Customers using 3+ products rose 480% and 4+ products 1,200% (f5), and Deel is adding AI payroll/HR products and Anytime Pay (f3, f4). Each new product probably needs its own onboarding and activation, so new users may stall before reaching value. That is a likely pain for a VP of Customer Success, and it fits Onboardly's work on finding onboarding drop-off steps. This is a hypothesis, not a confirmed problem.",
+      "supporting_fact_ids": [
+        "f5",
+        "f3",
+        "f4"
+      ]
+    },
+    "email": {
+      "subject": "Onboarding across Deel's product bundles",
+      "body": "Hi Jordan,\n\nDeel's customers using four or more products are up 1,200% since early last year, and those using three or more are up 480%.\n\nWith products like Anytime Pay joining the line-up, teams growing that fast often find each product needs its own onboarding, and new users can stall before they reach value.\n\nOnboardly finds and fixes the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f5",
+        "f4"
+      ]
+    },
+    "cost_usd": 0.07952469999999999
+  },
+  {
+    "lead": {
+      "domain": "stripe.com",
+      "person_name": "Riley Chen",
+      "person_role": "Director of Product, Onboarding"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "stripe.com",
+      "company_name": "Stripe",
+      "summary": "Stripe is a programmable financial infrastructure company serving more than 5 million businesses, with $1.9T processed in 2025. Recent focus areas are AI/agentic commerce, stablecoins and money management. Connect is its platform product with embedded onboarding, which is relevant to an onboarding product leader.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "More than 5 million businesses build on Stripe, which describes itself as building programmable financial infrastructure.",
+          "category": "other",
+          "source_url": "https://stripe.com/about",
+          "evidence": [
+            "More than 5 million businesses build on Stripe, spanning the economic frontier—from solo founders to established enterprises—united by a practical focus on growth."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Businesses on Stripe generated $1.9T in payments volume in 2025, and Stripe's annual letter covers trends like agentic commerce and stablecoins.",
+          "category": "other",
+          "source_url": "https://stripe.com/",
+          "evidence": [
+            "Businesses on Stripe generated $1.9T in 2025.",
+            "Our annual letter explores the trends defining the internet economy—including steeper growth for newer businesses, faster international expansion, stablecoin progress, agentic commerce, and more."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Stripe launched the Agentic Commerce Suite on December 11, 2025, letting businesses sell across multiple AI agents with a single integration. Named adopters include Coach, Kate Spade, URBN, Wix, Etsy and Squarespace.",
+          "category": "news",
+          "source_url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
+          "evidence": [
+            "Agentic Commerce Suite removes that complexity with a low-code solution for businesses, letting them sell across AI agents with a single integration.",
+            "Businesses including Coach, Kate Spade, URBN (including Anthropologie, Free People, and Urban Outfitters), Revolve, Ashley Furniture, Halara, ABT Electronics, and Nectar"
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "At Sessions 2025, Stripe unveiled a Payments Foundation Model and 60+ launches, including 25 new payment methods that bring its total to over 125.",
+          "category": "news",
+          "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+          "evidence": [
+            "Stripe unveils the world's first AI foundation model for payments.",
+            "Support for 25 new payment methods, including UPI and PIX, bringing its total to over 125 payment methods."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Stripe expanded stablecoin-powered Treasury accounts to businesses in 101 countries, three months after completing its acquisition of Bridge.",
+          "category": "news",
+          "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+          "evidence": [
+            "With Treasury, Stripe announced our largest effort in expanding new money management capabilities powered by stablecoins, to 101 countries. This comes just three months after Stripe completed its acquisition of stablecoin platform Bridge."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "NVIDIA migrated its entire GeForce Now subscriber base to Stripe Billing in six weeks, the fastest-ever migration to Stripe Billing.",
+          "category": "customers",
+          "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+          "evidence": [
+            "NVIDIA migrated their entire subscriber base to Stripe Billing in just six weeks, making it the fastest-ever migration to Stripe Billing."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Stripe Connect advertises seamless onboarding and embedded components for platforms, letting them go live in weeks instead of quarters.",
+          "category": "product",
+          "source_url": "https://stripe.com/connect",
+          "evidence": [
+            "Connect offers seamless onboarding, embedded components, global payouts, and more—go live in weeks instead of quarters"
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Connect handles identity verification, KYC and sanctions checks while onboarding users, and offers prebuilt or custom embedded onboarding flows.",
+          "category": "product",
+          "source_url": "https://stripe.com/connect",
+          "evidence": [
+            "manages identity verifications, KYC, and sanctions checks while onboarding your users to Connect",
+            "Whether you use Connect’s prebuilt, optimized UIs or build your own custom flows, it’s easy to get your users up and running quickly."
+          ]
+        },
+        {
+          "id": "f9",
+          "claim": "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B while maintaining 99.9999% uptime.",
+          "category": "news",
+          "source_url": "https://stripe.com/",
+          "evidence": [
+            "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B for businesses while maintaining a 99.9999% uptime."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Keeping KYC-heavy Connect onboarding fast as it scales",
+      "rationale": "Stripe Connect promises 'seamless onboarding' and 'go live in weeks instead of quarters' (f7). It also handles identity verification, KYC and sanctions checks during onboarding, with prebuilt or custom flows (f8). Compliance steps like these are a common place for users to stall or drop off. With 5M+ businesses on Stripe (f1), small drop-off rates would add up. A Director of Product, Onboarding probably has to balance compliance friction against activation speed. This is a hypothesis, not a confirmed problem.",
+      "supporting_fact_ids": [
+        "f7",
+        "f8",
+        "f1"
+      ]
+    },
+    "email": {
+      "subject": "Connect onboarding drop-off",
+      "body": "Hi Riley,\n\nStripe Connect promises to get platforms live \"in weeks instead of quarters,\" while also handling identity verification, KYC and sanctions checks during onboarding.\n\nCompliance steps like those are often where users stall, and with more than 5 million businesses on Stripe, even small drop-off rates likely add up. Balancing that friction against activation speed is probably a real tension in your role.\n\nAt Onboardly, we help B2B software companies find and fix the onboarding steps where new users drop off. For a payroll software company, we cut time-to-first-value from 9 days to 3.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f7",
+        "f8",
+        "f1"
+      ]
+    },
+    "cost_usd": 0.11959739999999999
+  }
+]

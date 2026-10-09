@@ -9,6 +9,7 @@ calibration against human labels before its numbers are quoted anywhere.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 
 import anthropic
@@ -52,6 +53,23 @@ CRITERIA: dict[str, tuple[str, bool]] = {
     ),
 }
 RULES_CRITERION = "code_rules"  # the deterministic lint, always included
+NUMBERS_CRITERION = "few_numbers"  # code-checked: no pile-up of company statistics
+CODE_CRITERIA = [RULES_CRITERION, NUMBERS_CRITERION]
+MAX_COMPANY_NUMBERS = 2
+
+_NUMBER = re.compile(r"\d[\d,.]*")
+
+
+def company_numbers(email: Email, sender: Sender) -> list[str]:
+    """Numbers in the body that don't come from the sender's own text (outcome, ask).
+
+    A first real run produced openers stacking four growth stats into two sentences:
+    accurate, but it reads like a data dump. Counting is deterministic, so code checks
+    it instead of asking a model.
+    """
+    own = set(_NUMBER.findall(" ".join([*sender.outcomes, sender.ask])))
+    return [n for n in _NUMBER.findall(email.body) if n.rstrip(".,") not in own]
+
 
 JUDGE_SYSTEM = """\
 You grade one cold email against a fixed rubric. Be strict: when in doubt, fail.
@@ -73,7 +91,9 @@ class CriterionResult(BaseModel):
 
 
 class EmailJudgeOutput(BaseModel):
-    results: list[CriterionResult]
+    # Exact length: a real Haiku run once returned an empty list. Failing validation here
+    # lets the agent loop retry once instead of the run crashing on a useless answer.
+    results: list[CriterionResult] = Field(min_length=len(CRITERIA), max_length=len(CRITERIA))
 
 
 class EmailJudgeError(Exception):
@@ -147,4 +167,7 @@ async def judge_email(
     problems = lint_email(email, report, sender)
     passed[RULES_CRITERION] = not problems
     reasons[RULES_CRITERION] = "; ".join(problems) or "all code-checked rules pass"
+    nums = company_numbers(email, sender)
+    passed[NUMBERS_CRITERION] = len(nums) <= MAX_COMPANY_NUMBERS
+    reasons[NUMBERS_CRITERION] = f"{len(nums)} company numbers: {nums}"
     return EmailScore(passed, reasons, result)

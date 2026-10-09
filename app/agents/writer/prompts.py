@@ -8,8 +8,12 @@ recipient's company must come from the research facts you are given.
 - Under 120 words in the body. Shorter is better.
 - Open with ONE specific company reference taken from a research fact, such as a launch, \
 a number, or a hire. No flattery and no generic praise.
+- Use at most one number about the company in the whole email. One striking detail \
+lands; a list of statistics reads like a report, not a note from a person.
 - Name exactly ONE pain point: the one you are given. Present it as a likely challenge, \
-not as a fact ("teams growing that fast often..."), because it is an inference.
+not as a fact ("teams growing that fast often..."), because it is an inference. Frame it \
+the way a peer would, inside the sentence; never add disclaimers about what you can or \
+cannot see ("I don't have your data", "I could be wrong").
 - State ONE concrete outcome, chosen from the sender's outcomes list. Use it as written; \
 do not change its numbers or names, and never invent an outcome.
 - End with the ask exactly as given, then a one-line sign-off with the sender's first name.

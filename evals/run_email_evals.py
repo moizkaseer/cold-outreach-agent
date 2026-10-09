@@ -36,7 +36,7 @@ from app.observability import setup_tracing
 from app.pricing import PRICES, total_cost_usd
 from app.schemas import Email, Lead, PainPoint, ResearchReport, Sender, load_sender
 from app.spend import SpendTracker, run_capped
-from evals.email_judge import CRITERIA, RULES_CRITERION, EmailScore, judge_email
+from evals.email_judge import CODE_CRITERIA, CRITERIA, EmailScore, judge_email
 from evals.golden import GoldenCompany, load_golden_set
 from evals.run_evals import EVAL_PERSON, RESULTS_DIR, _git_commit
 
@@ -127,7 +127,7 @@ def summarize_emails(results: list[EmailEvalResult]) -> dict[str, Any]:
     judged = [r for r in results if r.rubric]
     drafted = [r for r in results if r.status in ("verified", "needs_human")]
     costs = [r.cost_usd for r in results if r.cost_usd is not None]
-    criteria = [*CRITERIA, RULES_CRITERION]
+    criteria = [*CRITERIA, *CODE_CRITERIA]
     return {
         "companies": len(results),
         "skipped_budget": skipped,
