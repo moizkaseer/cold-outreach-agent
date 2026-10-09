@@ -7,11 +7,15 @@ from app.schemas import Email
 from evals.email_judge import (
     CODE_CRITERIA,
     CRITERIA,
+    JUDGED_CRITERIA,
     NUMBERS_CRITERION,
+    PAIN_HYPOTHESIS,
     RULES_CRITERION,
+    SINGLE_PAIN,
     EmailJudgeError,
     company_numbers,
     judge_email,
+    opening_sentence,
 )
 from tests.fakes import FakeClient, response, tool_use
 from tests.samples import LEAD, REPORT, SENDER
@@ -20,21 +24,27 @@ from tests.test_writer import GOOD_BODY, PAIN
 EMAIL = Email(subject="Your Series C hiring", body=GOOD_BODY, used_fact_ids=["f1", "f2"])
 EVIDENCE = {
     "specific_opener": "Congrats on the $60M Series C.",
-    "single_pain_point": "getting new hires productive quickly is often the hard part",
-    "pain_as_hypothesis": "is often the hard part",
     "one_sender_outcome": "we cut time-to-productivity for new hires by 30% at Northwind",
 }
+PAIN_QUOTE = "getting new hires productive quickly is often the hard part"
+GOOD_PROBLEMS = [{"quote": PAIN_QUOTE, "is_given_pain_point": True, "framing": "hypothesis"}]
 
 
-def results(overrides: dict | None = None, drop: str | None = None) -> dict:
+def results(
+    overrides: dict | None = None, problems: list[dict] | None = None, drop: str | None = None
+) -> dict:
     rows = []
-    for name in CRITERIA:
+    for name in JUDGED_CRITERIA:
         if name == drop:
             continue
         row = {"criterion": name, "passed": True, "evidence": EVIDENCE.get(name, ""), "reason": "r"}
         row.update((overrides or {}).get(name, {}))
         rows.append(row)
-    return {"results": rows}
+    return {
+        "problems": GOOD_PROBLEMS if problems is None else problems,
+        "pain_owner_roles": ["Head of People"],
+        "results": rows,
+    }
 
 
 async def judge(payload: dict, email: Email = EMAIL):
@@ -68,7 +78,7 @@ async def test_criteria_without_evidence_requirement() -> None:
 
 
 async def test_code_rules_folded_in() -> None:
-    bad = Email(subject="s", body="Our AI helps. " + GOOD_BODY, used_fact_ids=["f1"])
+    bad = Email(subject="s", body=GOOD_BODY + " Our AI helps.", used_fact_ids=["f1"])
     s = await judge(results(), email=bad)
     assert s.passed[RULES_CRITERION] is False and "AI or automation" in s.reasons[RULES_CRITERION]
     assert s.score == pytest.approx(7 / 8)
@@ -107,3 +117,43 @@ async def test_stat_pileup_fails_few_numbers() -> None:
     assert (
         s.passed[NUMBERS_CRITERION] is False and "4 company numbers" in s.reasons[NUMBERS_CRITERION]
     )
+
+
+def test_opening_sentence_skips_greeting() -> None:
+    assert opening_sentence(GOOD_BODY) == "Congrats on the $60M Series C."
+    assert opening_sentence("No greeting here. Second.") == "No greeting here."
+
+
+async def test_opener_evidence_must_come_from_the_opening_sentence() -> None:
+    # Seen for real: a generic first sentence passed because sentence 2 was specific.
+    s = await judge(results({"specific_opener": {"evidence": "With 120 open roles"}}))
+    assert s.passed["specific_opener"] is False
+    assert "opening sentence" in s.reasons["specific_opener"]
+
+
+async def test_off_topic_problem_fails_single_pain_point() -> None:
+    extra = {"quote": "retaining engineers is harder", "is_given_pain_point": False,
+             "framing": "hypothesis"}  # fmt: skip
+    s = await judge(results(problems=[*GOOD_PROBLEMS, extra]))
+    assert s.passed[SINGLE_PAIN] is False and "retaining engineers" in s.reasons[SINGLE_PAIN]
+    assert s.passed[PAIN_HYPOTHESIS] is True
+
+
+async def test_asserted_problem_fails_hypothesis_even_with_a_sloppy_quote() -> None:
+    # Fail-safe: a flagged problem counts even if its quote isn't verbatim.
+    bad = {"quote": "not in the email", "is_given_pain_point": True, "framing": "asserted"}
+    s = await judge(results(problems=[*GOOD_PROBLEMS, bad]))
+    assert s.passed[PAIN_HYPOTHESIS] is False and s.passed[SINGLE_PAIN] is True
+
+
+async def test_pain_passes_need_a_verifiable_quote() -> None:
+    fake = [{"quote": "invented text", "is_given_pain_point": True, "framing": "hypothesis"}]
+    s = await judge(results(problems=fake))
+    assert s.passed[SINGLE_PAIN] is False and s.passed[PAIN_HYPOTHESIS] is False
+    s = await judge(results(problems=[]))
+    assert s.passed[SINGLE_PAIN] is False and s.passed[PAIN_HYPOTHESIS] is False
+
+
+async def test_pain_criteria_are_not_model_verdicts() -> None:
+    assert SINGLE_PAIN not in JUDGED_CRITERIA and PAIN_HYPOTHESIS not in JUDGED_CRITERIA
+    assert {SINGLE_PAIN, PAIN_HYPOTHESIS} <= set(CRITERIA)
