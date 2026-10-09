@@ -84,11 +84,15 @@ You grade one cold email against a fixed rubric. Be strict: when in doubt, fail.
 for what is WRONG, not for something that passes.
 
 Fill the fields in order:
-1. `problems`: EVERY problem, challenge or difficulty the email says (or suggests) the \
-recipient's company has. One entry per distinct problem; include ones that look like \
-asides. Do not include the sender's own results. For each: a verbatim quote (one \
-contiguous span copied from the email), whether it is the given pain point, and whether \
-it is framed as a hypothesis ("often", "probably", "may") or asserted as fact.
+1. `problems`: EVERY distinct problem the email says (or suggests) the recipient's \
+company has: a difficulty or bad outcome (users stall, costs rise, people leave). \
+Include ones that look like asides. NOT problems: neutral facts about the company or its \
+products, the sender's own results, and sentences that only explain, elaborate or give a \
+cause for a problem already listed (those belong to that problem; don't list them \
+again). For each: `quote` = the WHOLE sentence containing it, copied verbatim, so its \
+hedges stay attached; whether it is the given pain point; and `framing`: "hypothesis" if \
+that sentence hedges it ("often", "probably", "likely", "may", "teams like X tend to"), \
+"asserted" if it states the problem as a plain fact about this company.
 2. `pain_owner_roles`: 1-3 job titles that typically own the given pain point.
 3. `results`: one verdict per rubric criterion, with a short reason and `evidence`, the \
 exact phrase from the email that shows a pass (copied verbatim). If it fails, evidence \
@@ -107,7 +111,7 @@ class CriterionResult(BaseModel):
 
 
 class Problem(BaseModel):
-    quote: str = Field(description="One contiguous span copied verbatim from the email.")
+    quote: str = Field(description="The whole sentence, copied verbatim from the email.")
     is_given_pain_point: bool
     framing: Literal["hypothesis", "asserted"]
 
