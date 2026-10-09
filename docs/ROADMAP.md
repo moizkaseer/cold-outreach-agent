@@ -335,3 +335,16 @@ Progress log after every working session (what was built, what broke, what's nex
   Next: Moiz labels the 10 emails (send / don't send + why) -> calibrate or replace the
   judge (stricter prompt, maybe Sonnet), then tune. Spend 2026-10-09 ≈ $1.44 estimated.
 
+- 2026-10-09 — Judge check without expert labels (`evals/email_controls.py`,
+  `evals/run_judge_check.py`). Moiz isn't an SDR, so his send/don't-send labels would
+  calibrate the judge to the wrong taste; `email_labels.csv` is shelved until 2-3 real
+  sales people can label it. Instead: 7 planted flaws, each a deterministic edit aimed at
+  one LLM criterion (generic opener, extra pain point, pain stated as fact, changed outcome
+  number, vague outcome, off-target role "General Counsel", salesy hype). The correct
+  verdict is known by construction. Reports catch rate per flaw, pass rate on unedited
+  originals ("no planted flaw", not "known good"), and flip rate across `--repeats`.
+  All 7 flaws apply to all 10 fixture emails (70 copies). Edits that would push an email
+  over 120 words are skipped (the writer can't produce those). 228 tests, no API spend.
+  Real ground truth later = reply rates once sending exists (Week 7).
+  Next (needs Moiz's OK): `--limit 5` run (~40 judgements, ~$0.28 est.) and a
+  `--flaws none --repeats 3` consistency run (~30 judgements, ~$0.21 est.).
