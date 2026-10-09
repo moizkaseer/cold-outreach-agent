@@ -47,6 +47,7 @@ class JobResult:
     passed: dict[str, bool] | None
     reasons: dict[str, str] | None
     cost_usd: float | None
+    raw: dict | None = None  # the judge's own output, for debugging fails without re-paying
     skipped: bool = False
 
 
@@ -86,12 +87,13 @@ async def main(args: argparse.Namespace) -> None:
         except EmailJudgeError as e:
             print(f"  judge error {c.domain}/{c.flaw}: {e}", flush=True)
             return JobResult(job, None, None, None)
+        raw = score.agent.output.model_dump() if score.agent and score.agent.output else None
         llm_only = {k: v for k, v in score.passed.items() if k in CRITERIA}
         cost = total_cost_usd([score.agent]) if score.agent else None
         if c.target is not None:
             mark = "caught" if not llm_only[c.target] else "MISSED"
             print(f"  {c.domain:<14} {c.flaw:<24} {mark}", flush=True)
-        return JobResult(job, llm_only, score.reasons, cost)
+        return JobResult(job, llm_only, score.reasons, cost, raw=raw)
 
     results = await run_capped(
         jobs, one, tracker=tracker, concurrency=args.concurrency,
@@ -116,7 +118,7 @@ async def main(args: argparse.Namespace) -> None:
         "judgements": [
             {"domain": r.job.judged.case.domain, "flaw": r.job.judged.case.flaw,
              "target": r.job.judged.case.target, "repeat": r.job.repeat,
-             "passed": r.passed, "reasons": r.reasons, "skipped": r.skipped}
+             "passed": r.passed, "reasons": r.reasons, "raw": r.raw, "skipped": r.skipped}
             for r in results
         ],
     }, indent=2, ensure_ascii=False))  # fmt: skip

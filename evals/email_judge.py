@@ -22,11 +22,11 @@ from app.schemas import Email, Lead, PainPoint, ResearchReport, Sender
 from app.tools.text import quote_in_text
 
 # name -> (definition shown to the judge, does a pass need a quote from the email?)
-# The model gives a direct verdict on these four. A first planted-flaw check
+# The model gives a direct verdict on these three. A first planted-flaw check
 # (judge-check-20261009-224559) showed a pass-seeking judge: asked "is there exactly one
 # pain point?" it found the real one and ignored a planted second. So each verdict is
 # narrowed: the opener check sees only the opening sentence, and the role check must
-# first name who owns the pain.
+# first name who owns the pain. Everything fuzzier is decided by code (see below).
 CRITERIA: dict[str, tuple[str, bool]] = {
     "specific_opener": (
         "Judge ONLY the given opening sentence: it must reference one specific fact about "
@@ -45,18 +45,18 @@ CRITERIA: dict[str, tuple[str, bool]] = {
         "is not enough.",
         False,
     ),
-    "human_tone": (
-        "It reads like a thoughtful person writing to a peer: plain and specific, with no "
-        "hype, buzzwords, or salesy filler.",
-        False,
-    ),
 }
-# Decided by CODE from the judge's list of problems, never by a direct model verdict.
+# Decided by CODE from lists the judge fills in, never by a direct model verdict. A
+# direct "is the tone human?" verdict flipped on 4/10 emails across 3 repeats
+# (judge-check-20261009-230843): strict + fuzzy = a coin flip on borderline emails.
 SINGLE_PAIN = "single_pain_point"
 PAIN_HYPOTHESIS = "pain_as_hypothesis"
+HUMAN_TONE = "human_tone"
 DERIVED_CRITERIA = {
     SINGLE_PAIN: "Every problem the email raises is the given pain point (and there is one).",
     PAIN_HYPOTHESIS: "Every problem is framed as a likely challenge, none asserted as fact.",
+    HUMAN_TONE: "No concrete tone defects (hype, superlatives, guarantees, flattery, "
+    "buzzwords, exclamation marks) outside the sender's own wording.",
 }
 JUDGED_CRITERIA = dict(CRITERIA)  # what the model returns verdicts for
 CRITERIA = {**CRITERIA, **{k: (v, False) for k, v in DERIVED_CRITERIA.items()}}
@@ -80,8 +80,8 @@ def company_numbers(email: Email, sender: Sender) -> list[str]:
 
 
 JUDGE_SYSTEM = """\
-You grade one cold email against a fixed rubric. Be strict: when in doubt, fail. Look \
-for what is WRONG, not for something that passes.
+You grade one cold email against a fixed rubric. Look for what is WRONG, not for \
+something that passes. Copy every quote from the EMAIL text only, never from the context.
 
 Fill the fields in order:
 1. `problems`: EVERY distinct problem the email says (or suggests) the recipient's \
@@ -92,9 +92,17 @@ cause for a problem already listed (those belong to that problem; don't list the
 again). For each: `quote` = the WHOLE sentence containing it, copied verbatim, so its \
 hedges stay attached; whether it is the given pain point; and `framing`: "hypothesis" if \
 that sentence hedges it ("often", "probably", "likely", "may", "teams like X tend to"), \
-"asserted" if it states the problem as a plain fact about this company.
-2. `pain_owner_roles`: 1-3 job titles that typically own the given pain point.
-3. `results`: one verdict per rubric criterion, with a short reason and `evidence`, the \
+"asserted" only if it states as a plain fact that THIS company has the problem ("your \
+onboarding is losing users", "Acme's signups are stalling"). A general statement about \
+similar teams or users ("teams growing this fast often...", "new users can stall", \
+"that's usually where X leaks") is a hypothesis.
+2. `tone_issues`: every concrete tone defect, quoted verbatim, one per entry. Kinds: \
+"hype" (game-changing, revolutionary), "superlative" (best, leading, #1), "guarantee" \
+(guaranteed, promise you), "flattery" (love what you're building, huge fan), "buzzword" \
+(synergy, leverage, best-in-class, 10x). Only these kinds; general style preferences are \
+not issues. Empty list if there are none.
+3. `pain_owner_roles`: 1-3 job titles that typically own the given pain point.
+4. `results`: one verdict per rubric criterion, with a short reason and `evidence`, the \
 exact phrase from the email that shows a pass (copied verbatim). If it fails, evidence \
 may be empty.
 
@@ -116,8 +124,14 @@ class Problem(BaseModel):
     framing: Literal["hypothesis", "asserted"]
 
 
+class ToneIssue(BaseModel):
+    quote: str = Field(description="The offending words, copied verbatim from the email.")
+    kind: Literal["hype", "superlative", "guarantee", "flattery", "buzzword"]
+
+
 class EmailJudgeOutput(BaseModel):
     problems: list[Problem]
+    tone_issues: list[ToneIssue]
     pain_owner_roles: list[str] = Field(min_length=1, max_length=3)
     # Exact length: a real Haiku run once returned an empty list. Failing validation here
     # lets the agent loop retry once instead of the run crashing on a useless answer.
@@ -192,6 +206,22 @@ def judge_pain(problems: list[Problem], email: Email) -> dict[str, tuple[bool, s
     return {SINGLE_PAIN: single, PAIN_HYPOTHESIS: hyp}
 
 
+def judge_tone(issues: list[ToneIssue], email: Email, sender: Sender) -> tuple[bool, str]:
+    """Fail on any verifiable tone defect the writer introduced.
+
+    Unlike pain, an issue needs a real quote to count: noise was the problem here, and an
+    unverifiable complaint is exactly the kind of thing that flips run to run. The
+    sender's own offer/outcomes/ask are their words, not the writer's, so defects inside
+    them don't count. Exclamation marks are counted by code, not the model.
+    """
+    own = " ".join([sender.offer, *sender.outcomes, sender.ask])
+    found = [f"{i.kind}: {i.quote!r}" for i in issues
+             if quote_in_text(i.quote, email.body) and not quote_in_text(i.quote, own)]  # fmt: skip
+    if "!" in email.body.replace(sender.ask, ""):
+        found.append("exclamation mark")
+    return (not found, "; ".join(found) or "no concrete tone defects")
+
+
 async def judge_email(
     *,
     client: anthropic.AsyncAnthropic,
@@ -242,6 +272,7 @@ async def judge_email(
         passed[r.criterion], reasons[r.criterion] = apply_evidence_rule(r, email)
     for name, (ok, why) in judge_pain(result.output.problems, email).items():
         passed[name], reasons[name] = ok, why
+    passed[HUMAN_TONE], reasons[HUMAN_TONE] = judge_tone(result.output.tone_issues, email, sender)
     reasons["pain_owner_roles"] = ", ".join(result.output.pain_owner_roles)
 
     problems = lint_email(email, report, sender)

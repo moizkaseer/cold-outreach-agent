@@ -7,6 +7,7 @@ from app.schemas import Email
 from evals.email_judge import (
     CODE_CRITERIA,
     CRITERIA,
+    HUMAN_TONE,
     JUDGED_CRITERIA,
     NUMBERS_CRITERION,
     PAIN_HYPOTHESIS,
@@ -31,7 +32,10 @@ GOOD_PROBLEMS = [{"quote": PAIN_QUOTE, "is_given_pain_point": True, "framing": "
 
 
 def results(
-    overrides: dict | None = None, problems: list[dict] | None = None, drop: str | None = None
+    overrides: dict | None = None,
+    problems: list[dict] | None = None,
+    tone: list[dict] | None = None,
+    drop: str | None = None,
 ) -> dict:
     rows = []
     for name in JUDGED_CRITERIA:
@@ -42,6 +46,7 @@ def results(
         rows.append(row)
     return {
         "problems": GOOD_PROBLEMS if problems is None else problems,
+        "tone_issues": tone or [],
         "pain_owner_roles": ["Head of People"],
         "results": rows,
     }
@@ -73,8 +78,8 @@ async def test_pass_with_fake_evidence_is_rejected() -> None:
 
 
 async def test_criteria_without_evidence_requirement() -> None:
-    s = await judge(results({"human_tone": {"evidence": ""}}))  # no quote needed
-    assert s.passed["human_tone"] is True
+    s = await judge(results({"relevant_to_role": {"evidence": ""}}))  # no quote needed
+    assert s.passed["relevant_to_role"] is True
 
 
 async def test_code_rules_folded_in() -> None:
@@ -155,5 +160,32 @@ async def test_pain_passes_need_a_verifiable_quote() -> None:
 
 
 async def test_pain_criteria_are_not_model_verdicts() -> None:
-    assert SINGLE_PAIN not in JUDGED_CRITERIA and PAIN_HYPOTHESIS not in JUDGED_CRITERIA
-    assert {SINGLE_PAIN, PAIN_HYPOTHESIS} <= set(CRITERIA)
+    for c in (SINGLE_PAIN, PAIN_HYPOTHESIS, HUMAN_TONE):
+        assert c not in JUDGED_CRITERIA and c in CRITERIA
+
+
+async def test_verified_tone_issue_fails_human_tone() -> None:
+    hype = GOOD_BODY.replace("Open to", "We're the industry-leading platform. Open to")
+    e = Email(subject="s", body=hype, used_fact_ids=["f1"])
+    s = await judge(results(tone=[{"quote": "industry-leading", "kind": "superlative"}]), email=e)
+    assert s.passed[HUMAN_TONE] is False and "industry-leading" in s.reasons[HUMAN_TONE]
+
+
+async def test_unverifiable_tone_complaint_is_ignored() -> None:
+    # Noise was the problem: a complaint about words that aren't there doesn't count.
+    s = await judge(results(tone=[{"quote": "synergy", "kind": "buzzword"}]))
+    assert s.passed[HUMAN_TONE] is True
+
+
+async def test_senders_own_wording_is_not_the_writers_tone_defect() -> None:
+    # "cut time-to-productivity ... by 30%" comes verbatim from SENDER.outcomes.
+    issue = {"quote": "cut time-to-productivity for new hires by 30%", "kind": "hype"}
+    s = await judge(results(tone=[issue]))
+    assert s.passed[HUMAN_TONE] is True
+
+
+async def test_exclamation_mark_is_checked_by_code() -> None:
+    e = Email(subject="s", body=GOOD_BODY.replace("Series C.", "Series C!"), used_fact_ids=["f1"])
+    s = await judge(results({"specific_opener": {"evidence": "Congrats on the $60M Series C!"}}),
+                    email=e)  # fmt: skip
+    assert s.passed[HUMAN_TONE] is False and "exclamation" in s.reasons[HUMAN_TONE]
