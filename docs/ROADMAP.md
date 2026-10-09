@@ -364,3 +364,16 @@ Progress log after every working session (what was built, what broke, what's nex
   Next: fix by design rather than prompt pleading: code hands the judge the first sentence
   for the opener check; pain criteria ask the judge to LIST every pain point/assertion
   (code counts them); role check asks which role owns the pain. Then re-run the same check.
+- 2026-10-09 — Email judge v2 (`evals/email_judge.py`), fixing the pass-seeking pattern by
+  design: specific_opener sees only the code-extracted opening sentence (evidence must be
+  inside it); single_pain_point + pain_as_hypothesis are DERIVED BY CODE from a list of
+  every problem the judge finds (fail-safe: flagged problems count even with sloppy quotes,
+  passes need a verbatim quote); relevant_to_role must first name the pain's owner roles.
+  Re-run `judge-check-20261009-225325.json` (same 5 emails, $0.246): catch rate 35/35
+  (was 23/35). But it OVERSHOT on originals: opener 4/5, single pain 3/5, hypothesis 2/5.
+  My read of the 6 original fails: 1 fair (stripe opener quotes product marketing, which I
+  flagged earlier too), 5 false (elaboration sentence listed as a second problem; opener
+  fact listed as a problem; sub-sentence quote dropped the "often find" hedge).
+  v2.1 (prompt only, not yet measured): tighter "problem" definition, whole-sentence quotes.
+  Overfitting risk: tuned on these 5 emails, so the next run should use the 5 HELD-OUT
+  fixture emails (webflow, retool, sentry, mercury, cal) as well. Spend 2026-10-09 ≈ $2.08.
