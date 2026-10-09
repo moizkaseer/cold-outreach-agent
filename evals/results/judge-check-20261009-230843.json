@@ -1,0 +1,818 @@
+{
+  "config": {
+    "git_commit": "b8e21a3",
+    "judge_model": "claude-haiku-4-5-20251001",
+    "fixture": "/home/moizali/cold outreach agent/cold-outreach-agent/evals/results/writer-fixture-10.json",
+    "repeats": 3,
+    "flaws": [],
+    "max_cost_usd": 0.25,
+    "estimated_spend_usd": 0.1913
+  },
+  "summary": {
+    "originals": 10,
+    "flawed_copies": 0,
+    "judge_errors": 0,
+    "original_pass_rate": {
+      "specific_opener": 0.933,
+      "one_sender_outcome": 0.933,
+      "relevant_to_role": 1,
+      "human_tone": 0.867,
+      "single_pain_point": 0.9,
+      "pain_as_hypothesis": 0.867
+    },
+    "catch_rate": {},
+    "mean_catch_rate": null,
+    "flip_rate": {
+      "specific_opener": 0.1,
+      "one_sender_outcome": 0.2,
+      "relevant_to_role": 0,
+      "human_tone": 0.4,
+      "single_pain_point": 0,
+      "pain_as_hypothesis": 0.3
+    },
+    "overall_flip_rate": 0.167,
+    "skipped_budget": 0
+  },
+  "judgements": [
+    {
+      "domain": "posthog.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references two specific facts about PostHog's business model.",
+        "one_sender_outcome": "Exactly one concrete outcome stated that matches a sender outcome precisely.",
+        "relevant_to_role": "Free-to-paid conversion is directly owned by Head of Growth.",
+        "human_tone": "Plain, specific language without hype or buzzwords; reads like peer conversation.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Growth, VP of Growth, Head of Demand Generation",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['98']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "deel.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": false
+      },
+      "reasons": {
+        "specific_opener": "Opens with a specific metric about Deel from research (f5), not generic praise.",
+        "one_sender_outcome": "States exactly one concrete outcome matching the sender's second outcome verbatim.",
+        "relevant_to_role": "Jordan Lee as VP Customer Success directly owns adoption and user value realization, which is the pain point.",
+        "human_tone": "Reads conversational and specific without hype; uses plain language and genuine observation rather than buzzwords.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "asserted as fact: ['new users can stall before they reach value']",
+        "pain_owner_roles": "VP Customer Success, VP Product, Chief Revenue Officer",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['1,200', '480']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "stripe.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": false,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": false,
+        "single_pain_point": false,
+        "pain_as_hypothesis": false
+      },
+      "reasons": {
+        "specific_opener": "The opener quotes Stripe's own marketing language ('in weeks instead of quarters') rather than citing a specific fact about Riley Chen's company or the Connect product's actual performance metrics.",
+        "one_sender_outcome": "Exactly one outcome is stated and it matches the sender's outcome for the payroll software company without changed numbers.",
+        "relevant_to_role": "Riley's role as Director of Product, Onboarding directly owns the onboarding experience and pain points discussed.",
+        "human_tone": "The phrase 'probably a real tension in your role' feels assumptive and salesy rather than a peer conversation, and the hedged framing ('often', 'probably', 'likely') reads more like positioning than genuine insight.",
+        "single_pain_point": "2 other problem(s): ['Compliance steps like those are often where users stall', 'with more than 5 million businesses on Stripe, even small drop-off rates likely add up']",
+        "pain_as_hypothesis": "no verifiable hypothesis-framed pain point",
+        "pain_owner_roles": "Director of Product, Onboarding, Head of Product, VP of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['5', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "notion.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": false,
+        "relevant_to_role": true,
+        "human_tone": false,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "References specific facts about the recipient's company: Notion 3.1 capabilities (reading comments, CSVs, searching calendars and Slack) from research claim f5.",
+        "one_sender_outcome": "Two sender outcomes exist; the email states only one ('cut time-to-first-value from 9 days to 3 for a payroll software company'), but does not match the problem stated—it's about time-to-first-value generally, not about getting users to value with Agent features specifically.",
+        "relevant_to_role": "Casey Park, Head of Product Growth, owns user activation and discovery of new features—directly relevant to getting new users to value with Agent features.",
+        "human_tone": "The phrase 'That's the kind of drop-off we find and fix' is salesy positioning rather than a thoughtful peer-to-peer observation; it positions the sender as a fixer without depth.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Product Growth, VP of Product, Product Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['3.1', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "linear.app",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references a specific current fact about Linear's product positioning.",
+        "one_sender_outcome": "Exactly matches one sender outcome with identical numbers and company type.",
+        "relevant_to_role": "Morgan Ellis as Head of Customer Experience directly owns user activation and onboarding success.",
+        "human_tone": "Plain, conversational language with specific outcomes and no hype or salesiness.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Customer Experience, Head of Onboarding, VP of Customer Success",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "0 company numbers: []"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "webflow.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "References two specific facts about the company: the Conf announcement of prompt-to-production apps and the next-gen CMS announcement.",
+        "one_sender_outcome": "Exactly one concrete outcome stated; matches the second sender outcome precisely.",
+        "relevant_to_role": "Taylor's title directly owns user activation; the pain is about activating new users into the broader product.",
+        "human_tone": "Plain, specific language with no hype, buzzwords, or salesy filler; reads as peer-to-peer.",
+        "single_pain_point": "2 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "VP Product, Activation, Head of Onboarding, Director of User Activation",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "retool.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references three specific facts about Retool's actual initiatives (Assist Beta launch, onboarding prompts, CSAT surveys).",
+        "one_sender_outcome": "Exactly one concrete outcome stated that matches a sender outcome without changed numbers or names.",
+        "relevant_to_role": "Recipient is Director of Customer Onboarding, which directly owns this pain point.",
+        "human_tone": "Plain, specific language with no buzzwords or hype; reads like a thoughtful peer addressing a concrete problem.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Director of Customer Onboarding, VP of Customer Success, Head of Product",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "0 company numbers: []"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "sentry.io",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": false
+      },
+      "reasons": {
+        "specific_opener": "The opener references two specific product launches with concrete details (GA status, 5,000+ companies in beta, MCP Server Monitoring timing).",
+        "one_sender_outcome": "Exactly one concrete outcome stated, matching a sender outcome with identical numbers and names.",
+        "relevant_to_role": "Drew Patel is Head of Growth, a core pain owner for user activation and onboarding challenges.",
+        "human_tone": "Plain, specific language about a real problem with no hype, buzzwords, or salesy filler; reads like a peer identifying a concrete issue.",
+        "single_pain_point": "2 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "asserted as fact: [\"That's usually where activation quietly leaks.\"]",
+        "pain_owner_roles": "Head of Growth, VP of Product, Head of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['5,000']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "mercury.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opens with two specific facts about Mercury: 200k+ customers and 40% YoY growth.",
+        "one_sender_outcome": "States exactly one concrete outcome matching a sender outcome without changed numbers.",
+        "relevant_to_role": "Avery Kim is Head of Onboarding and directly owns the pain point of onboarding at scale.",
+        "human_tone": "Plain, specific language without hype or buzzwords; reads like a thoughtful peer.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Onboarding, VP of Customer Success, Chief Customer Officer",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['200,000', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "cal.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 0,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references two specific features from Cal.com's v5.6 update (Round-Robin Groups and private links with expiry), matching research claim f5.",
+        "one_sender_outcome": "Exactly one sender outcome is stated and it matches the second item in sender_outcomes without changed numbers or names.",
+        "relevant_to_role": "Head of Product directly owns onboarding and user activation, which aligns with the given pain point of activating new users.",
+        "human_tone": "The email reads conversational and peer-like, with specific examples and no hype or buzzwords; it directly addresses the problem without salesy language.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Product, VP of Product, Chief Product Officer",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "posthog.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": false,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references two specific facts about PostHog: the 98% free customer ratio and the self-serve model without sales conversations.",
+        "one_sender_outcome": "Exactly one concrete outcome is stated and it matches the first sender outcome with identical numbers and description.",
+        "relevant_to_role": "The recipient is Head of Growth, which directly owns conversion and onboarding problems for a product-led company.",
+        "human_tone": "The phrase 'Onboardly finds and fixes the onboarding steps where new users drop off' reads as generic marketing copy, and 'In-product onboarding likely carries most of that load' is salesy filler speculation rather than a peer observation.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Growth, Growth Lead, Conversion Optimization Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['98']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "deel.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references specific growth percentages from research about Deel's multi-product adoption.",
+        "one_sender_outcome": "One concrete outcome is stated that exactly matches a sender outcome without changes.",
+        "relevant_to_role": "VP Customer Success directly owns onboarding and product adoption, which is core to the pain point.",
+        "human_tone": "The email is plain, specific, and conversational with no hype or buzzwords.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "VP Customer Success, Director of Onboarding, VP Product",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['1,200', '480']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "stripe.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": false,
+        "one_sender_outcome": false,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": false,
+        "pain_as_hypothesis": false
+      },
+      "reasons": {
+        "specific_opener": "The opening quotes Stripe's own marketing copy rather than citing a specific fact about Riley's team or company actions.",
+        "one_sender_outcome": "pass rejected: evidence not found in the email (Exactly one concrete outcome stated that matches the sender's outcomes without changes.)",
+        "relevant_to_role": "Riley Chen directly runs the onboarding team, which owns the pain point about onboarding drop-off.",
+        "human_tone": "Plain language, specific hedging, thoughtful peer-to-peer framing without hype or buzzwords.",
+        "single_pain_point": "2 other problem(s): ['Compliance steps like those are often where users stall', 'with more than 5 million businesses on Stripe, even small drop-off rates likely add up']",
+        "pain_as_hypothesis": "no verifiable hypothesis-framed pain point",
+        "pain_owner_roles": "Director of Product, Product Manager, Onboarding Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['5', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "notion.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references specific Notion 3.1 features that are publicly documented facts about the recipient's product.",
+        "one_sender_outcome": "Exactly one outcome is stated and matches a sender outcome verbatim.",
+        "relevant_to_role": "Head of Product Growth directly owns user adoption, onboarding speed, and time-to-value metrics.",
+        "human_tone": "Plain, conversational language without jargon or sales hype; reads like peer-to-peer problem diagnosis.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Product Growth, Product Manager, VP Product",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['3.1', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "linear.app",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references a specific, verifiable fact about Linear's current homepage placement of Intake.",
+        "one_sender_outcome": "Exactly one outcome is stated and it matches verbatim one of the sender's outcomes.",
+        "relevant_to_role": "Morgan's role as Head of Customer Experience directly owns new-user activation and onboarding, matching a pain owner role.",
+        "human_tone": "The email reads like thoughtful peer-to-peer communication with plain language and no hype or buzzwords.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Customer Experience, Product Manager, Head of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "0 company numbers: []"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "webflow.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "References two specific product announcements from Webflow Conf as factual events.",
+        "one_sender_outcome": "Exactly matches one sender outcome with identical numbers and company type.",
+        "relevant_to_role": "Recipient is VP Product, Activation, which directly owns this pain point.",
+        "human_tone": "Plain, specific language without hype or buzzwords; reads like a peer conversation.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "VP Product, Head of Onboarding, Product Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "retool.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references three specific recent initiatives at Retool: Assist (Beta) launch, guided onboarding prompts, and in-product CSAT surveys—all verifiable facts about the recipient's company.",
+        "one_sender_outcome": "Exactly one concrete outcome is stated and it matches one of the sender's outcomes without changed numbers or names.",
+        "relevant_to_role": "Jamie Fox's role as Director of Customer Onboarding directly owns the pain point of getting new users to first value, which is core onboarding responsibility.",
+        "human_tone": "The email reads conversational and peer-to-peer with plain language, specific problem diagnosis, and no buzzwords or hype—just a straightforward explanation of what the sender does.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Director of Customer Onboarding, Head of Onboarding, VP of Customer Success",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "0 company numbers: []"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "sentry.io",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opens with two specific, verifiable facts about recent Sentry product launches.",
+        "one_sender_outcome": "Exactly one concrete outcome stated, matching a sender outcome without changes.",
+        "relevant_to_role": "Recipient is Head of Growth; activation of new users on product surface is core to this role.",
+        "human_tone": "Plain, specific, conversational tone with no hype or buzzwords; reads like peer-to-peer dialogue.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Growth, Product Manager, Onboarding Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['5,000']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "mercury.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references two specific facts about Mercury: 200,000+ customers and 40% YoY growth (both confirmed in research).",
+        "one_sender_outcome": "Exactly one concrete sender outcome is stated ('cut time-to-first-value from 9 days to 3') which matches the second sender outcome exactly.",
+        "relevant_to_role": "The recipient is Head of Onboarding, which is the primary pain owner role for onboarding problems.",
+        "human_tone": "The email is plain, specific, conversational with concrete data and no hype or buzzwords—reads like a peer reaching out thoughtfully.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Onboarding, VP of Onboarding, Onboarding Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['200,000', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "cal.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 1,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references a specific product feature from Cal.com's documented v5.6 update.",
+        "one_sender_outcome": "Exactly one concrete outcome is stated that matches a sender outcome verbatim.",
+        "relevant_to_role": "Head of Product directly owns activation and onboarding experience across product tiers.",
+        "human_tone": "Plain language, specific examples, no hype or jargon—reads like a peer conversation.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Product, VP of Customer Success, Onboarding Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "posthog.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references two specific facts about PostHog: 98% free customer base and self-serve model.",
+        "one_sender_outcome": "Exactly one concrete outcome stated that matches a sender outcome with identical numbers.",
+        "relevant_to_role": "Alex is Head of Growth; free-to-paid conversion and monetization are core growth responsibilities.",
+        "human_tone": "Email is plain, conversational, specific, with no hype or buzzwords; reads like a peer.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Growth, VP of Product, Chief Revenue Officer",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['98']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "deel.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references specific, verifiable metrics about Deel's multi-product adoption from research.",
+        "one_sender_outcome": "Exactly one sender outcome stated, matching the given outcomes verbatim.",
+        "relevant_to_role": "VP Customer Success directly owns customer onboarding and multi-product adoption.",
+        "human_tone": "Plain language, specific, no hype or buzzwords; reads like a thoughtful peer conversation.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "VP Customer Success, VP Product, Chief Customer Officer",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['1,200', '480']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "stripe.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": false,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references specific Stripe Connect facts (quoted promises, specific compliance processes) not generic praise.",
+        "one_sender_outcome": "Exactly one concrete outcome stated matching the payroll software sender outcome verbatim.",
+        "relevant_to_role": "Riley directly owns the Connect onboarding product and pain point—perfect role match.",
+        "human_tone": "Plain, specific, conversational tone with real metrics; no hype or buzzwords.",
+        "single_pain_point": "2 other problem(s): ['Compliance steps like those are often where users stall', 'with more than 5 million businesses on Stripe, even small drop-off rates likely add up']",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Director of Product, Onboarding, Head of Onboarding, VP of Customer Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['5', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "notion.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references specific recent product features from Notion 3.1.",
+        "one_sender_outcome": "Exactly one concrete outcome stated, matching a sender outcome precisely.",
+        "relevant_to_role": "Casey Park as Head of Product Growth directly owns user onboarding and feature discovery.",
+        "human_tone": "Plain, direct language with no hype or buzzwords; reads like a peer conversation despite minor hedging.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Product Growth, Product Manager, Head of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['3.1', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "linear.app",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references a specific, current fact about Linear's Intake feature placement and functionality.",
+        "one_sender_outcome": "Exactly one concrete outcome stated that matches the sender's outcome verbatim.",
+        "relevant_to_role": "Morgan Ellis as Head of Customer Experience directly owns new-user activation and onboarding—core pain points for this message.",
+        "human_tone": "Plain, specific language without hype or buzzwords; reads like one professional talking to another about a real problem.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Customer Experience, VP of Product, Head of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "0 company numbers: []"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "webflow.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": false,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references two specific facts about Webflow: the Conf announcement of prompt-to-production apps and the next-gen CMS launch.",
+        "one_sender_outcome": "Exactly one concrete sender outcome is stated and matches the second outcome from sender_outcomes without changed numbers or names.",
+        "relevant_to_role": "VP Product, Activation directly owns user activation and onboarding, which is the stated pain point.",
+        "human_tone": "The phrase 'find and fix the onboarding steps where new users drop off' is generic consultant-speak; 'When a product widens that much' is awkwardly hedged; the overall structure feels like a template rather than a thoughtful peer conversation.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "VP Product, Head of Onboarding, VP User Activation",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "retool.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references multiple specific facts about Retool's recent launches and initiatives.",
+        "one_sender_outcome": "Exactly one concrete outcome is stated, matching a sender outcome without changed numbers or names.",
+        "relevant_to_role": "Jamie Fox as Director of Customer Onboarding directly owns the pain of user onboarding to new product features.",
+        "human_tone": "The email is conversational, specific, and free of hype or buzzwords; it reads like one professional to another.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Director of Customer Onboarding, Head of Product, Product Manager",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "0 company numbers: []"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "sentry.io",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "References two specific product facts: Logs GA with 5,000+ beta users and recent MCP Server Monitoring launch.",
+        "one_sender_outcome": "Exactly one concrete outcome stated that matches sender's outcomes without changed numbers or names.",
+        "relevant_to_role": "Drew's role as Head of Growth directly owns user activation and onboarding problems.",
+        "human_tone": "Natural conversational tone with specific observations, no buzzwords or salesy language.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Growth, VP of Product, Director of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['5,000']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "mercury.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "The opening references two specific facts about Mercury: 200,000 customers and 40% YoY growth.",
+        "one_sender_outcome": "Exactly one concrete outcome is stated and it matches one of the sender's outcomes without any changed numbers or names.",
+        "relevant_to_role": "The recipient is Head of Onboarding at Mercury, which directly owns the onboarding pain point described.",
+        "human_tone": "The email reads as a thoughtful peer conversation with plain, specific language and no hype or buzzwords—just a straightforward observation and one concrete example.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Onboarding, VP of Customer Success, Director of Onboarding",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "2 company numbers: ['200,000', '2']"
+      },
+      "skipped": false
+    },
+    {
+      "domain": "cal.com",
+      "flaw": null,
+      "target": null,
+      "repeat": 2,
+      "passed": {
+        "specific_opener": true,
+        "one_sender_outcome": true,
+        "relevant_to_role": true,
+        "human_tone": true,
+        "single_pain_point": true,
+        "pain_as_hypothesis": true
+      },
+      "reasons": {
+        "specific_opener": "Opening references two specific features from the v5.6 update, not generic praise.",
+        "one_sender_outcome": "Exactly one outcome stated that matches a sender outcome without changed numbers or names.",
+        "relevant_to_role": "Head of Product directly owns user activation and onboarding, which is core to this pain point.",
+        "human_tone": "Conversational, peer-to-peer tone without buzzwords or salesy filler.",
+        "single_pain_point": "1 mention(s), all of the given pain point",
+        "pain_as_hypothesis": "every problem framed as a likely challenge",
+        "pain_owner_roles": "Head of Product, Product Manager, VP of Product",
+        "code_rules": "all code-checked rules pass",
+        "few_numbers": "1 company numbers: ['2']"
+      },
+      "skipped": false
+    }
+  ]
+}

@@ -390,3 +390,18 @@ Progress log after every working session (what was built, what broke, what's nex
   see them. Spend 2026-10-09 ≈ $2.60 estimated.
   Next: consistency re-check for v2.1 (`--flaws none --repeats 3`, ~$0.21), then add a
   code-checked "formulaic phrasing" signal across a batch, then resume writer tuning.
+- 2026-10-09 — Judge v2.1 consistency, `judge-check-20261009-230843.json` (10 originals x3,
+  $0.191): overall flip rate 0.167 (v1 was 0.017). REGRESSION: making it strict made it
+  noisy on borderline emails. Flips by criterion: human_tone 4/10 (it picks a different
+  phrase to object to each time, often the sender's own offer wording), pain_as_hypothesis
+  3/10 (unsure whether "can stall" / "usually leaks" count as hedged), one_sender_outcome
+  2/10, specific_opener 1/10 (stripe, the borderline marketing-copy opener). Some fails
+  come from the evidence rule: e.g. it quoted the sender's outcome wording from the context
+  instead of the email's sentence (checked locally: the email's sentence matches, the
+  outcome-list wording doesn't). Raw judge outputs aren't saved, so I can't inspect the
+  other quote failures. Lesson: catch rate alone hides this; always measure both.
+  Proposed v2.2: human_tone becomes a list of concrete tone defects (hype, superlatives,
+  guarantees, flattery, exclamation) with code deciding, while "sounds templated" moves to
+  a batch-level code check; define "asserted" precisely (a plain claim about THIS company;
+  general statements about teams like them = hypothesis); evidence must come from the
+  email, not the context; save raw judge output. Spend 2026-10-09 ≈ $2.79 estimated.
