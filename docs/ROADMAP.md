@@ -295,4 +295,14 @@ Progress log after every working session (what was built, what broke, what's nex
   .env has prefix `sk-ant-usr` (not a Console API key, `sk-ant-api...`). Resume orchestration
   worked as designed (validate/dedupe succeeded, later steps left pending). Blocked on a
   valid ANTHROPIC_API_KEY; then rerun the smoke.
+- 2026-10-09 — FIRST REAL END-TO-END RUN (`scripts/pipeline_smoke.py`, fake test sender,
+  in-process SQLite, no Redis). Key fixed (old key was invalid; the `sk-ant-usr` prefix
+  was NOT the cause, my earlier guess was wrong). 3/3 leads succeeded, 3/3 emails
+  `verified`, 84-96 words. Measured (estimated from tokens + Exa cost): posthog $0.082 / 78s,
+  deel $0.080 / 34s, stripe $0.109 / 43s; total $0.271, avg ~$0.09/lead. Research is
+  60-70% of cost ($0.049-0.076); score ~$0.002; painpoints ~$0.013-0.016; draft
+  ~$0.014-0.016. Scores 4/4/5. My read of the emails (n=3, not an eval): grounded and
+  specific; deel email crams 4 stats into 2 sentences; stripe email has an awkward hedge
+  ("I can't see your data"). Next: tune writer prompt for one stat + natural hypothesis
+  tone (measure with email rubric), then Docker build + deploy.
 
