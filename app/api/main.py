@@ -3,6 +3,7 @@
     uv run uvicorn app.api.main:app --reload
 
     POST /runs                 create + enqueue a run         -> 202 {run_id}
+                               (body carries the caller's sender profile)
     GET  /runs/{id}            status, steps, email, cost
     GET  /runs/{id}/events     live progress (Server-Sent Events) until the run ends
     POST /runs/{id}/resume     re-enqueue a FAILED run (resumes at the failed step)
@@ -46,7 +47,7 @@ SSE_HEARTBEAT_SECONDS = 15.0  # keeps proxies from closing an idle stream
 class AppDeps:
     sessions: async_sessionmaker[AsyncSession]
     enqueue: Callable[[uuid.UUID, int], Awaitable[bool]]
-    sender: Sender | None  # None = not configured; creating runs is refused
+    sender: Sender | None  # server default (sender.json); requests may bring their own
     limits: Limits = Limits()  # guarded by default; tests pass their own
     poll_seconds: float = 1.0
 
@@ -63,6 +64,11 @@ class CreateRun(BaseModel):
     domain: str
     person_name: str
     person_role: str
+    # Each sales team writes as itself: who they are, what they sell, results they can
+    # prove. Optional only so a single-tenant deploy can rely on sender.json instead.
+    # Safe to accept from strangers: it reaches only this run's writer + verifier prompts
+    # (length-capped in the schema), and no agent has tools that act outside the run.
+    sender: Sender | None = None
 
 
 class StepView(BaseModel):
@@ -195,8 +201,11 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
     @app.post("/runs", status_code=202, response_model=None)
     async def post_run(body: CreateRun, request: Request) -> dict[str, str] | JSONResponse:
         d = get_deps(request)
-        if d.sender is None or d.sender.is_placeholder:
-            raise HTTPException(503, "sender profile not configured (sender.json)")
+        sender = body.sender or d.sender
+        if sender is None:
+            raise HTTPException(422, "sender profile required (who you are, offer, outcomes)")
+        if sender.is_placeholder:
+            raise HTTPException(422, "sender profile is the example placeholder; use real details")
         try:
             lead = Lead(domain=body.domain, person_name=body.person_name,
                         person_role=body.person_role)  # fmt: skip
@@ -209,7 +218,7 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
         key = client_key(request.client.host if request.client else None)
         if refusal := await check_new_run(d.sessions, d.limits, key):
             return refused(refusal)
-        run_id = await create_run(d.sessions, lead, d.sender, STEP_NAMES, client_key=key)
+        run_id = await create_run(d.sessions, lead, sender, STEP_NAMES, client_key=key)
         await d.enqueue(run_id, 0)
         return {"run_id": str(run_id), "status": RunStatus.PENDING.value}
 

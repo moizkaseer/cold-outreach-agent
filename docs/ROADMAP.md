@@ -48,7 +48,9 @@ Progress log after every working session (what was built, what broke, what's nex
 - [ ] Connect reply-classification workflow
 
 ## Week 8 — Discovery and story
-- [ ] Contact discovery via provider API
+- [ ] Contact discovery via provider API (Apollo/Hunter; find the right person to contact)
+- [ ] Fit signal: does the prospect already use the seller's product or a competitor's?
+  (e.g. tech-stack evidence, cited like every other fact)
 - [ ] (Optional) Claude Agent SDK research implementation, compared on evals
 - [ ] Rewrite case study with real metrics from evals
 
@@ -275,3 +277,14 @@ Progress log after every working session (what was built, what broke, what's nex
   the user isn't in the `docker` group yet (`sudo usermod -aG docker $USER`, then re-login).
   Still blocked on Moiz: golden-fact verification (0/101), 24 calibration labels,
   sender.json. Next (no API spend): Week 7 review API (approve / edit / reject).
+- 2026-10-09 — Product direction (Moiz): users are SALES TEAMS (SDRs). The agent replaces
+  their manual research (company info, "do they use our/competitor product", right contact;
+  today they patch this with Apollo). So the sender is whoever runs it, not a fixed profile.
+  Launch step 1: `POST /runs` now takes an optional `sender` (name, company, offer, provable
+  outcomes, ask); request wins, `sender.json` is only a single-tenant fallback; missing or
+  placeholder -> 422 (was 503). Sender fields length-capped (offer 400, <=5 outcomes x 200,
+  ask 150) since strangers' text reaches the writer/verifier prompts; it never reaches the
+  research agent and no agent has outward-acting tools. Run rows already snapshot the
+  sender, so the pipeline needed no change. 213 tests. Added Week 8 items: Apollo contact
+  discovery, product/competitor-usage fit signal. Next: launch step 2, first real
+  end-to-end run (needs a real test sender profile + Moiz's OK for ~$0.50 API spend).

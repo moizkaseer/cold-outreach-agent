@@ -85,12 +85,39 @@ async def test_create_run_enqueues_and_normalises(env) -> None:
     assert view["email"] is None
 
 
-@pytest.mark.parametrize("sender", [None, Sender(name="Your Name", company="c", offer="o",
-                                                  outcomes=["x"])])  # fmt: skip
-async def test_create_refused_without_real_sender(env, sender) -> None:
-    env.deps.sender = sender
+PLACEHOLDER = Sender(name="Your Name", company="c", offer="o", outcomes=["x"])
+
+
+@pytest.mark.parametrize("server_sender", [None, PLACEHOLDER])
+async def test_create_refused_without_real_sender(env, server_sender) -> None:
+    env.deps.sender = server_sender
     r = await env.client.post("/runs", json=BODY)
-    assert r.status_code == 503 and env.enqueued == []
+    assert r.status_code == 422 and env.enqueued == []
+
+
+async def test_request_sender_overrides_server_default(env) -> None:
+    env.deps.sender = None  # e.g. a multi-team deploy with no sender.json
+    team = {"name": "Sam Lee", "company": "Shiftly", "offer": "Shift scheduling for clinics.",
+            "outcomes": ["cut rota planning from 6h to 1h a week at Northside Clinic"]}  # fmt: skip
+    r = await env.client.post("/runs", json={**BODY, "sender": team})
+    assert r.status_code == 202
+    async with env.sessions() as s:
+        run = await s.get(Run, uuid.UUID(r.json()["run_id"]))
+    assert run.sender["company"] == "Shiftly"  # snapshotted: the pipeline writes as this team
+
+
+async def test_request_placeholder_sender_refused(env) -> None:
+    r = await env.client.post("/runs", json={**BODY, "sender": PLACEHOLDER.model_dump()})
+    assert r.status_code == 422 and env.enqueued == []
+
+
+@pytest.mark.parametrize("patch", [{"outcomes": []}, {"outcomes": ["x"] * 6},
+                                   {"offer": "o" * 401}, {"ask": "a" * 151},
+                                   {"outcomes": ["x" * 201]}, {"surprise": 1}])  # fmt: skip
+async def test_oversized_or_malformed_sender_is_422(env, patch) -> None:
+    sender = {**SENDER.model_dump(), **patch}
+    r = await env.client.post("/runs", json={**BODY, "sender": sender})
+    assert r.status_code == 422 and env.enqueued == []
 
 
 async def test_invalid_lead_is_422(env) -> None:
