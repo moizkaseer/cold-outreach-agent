@@ -348,3 +348,19 @@ Progress log after every working session (what was built, what broke, what's nex
   Real ground truth later = reply rates once sending exists (Week 7).
   Next (needs Moiz's OK): `--limit 5` run (~40 judgements, ~$0.28 est.) and a
   `--flaws none --repeats 3` consistency run (~30 judgements, ~$0.21 est.).
+- 2026-10-09 — First judge-check runs (Haiku judge; n=5 per flaw, so directional only).
+  `judge-check-20261009-224559.json` (5 emails + 35 flawed copies, $0.223): mean catch
+  rate 0.66. Caught every time: changed outcome number 5/5, vague outcome 5/5, salesy hype
+  5/5. Weak: generic opener 1/5, wrong role 1/5, extra pain point 3/5, pain as fact 3/5.
+  `judge-check-20261009-224705.json` (10 originals x3, $0.169): overall flip rate 0.017
+  (only pain_as_hypothesis flipped, on stripe). So the judge is CONSISTENT BUT LENIENT;
+  my earlier "inconsistent" read (one stripe flip) was mostly wrong. Its reasons show a
+  pass-seeking pattern: it finds any passing detail and ignores the planted flaw (generic
+  first sentence -> "references Anytime Pay" from sentence 2; rationalises General Counsel
+  caring about activation). Caveats: the stripe/wrong_role case is not clean (KYC and
+  compliance are partly a legal concern); the stripe original's pain_as_hypothesis fail
+  is our evidence rule rejecting a quote stitched from two places, not the model.
+  Spend 2026-10-09 ≈ $1.83 estimated.
+  Next: fix by design rather than prompt pleading: code hands the judge the first sentence
+  for the opener check; pain criteria ask the judge to LIST every pain point/assertion
+  (code counts them); role check asks which role owns the pain. Then re-run the same check.
