@@ -377,3 +377,16 @@ Progress log after every working session (what was built, what broke, what's nex
   v2.1 (prompt only, not yet measured): tighter "problem" definition, whole-sentence quotes.
   Overfitting risk: tuned on these 5 emails, so the next run should use the 5 HELD-OUT
   fixture emails (webflow, retool, sentry, mercury, cal) as well. Spend 2026-10-09 ≈ $2.08.
+- 2026-10-09 — Judge v2.1 measured, `judge-check-20261009-230039.json` (all 10 emails, 70
+  flawed copies, $0.520). Catch rate 69/70 (0.986); dev half 34/35, HELD-OUT half 35/35, so
+  no sign the prompt fix overfit. Only miss: stripe/wrong_role, the case already noted as
+  not clean (the judge argued a General Counsel owns KYC/compliance; defensible). Originals:
+  57/60 criterion passes (was 25/30 on the dev half under v2). The 3 fails, my read:
+  stripe opener = fair (product marketing copy); linear opener ("homepage now puts Intake
+  front and center") = borderline; cal.com single_pain_point = false fail (the "another
+  setup step before a team sees value" sentence IS the given pain). n=10, one run, Haiku.
+  Limits: planted flaws are blatant; subtler weaknesses I saw (formulaic "teams ... often
+  find ... stall", "caught my eye") aren't a rubric criterion at all, so the judge can't
+  see them. Spend 2026-10-09 ≈ $2.60 estimated.
+  Next: consistency re-check for v2.1 (`--flaws none --repeats 3`, ~$0.21), then add a
+  code-checked "formulaic phrasing" signal across a batch, then resume writer tuning.
