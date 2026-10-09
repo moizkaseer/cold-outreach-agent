@@ -288,3 +288,11 @@ Progress log after every working session (what was built, what broke, what's nex
   sender, so the pipeline needed no change. 213 tests. Added Week 8 items: Apollo contact
   discovery, product/competitor-usage fit signal. Next: launch step 2, first real
   end-to-end run (needs a real test sender profile + Moiz's OK for ~$0.50 API spend).
+- 2026-10-09 — Launch step 2 started: `scripts/pipeline_smoke.py` runs the REAL
+  orchestrator + steps in-process on a throwaway SQLite DB (no Redis), with a FAKE test
+  sender (invented outcomes; emails must never be sent), spend cap (default $0.75). First
+  attempt: all 3 leads failed at `score` with 401 invalid x-api-key, $0 spent. The key in
+  .env has prefix `sk-ant-usr` (not a Console API key, `sk-ant-api...`). Resume orchestration
+  worked as designed (validate/dedupe succeeded, later steps left pending). Blocked on a
+  valid ANTHROPIC_API_KEY; then rerun the smoke.
+
