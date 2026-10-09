@@ -1,0 +1,1102 @@
+[
+  {
+    "lead": {
+      "domain": "posthog.com",
+      "person_name": "Alex Morgan",
+      "person_role": "Head of Growth"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "posthog.com",
+      "company_name": "PostHog",
+      "summary": "PostHog is an open-source product and data platform used by 500,000+ teams, now positioning itself as a \"context layer\" for products and AI agents. It raised a $75M Series E at a $1.4B valuation in Sept 2025 and is growing through inbound, usage-based, free-tier-led adoption rather than outbound sales. It has 230+ employees, over $50M in revenue and a Growth small team.",
+      "facts": [
+        {
+          "id": "f2",
+          "claim": "PostHog says it is starting 'Act 2': going deeper into being a devtool and working on automatically generating pull requests for engineers.",
+          "category": "product",
+          "source_url": "https://posthog.com/blog/series-e",
+          "evidence": [
+            "We are starting Act 2 of PostHog. We are going deeper into being a devtool, not \"just\" analytics.",
+            "we're also going to start working on generating pull requests for you."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "PostHog's homepage positions it as 'your product's context layer', ingesting analytics, errors, replays and business data so people and agents can query and act on it.",
+          "category": "product",
+          "source_url": "https://posthog.com/",
+          "evidence": [
+            "PostHog ingests and stores your analytics, errors, replays, and business data so you and your agents can query and act on it.",
+            "Join 500,000+ teams already shipping with PostHog."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "PostHog is used by 500,000+ teams, and 65% of every Y Combinator batch uses its products.",
+          "category": "customers",
+          "source_url": "https://posthog.com/about",
+          "evidence": [
+            "We have over 500,000+ teams using our products.",
+            "65% of every Y Combinator batch (the world's best accelerator for startups) use our products."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "PostHog's growth model is inbound-led and reputation-driven, with generous free tiers and no need to talk to sales.",
+          "category": "other",
+          "source_url": "https://posthog.com/about",
+          "evidence": [
+            "we grow because of our reputation on the internet, whereas every single competitor grows by salespeople.",
+            "Inbound-led sales",
+            "Use it without talking to us."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "98% of PostHog's customers use it for free; all paid products are pay-per-use with monthly free tiers.",
+          "category": "product",
+          "source_url": "https://posthog.com/",
+          "evidence": [
+            "All our paid products are pay-per-use with generous monthly free tiers. In fact, 98% of our customers use PostHog for free."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "PostHog is hiring (11 open team member slots), is a company of 230+ people, has revenue over $50 million a year, and has dedicated small teams including Growth and Demand Gen.",
+          "category": "hiring",
+          "source_url": "https://posthog.com/careers",
+          "evidence": [
+            "Our small teams are looking to add 11 team members.",
+            "Starting a job at a company of 230+ people can be intimidating!",
+            "Our revenue is over $50 million a year"
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "PostHog offers 10+ paid products and says it plans to keep adding more.",
+          "category": "product",
+          "source_url": "https://posthog.com/about",
+          "evidence": [
+            "We have 10+ paid products today, and even if we don't offer it yet, we will eventually."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Converting a 98% free base into paying, multi-product users",
+      "rationale": "PostHog says 98% of customers use it for free (f6), and all paid products are pay-per-use with free tiers. Growth is inbound-led and self-serve, with no sales needed (f5). So the conversion from free to paid, and from one product to the next, probably depends on in-product onboarding rather than people. As Head of Growth, Alex likely owns this. It is a hypothesis that many free users stall before reaching a paid use case. Onboardly's work on finding and fixing onboarding drop-off, and its trial-to-paid result, could plausibly help.",
+      "supporting_fact_ids": [
+        "f6",
+        "f5"
+      ]
+    },
+    "email": {
+      "subject": "PostHog's free-to-paid onboarding",
+      "body": "Hi Alex,\n\nPostHog says 98% of its customers use it for free, and that people can use it without talking to anyone.\n\nWith a self-serve, inbound-led model and 10+ paid products, many free users probably stall before they reach a first paid use case. In-product onboarding likely carries most of that load.\n\nOnboardly finds and fixes the onboarding steps where new users drop off. We lifted trial-to-paid conversion 18% in 10 weeks for a 40-person analytics startup.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f6",
+        "f5",
+        "f8"
+      ]
+    },
+    "cost_usd": 0.0805815
+  },
+  {
+    "lead": {
+      "domain": "deel.com",
+      "person_name": "Jordan Lee",
+      "person_role": "VP Customer Success"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "deel.com",
+      "company_name": "Deel",
+      "summary": "Deel is a global HR, payroll and compliance platform that announced a $300M Series E at a $17.3B valuation in October 2025, with over $1B ARR. It is scaling quickly across multiple products and countries, and plans to invest in AI-powered payroll/HR and infrastructure. It also advertises a 90+ NPS for enterprise customers and 261 open roles.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Deel announced a $300M Series E round valuing the company at $17.3B, co-led by new investor Ribbit Capital with Andreessen Horowitz and Coatue.",
+          "category": "funding",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "Today, Deel announced a $300 million Series E funding round, valuing the company at $17.3 billion.",
+            "We’re thrilled to welcome Ribbit Capital as a new investor, co-leading this round alongside our long-time partners Andreessen Horowitz and Coatue Management."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Deel surpassed $1B in ARR in 2025, has had three consecutive years of profitability, and hit its first $100M revenue month in September.",
+          "category": "news",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "Earlier this year, we surpassed $1 billion in annual recurring revenue (ARR). In September, we marked three consecutive years of profitability and a major milestone - our first $100 million revenue month."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Series E funds will go to expanding infrastructure, AI-powered payroll and HR products, and serving 100 million employees worldwide.",
+          "category": "product",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "With our Series E, we’ll double down on expanding our infrastructure, advancing AI-powered payroll and HR products, and laying the foundation to serve 100 million employees worldwide."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Deel's own global payroll engine is live in 55+ countries, and it targets real-time native payroll in 100+ countries by 2029; it also launched Anytime Pay for early access to net earnings.",
+          "category": "product",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "We’re building the world's first global payroll processing engine which is live in 55+ countries, including the US, Canada, Singapore, South Africa, and Brazil.",
+            "are on track to reach real-time native payroll processing in 100+ countries by 2029.",
+            "Anytime Pay, which lets employees access their actual net earnings at any point during the month."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Customers are consolidating onto more Deel products: a 480% increase in customers using three or more products and 1,200% for four or more, since early last year.",
+          "category": "customers",
+          "source_url": "https://www.deel.com/blog/new-investment-valuation/",
+          "evidence": [
+            "we’ve seen a 480% increase in customers using three or more products and a 1,200% increase in those using four or more."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Deel's homepage claims 40,000+ customers, 150+ countries, and a 90+ NPS for enterprise customers.",
+          "category": "customers",
+          "source_url": "https://www.deel.com/",
+          "evidence": [
+            "+40,000",
+            "90+\nNPS for enterprise customers"
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Deel has 261 open positions and describes itself as going from zero to $1B+ ARR in six years.",
+          "category": "hiring",
+          "source_url": "https://www.deel.com/careers/",
+          "evidence": [
+            "261 open positions across all teams",
+            "We went from zero to $1B+ ARR in six years across 160+ countries."
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Named customers include Shopify, Nike, and Klarna, per the CRO's bio on Deel's About page.",
+          "category": "customers",
+          "source_url": "https://www.deel.com/about",
+          "evidence": [
+            "has 35,000+ customers including Shopify, Nike, and Klarna."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Driving adoption of multi-product bundles across a fast-growing base",
+      "rationale": "Customers using 3+ products rose 480% and 4+ products 1,200% (f5), and Deel is adding AI payroll/HR products and Anytime Pay (f3, f4). Each new product probably needs its own onboarding and activation, so new users may stall before reaching value. That is a likely pain for a VP of Customer Success, and it fits Onboardly's work on finding onboarding drop-off steps. This is a hypothesis, not a confirmed problem.",
+      "supporting_fact_ids": [
+        "f5",
+        "f3",
+        "f4"
+      ]
+    },
+    "email": {
+      "subject": "Onboarding across Deel's product bundles",
+      "body": "Hi Jordan,\n\nDeel's customers using four or more products are up 1,200% since early last year, and those using three or more are up 480%.\n\nWith products like Anytime Pay joining the line-up, teams growing that fast often find each product needs its own onboarding, and new users can stall before they reach value.\n\nOnboardly finds and fixes the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f5",
+        "f4"
+      ]
+    },
+    "cost_usd": 0.07952469999999999
+  },
+  {
+    "lead": {
+      "domain": "stripe.com",
+      "person_name": "Riley Chen",
+      "person_role": "Director of Product, Onboarding"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "stripe.com",
+      "company_name": "Stripe",
+      "summary": "Stripe is a programmable financial infrastructure company serving more than 5 million businesses, with $1.9T processed in 2025. Recent focus areas are AI/agentic commerce, stablecoins and money management. Connect is its platform product with embedded onboarding, which is relevant to an onboarding product leader.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "More than 5 million businesses build on Stripe, which describes itself as building programmable financial infrastructure.",
+          "category": "other",
+          "source_url": "https://stripe.com/about",
+          "evidence": [
+            "More than 5 million businesses build on Stripe, spanning the economic frontier—from solo founders to established enterprises—united by a practical focus on growth."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Businesses on Stripe generated $1.9T in payments volume in 2025, and Stripe's annual letter covers trends like agentic commerce and stablecoins.",
+          "category": "other",
+          "source_url": "https://stripe.com/",
+          "evidence": [
+            "Businesses on Stripe generated $1.9T in 2025.",
+            "Our annual letter explores the trends defining the internet economy—including steeper growth for newer businesses, faster international expansion, stablecoin progress, agentic commerce, and more."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Stripe launched the Agentic Commerce Suite on December 11, 2025, letting businesses sell across multiple AI agents with a single integration. Named adopters include Coach, Kate Spade, URBN, Wix, Etsy and Squarespace.",
+          "category": "news",
+          "source_url": "https://stripe.com/newsroom/news/agentic-commerce-suite",
+          "evidence": [
+            "Agentic Commerce Suite removes that complexity with a low-code solution for businesses, letting them sell across AI agents with a single integration.",
+            "Businesses including Coach, Kate Spade, URBN (including Anthropologie, Free People, and Urban Outfitters), Revolve, Ashley Furniture, Halara, ABT Electronics, and Nectar"
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "At Sessions 2025, Stripe unveiled a Payments Foundation Model and 60+ launches, including 25 new payment methods that bring its total to over 125.",
+          "category": "news",
+          "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+          "evidence": [
+            "Stripe unveils the world's first AI foundation model for payments.",
+            "Support for 25 new payment methods, including UPI and PIX, bringing its total to over 125 payment methods."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Stripe expanded stablecoin-powered Treasury accounts to businesses in 101 countries, three months after completing its acquisition of Bridge.",
+          "category": "news",
+          "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+          "evidence": [
+            "With Treasury, Stripe announced our largest effort in expanding new money management capabilities powered by stablecoins, to 101 countries. This comes just three months after Stripe completed its acquisition of stablecoin platform Bridge."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "NVIDIA migrated its entire GeForce Now subscriber base to Stripe Billing in six weeks, the fastest-ever migration to Stripe Billing.",
+          "category": "customers",
+          "source_url": "https://stripe.com/newsroom/news/sessions-2025",
+          "evidence": [
+            "NVIDIA migrated their entire subscriber base to Stripe Billing in just six weeks, making it the fastest-ever migration to Stripe Billing."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Stripe Connect advertises seamless onboarding and embedded components for platforms, letting them go live in weeks instead of quarters.",
+          "category": "product",
+          "source_url": "https://stripe.com/connect",
+          "evidence": [
+            "Connect offers seamless onboarding, embedded components, global payouts, and more—go live in weeks instead of quarters"
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Connect handles identity verification, KYC and sanctions checks while onboarding users, and offers prebuilt or custom embedded onboarding flows.",
+          "category": "product",
+          "source_url": "https://stripe.com/connect",
+          "evidence": [
+            "manages identity verifications, KYC, and sanctions checks while onboarding your users to Connect",
+            "Whether you use Connect’s prebuilt, optimized UIs or build your own custom flows, it’s easy to get your users up and running quickly."
+          ]
+        },
+        {
+          "id": "f9",
+          "claim": "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B while maintaining 99.9999% uptime.",
+          "category": "news",
+          "source_url": "https://stripe.com/",
+          "evidence": [
+            "From Black Friday through Cyber Monday 2025, Stripe processed more than $40B for businesses while maintaining a 99.9999% uptime."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Keeping KYC-heavy Connect onboarding fast as it scales",
+      "rationale": "Stripe Connect promises 'seamless onboarding' and 'go live in weeks instead of quarters' (f7). It also handles identity verification, KYC and sanctions checks during onboarding, with prebuilt or custom flows (f8). Compliance steps like these are a common place for users to stall or drop off. With 5M+ businesses on Stripe (f1), small drop-off rates would add up. A Director of Product, Onboarding probably has to balance compliance friction against activation speed. This is a hypothesis, not a confirmed problem.",
+      "supporting_fact_ids": [
+        "f7",
+        "f8",
+        "f1"
+      ]
+    },
+    "email": {
+      "subject": "Connect onboarding drop-off",
+      "body": "Hi Riley,\n\nStripe Connect promises to get platforms live \"in weeks instead of quarters,\" while also handling identity verification, KYC and sanctions checks during onboarding.\n\nCompliance steps like those are often where users stall, and with more than 5 million businesses on Stripe, even small drop-off rates likely add up. Balancing that friction against activation speed is probably a real tension in your role.\n\nAt Onboardly, we help B2B software companies find and fix the onboarding steps where new users drop off. For a payroll software company, we cut time-to-first-value from 9 days to 3.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f7",
+        "f8",
+        "f1"
+      ]
+    },
+    "cost_usd": 0.11959739999999999
+  },
+  {
+    "lead": {
+      "domain": "notion.com",
+      "person_name": "Casey Park",
+      "person_role": "Head of Product Growth"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "notion.com",
+      "company_name": "Notion",
+      "summary": "Notion is an all-in-one AI workspace with large scale (100M users, 62% of Fortune 100). It recently pivoted around AI Agents with Notion 3.0 (Sept 2025) and 3.1 (Nov 2025), and is building out in-person hubs globally.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Notion's homepage claims 100M users in over 50 countries and use by 62% of Fortune 100 companies.",
+          "category": "customers",
+          "source_url": "https://www.notion.com/",
+          "evidence": [
+            "100M users in over 50 countries",
+            "62% of Fortune 100 use Notion"
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Notion says over 50% of YC companies use it and it has a 1.4M+ member community.",
+          "category": "customers",
+          "source_url": "https://www.notion.com/",
+          "evidence": [
+            "Over 50% of YC companies",
+            "1.4M+ community members"
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "On September 18, 2025 Notion launched Notion 3.0, rebuilding Notion AI around Agents that can do up to 20 minutes of autonomous work across hundreds of pages.",
+          "category": "product",
+          "source_url": "https://www.notion.com/blog/introducing-notion-3-0",
+          "evidence": [
+            "Now, your Agent can do up to 20 minutes of autonomous work at a time across hundreds of pages at once."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Notion announced Custom Agents coming soon: team-shareable agents running on schedules or triggers (e.g., compiling daily user feedback).",
+          "category": "product",
+          "source_url": "https://www.notion.com/blog/introducing-notion-3-0",
+          "evidence": [
+            "Custom Agents are coming soon.",
+            "Imagine one Agent that compiles daily user feedback, another that posts weekly project updates"
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Notion 3.1 (Nov 17, 2025) lets the Agent analyze page comments and CSVs, search calendars and private Slack channels/DMs, and made pages load 15% faster.",
+          "category": "product",
+          "source_url": "https://www.notion.com/releases/2025-11-17",
+          "evidence": [
+            "Now your Agent can read comments and version history when answering questions and drafting updates.",
+            "It now supports private channels and Direct Messages",
+            "Pages are loading 15% faster!"
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Notion 3.1 shipped a Figma × Notion MCP integration connecting Figma Make to a Notion PRD to build a prototype.",
+          "category": "product",
+          "source_url": "https://www.notion.com/releases/2025-11-17",
+          "evidence": [
+            "The Figma × Notion MCP integration is live!"
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Notion is an in-person company (three days a week) with offices in San Francisco, New York, Dublin, Seoul, Hyderabad, Tokyo and Sydney, and its values stress speed in a competitive AI era.",
+          "category": "hiring",
+          "source_url": "https://www.notion.com/careers",
+          "evidence": [
+            "Notion is an in-person company. We come together three days a week: Monday, Tuesday, and Thursday",
+            "The AI era is extremely competitive."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Getting new users to value with the new Agent features",
+      "rationale": "Notion 3.0 rebuilt Notion AI around Agents (f3). Custom Agents are announced as coming soon (f4). Notion 3.1 added more Agent capabilities: comments, CSVs, calendars, Slack (f5). Each launch adds setup and discovery steps. New and existing users may not reach the first useful Agent outcome. That likely makes activation and time-to-first-value for these features a priority for a Head of Product Growth. Onboardly's work finding and fixing onboarding drop-off, and its result of cutting time-to-first-value from 9 days to 3, fits this. This is a hypothesis from the launch cadence, not a known fact.",
+      "supporting_fact_ids": [
+        "f3",
+        "f4",
+        "f5"
+      ]
+    },
+    "email": {
+      "subject": "Getting new users to a first useful Agent result",
+      "body": "Hi Casey,\n\nNotion 3.1 let Agents read comments and CSVs and search calendars and Slack. With Custom Agents coming soon, teams shipping at that pace often find each launch adds setup and discovery steps, so new users may never reach a first useful Agent result.\n\nThat's the kind of drop-off we find and fix for B2B software companies. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f4",
+        "f5"
+      ]
+    },
+    "cost_usd": 0.09679360000000001
+  },
+  {
+    "lead": {
+      "domain": "linear.app",
+      "person_name": "Morgan Ellis",
+      "person_role": "Head of Customer Experience"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "linear.app",
+      "company_name": "Linear",
+      "summary": "Linear is a product development system for teams and AI agents, founded in 2019 and used by more than 40,000 companies. It has passed $100M ARR and is profitable. In 2026 it did a tender offer at a $2.5B valuation. It also sells Customer Requests, which turns support and sales feedback into prioritized product work. That product is relevant to a Head of Customer Experience.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Linear was founded in 2019 and is used by more than 40,000 companies, including OpenAI, Coinbase and Ramp, to plan, build and ship products.",
+          "category": "customers",
+          "source_url": "https://linear.app/about",
+          "evidence": [
+            "Founded in 2019, Linear has become the tool of choice for more than 40,000 companies (including OpenAI, Coinbase, and Ramp) to plan, build, and ship their products."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Linear completed an employee tender offer at a $2.5B valuation led by Accel, doubling its Series C valuation, and has surpassed $100M in ARR.",
+          "category": "funding",
+          "source_url": "https://www.businessinsider.com/saas-is-dead-startup-linear-just-doubled-its-valuation-2026-8",
+          "evidence": [
+            "has doubled its valuation to $2.5 billion and surpassed $100 million in annual recurring revenue",
+            "Linear completed an employee tender offer at a $2.5 billion valuation, with Accel leading the deal"
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Linear says it has been profitable since its second year and remains cash-flow positive. The tender offer is mainly a retention tool.",
+          "category": "funding",
+          "source_url": "https://www.businessinsider.com/saas-is-dead-startup-linear-just-doubled-its-valuation-2026-8",
+          "evidence": [
+            "Saarinen says Linear does not need the new cash to fund its operations because it has been profitable since its second year and remains cash-flow positive",
+            "Instead, the tender offer is mostly a retention tool to fend off competition."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "In June 2025 Linear raised an $82M Series C at a $1.25B valuation, led by Accel with Sequoia and 01A.",
+          "category": "funding",
+          "source_url": "https://linear.app/now/building-our-way",
+          "evidence": [
+            "we’ve raised an $82M Series C at a $1.25B valuation",
+            "led by Accel with continued support from Sequoia and 01A"
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Linear's Customer Requests feature captures feedback from any customer interaction, from sales calls to support chats. It turns that feedback into requests linked to Linear projects or issues, and it integrates with support platforms, email, CRM and Slack.",
+          "category": "product",
+          "source_url": "https://linear.app/customer-requests",
+          "evidence": [
+            "Capture feedback across any customer interaction – from sales calls to support chats – and turn it into a customer request linked to a Linear project or issue.",
+            "so you can create requests directly from your support platform, email client, CRM tool, or shared Slack channels."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Linear Customer Requests can sync customer attributes from Salesforce and use triage rules to auto-prioritize requests from high-impact customers.",
+          "category": "product",
+          "source_url": "https://linear.app/customer-requests",
+          "evidence": [
+            "Sync customer attributes such as company size, tier, or revenue from Salesforce and other systems of record.",
+            "Create triage rules based on custom fields in Salesforce to route and prioritize incoming requests."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Linear's homepage promotes Intake, which automatically turns conversations and customer feedback into issues that are routed, labeled and prioritized. It also promotes AI agents that work as teammates.",
+          "category": "product",
+          "source_url": "https://linear.app/",
+          "evidence": [
+            "Automatically turn conversations and customer feedback into actionable issues that are instantly routed, labeled, and prioritized for the right team.",
+            "Build and deploy AI agents that work alongside you as teammates."
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Linear's recent changelog includes a coding agent: you assign a task to Linear Agent and it works in a cloud environment to write and test code before opening a PR. It also added AI credit usage tracking and spend limits.",
+          "category": "news",
+          "source_url": "https://linear.app/changelog",
+          "evidence": [
+            "Assign a task to Linear Agent, and it works in a secure cloud environment to write and test the code before opening a pull request for review.",
+            "Admins can now see what’s driving AI credit usage and set limits to manage spend."
+          ]
+        },
+        {
+          "id": "f9",
+          "claim": "Linear's customers page cites outcomes for teams that switch: 2.0x more filed issues, 3.3x faster issue resolution, and 50% of issues authored by agents.",
+          "category": "customers",
+          "source_url": "https://linear.app/customers",
+          "evidence": [
+            "3.3x\nFaster issue resolution",
+            "50%\nIssues authored by agents"
+          ]
+        },
+        {
+          "id": "f10",
+          "claim": "Linear is fully remote and keeps its team small. Its careers page lists customer support among the roles that need people who care about quality.",
+          "category": "hiring",
+          "source_url": "https://linear.app/careers",
+          "evidence": [
+            "no matter if it’s engineering, design, or customer support",
+            "Keep the team small, do more with lessWe build better with fewer people."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Keeping new-user activation strong as Linear adds agents and Intake",
+      "rationale": "Linear is adding new surfaces: Intake, AI agents, a coding agent, and AI credit tracking (f7, f8). Each one is something new teams must adopt before they see value. Linear also sells on outcomes such as 3.3x faster issue resolution after a switch (f9). That suggests new accounts probably have to reach those outcomes quickly. Linear's own claim of value depends on onboarding that is broad and fast. A likely pain is making sure new workspaces get to first value with these features, not just the core issue tracker. This is a hypothesis, not a confirmed fact. It fits Onboardly's offer of finding and fixing drop-off steps.",
+      "supporting_fact_ids": [
+        "f7",
+        "f8",
+        "f9"
+      ]
+    },
+    "email": {
+      "subject": "Onboarding new workspaces onto Intake",
+      "body": "Hi Morgan,\n\nLinear's homepage now puts Intake front and center, turning customer feedback into issues that are routed, labeled and prioritized for the right team.\n\nTeams adding surfaces like Intake and Linear Agent often find that new workspaces get comfortable with the core issue tracker but stall before reaching the newer pieces, which delays first value.\n\nAt Onboardly we find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f7",
+        "f8"
+      ]
+    },
+    "cost_usd": 0.1057048
+  },
+  {
+    "lead": {
+      "domain": "webflow.com",
+      "person_name": "Taylor Brooks",
+      "person_role": "VP Product, Activation"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "webflow.com",
+      "company_name": "Webflow",
+      "summary": "Webflow is a website platform founded in 2013 that now positions itself as an agentic, AI-native web platform, with 900+ team members and $335M in total funding. It recently pushed into AI app generation, AEO and on-site experimentation and personalization, with enterprise customers reporting pipeline and speed gains.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Webflow has $335M in total funding and 3.5M users.",
+          "category": "funding",
+          "source_url": "https://webflow.com/company/about",
+          "evidence": [
+            "$335M",
+            "In total funding",
+            "Users"
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "At Webflow Conf (Sept 2025) Webflow announced Webflow AI, a prompt-to-production agentic solution that generates production-grade apps and publishes them in one click within the same visual environment as the website.",
+          "category": "product",
+          "source_url": "https://www.prnewswire.com/news-releases/webflow-unveils-ai-prompt-to-production-a-new-way-to-build-with-ai-302558866.html",
+          "evidence": [
+            "Webflow AI, a prompt-to-production agentic solution that enables teams to generate production-grade apps and publish them with one click inside the same visual environment used to build and optimize their websites."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "The Sept 2025 announcements also included a revamped AI Assistant, AI Code Gen, React Code Components, AI SEO/AEO, and a next-gen CMS architectural overhaul.",
+          "category": "product",
+          "source_url": "https://www.prnewswire.com/news-releases/webflow-unveils-ai-prompt-to-production-a-new-way-to-build-with-ai-302558866.html",
+          "evidence": [
+            "Revamped AI Assistant: A new, conversational way for users to build and manage their site using an AI partner across the platform's UI.",
+            "Next-gen Webflow CMS: An architectural overhaul of the CMS to unlock larger data sets"
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Webflow's homepage emphasizes conversion optimization: A/B tests, personalization, and AI testing multiple variables at once, whether the site is built on Webflow or not.",
+          "category": "product",
+          "source_url": "https://webflow.com/",
+          "evidence": [
+            "Run experiments, personalize for every visitor, and let AI deliver the winning experience — whether your site is built on Webflow or not.",
+            "Run A/B tests"
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Webflow promotes AEO (Answer Engine Optimization) tools to track brand visibility in AI answers.",
+          "category": "product",
+          "source_url": "https://webflow.com/",
+          "evidence": [
+            "Webflow AEO gives you a clear path from visibility to action.",
+            "Track visibility in AI answers"
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Customer proof points on the homepage: Copy.ai attributes $4M+ pipeline to organic content, and ABM reports $200M in new pipeline post-site launch.",
+          "category": "customers",
+          "source_url": "https://webflow.com/",
+          "evidence": [
+            "$4M+ in pipeline attributed to organic content",
+            "$200M In new pipeline generated post-site launch"
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Arkose Labs chose Webflow after deciding in early 2026 that every vendor had to connect to Claude; Webflow also promotes building sites with AI tools like Claude and Cursor.",
+          "category": "customers",
+          "source_url": "https://webflow.com/",
+          "evidence": [
+            "Arkose Labs made a bet on agentic AI in early 2026: every vendor had to connect to Claude, or it was out. Webflow was the platform that rose to the top.",
+            "Build and manage your sites with AI tools like Claude and Cursor, without sacrificing the control and governance you need at scale."
+          ]
+        },
+        {
+          "id": "f9",
+          "claim": "Webflow says over 300,000 companies and more than 1,500 Certified Webflow Partners build sites with it.",
+          "category": "customers",
+          "source_url": "https://www.prnewswire.com/news-releases/webflow-unveils-ai-prompt-to-production-a-new-way-to-build-with-ai-302558866.html",
+          "evidence": [
+            "Today, over 300,000 of the best companies in the world, and more than 1,500 Certified Webflow Partners, create best-in-class, high-performing sites with Webflow."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Activating new users into a much broader Webflow AI product surface",
+      "rationale": "Webflow announced Webflow AI (prompt-to-production apps), a revamped AI Assistant, AI Code Gen, React Code Components, AEO and a next-gen CMS all at once (f2, f3). The product now covers far more than site building. This likely means new signups must find the right first-value path among many capabilities, and the onboarding flow may be hard to keep coherent. For a VP Product, Activation, the likely pain is getting new users to first value quickly. Onboardly's work on time-to-first-value is relevant. This is a hypothesis, not a confirmed problem.",
+      "supporting_fact_ids": [
+        "f2",
+        "f3"
+      ]
+    },
+    "email": {
+      "subject": "First value across a broader Webflow",
+      "body": "Hi Taylor,\n\nAt Webflow Conf you announced prompt-to-production apps alongside a next-gen CMS. When a product widens that much, new signups often struggle to find the right first-value path, and the onboarding flow gets harder to keep coherent.\n\nOnboardly helps B2B software companies find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f2",
+        "f3"
+      ]
+    },
+    "cost_usd": 0.13751170000000001
+  },
+  {
+    "lead": {
+      "domain": "retool.com",
+      "person_name": "Jamie Fox",
+      "person_role": "Director of Customer Onboarding"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "retool.com",
+      "company_name": "Retool",
+      "summary": "Retool, founded in 2017, is an enterprise platform for building internal software, now positioned around AI-driven app generation (AppGen) and Agents. It launched AppGen at its first Retool Summit in October 2025 and says over 10,000 organizations, including Stripe and Uber, use it. It is also still hiring for customer-facing roles.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Retool announced enterprise AppGen on October 7, 2025 at Retool Summit, starting with Assist (Beta) in the Retool editor, which generates apps from natural language.",
+          "category": "product",
+          "source_url": "https://community.retool.com/t/launch-day-appgen-is-live-in-retool/62398",
+          "evidence": [
+            "Today at Retool Summit we announced enterprise AppGen — the first platform where you can generate production-ready apps with natural language.",
+            "AppGen starts with Assist (Beta), now live in your Retool editor."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Retool is rolling out in-product CSAT surveys and guided onboarding prompts to better understand user workflows with Assist/AppGen.",
+          "category": "product",
+          "source_url": "https://community.retool.com/t/launch-day-appgen-is-live-in-retool/62398",
+          "evidence": [
+            "We’re rolling out in product CSAT surveys and guided onboarding prompts to help us better understand your workflows."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Retool launched Retool Agents in May 2025 and said it had already automated 100 million hours of work.",
+          "category": "news",
+          "source_url": "https://retool.com/newsroom/retool-automates-100-million-hours-of-work-launching-agents",
+          "evidence": [
+            "Retool Agents has arrived: 100 million hours already automated, and we’re just getting started"
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Stripe's Patrick Collison said at Retool Summit that anyone working at Stripe is a Retool user out of necessity; Uber said it rebuilt the whole Shopify backend with Retool in two weeks.",
+          "category": "customers",
+          "source_url": "https://siliconangle.com/2025/10/08/everyone-can-go-build-retool-adds-latest-chapter-movement-democratize-software-generation/",
+          "evidence": [
+            "“If you work at Stripe, you are a Retool user out of necessity.”",
+            "“We rebuilt the whole backend for Shopify using Retool in two weeks.”"
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Retool's survey of more than 1,100 internal builders found 48% of non-engineers can now build software directly, released at the inaugural Retool Summit in San Francisco.",
+          "category": "news",
+          "source_url": "https://siliconangle.com/2025/10/08/everyone-can-go-build-retool-adds-latest-chapter-movement-democratize-software-generation/",
+          "evidence": [
+            "Retool also released the results from a survey of more than 1,100 internal builders that found 48% of non-engineers can now build software directly."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Colgate-Palmolive has 140,000 unique users (90% of its desk worker population) on its internal AI platform, an example customer in the Retool AppGen story.",
+          "category": "customers",
+          "source_url": "https://siliconangle.com/2025/10/08/everyone-can-go-build-retool-adds-latest-chapter-movement-democratize-software-generation/",
+          "evidence": [
+            "Today, 140,000 unique users or 90% of Colgate-Palmolive’s desk worker population are engaged with the internal AI platform."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Retool homepage claims it is trusted by 10,000+ teams to generate production-ready AI applications, and emphasizes enterprise-grade security and governance.",
+          "category": "product",
+          "source_url": "https://retool.com/",
+          "evidence": [
+            "Trusted by 10,000+ teams to generate production-ready AI applications",
+            "Business teams move fast, IT keeps full visibility, and governance is centralized."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Getting new users to first value with the new AppGen/Assist",
+      "rationale": "Retool launched enterprise AppGen with Assist (Beta) in the editor (f1), which is a new way of building that existing and new users must learn. It is also rolling out guided onboarding prompts and in-product CSAT surveys to understand user workflows (f2). That suggests onboarding to the new experience is an active, still-being-figured-out area, so finding where users drop off before building their first app is a likely pain. This is a hypothesis. Time-to-first-value work is directly relevant to a Director of Customer Onboarding.",
+      "supporting_fact_ids": [
+        "f1",
+        "f2"
+      ]
+    },
+    "email": {
+      "subject": "Onboarding to Assist in the Retool editor",
+      "body": "Hi Jamie,\n\nI saw Assist (Beta) is now live in the Retool editor, alongside the guided onboarding prompts and in-product CSAT surveys you're rolling out to understand how people work with it.\n\nWhen a new way of building lands, teams often find that users stall somewhere before their first app comes together, and it's hard to tell which step is the culprit.\n\nThat's what we do at Onboardly: we find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f1",
+        "f2"
+      ]
+    },
+    "cost_usd": 0.0964876
+  },
+  {
+    "lead": {
+      "domain": "sentry.io",
+      "person_name": "Drew Patel",
+      "person_role": "Head of Growth"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "sentry.io",
+      "company_name": "Sentry",
+      "summary": "Sentry is a developer-first application monitoring and error-tracking platform used by millions of developers, with customers like Disney+, Cloudflare, GitHub, Anthropic and Vercel. In 2025 it has been expanding into AI debugging (Seer), AI code review, Logs and MCP monitoring, and moving upstream into pre-release development.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Sentry announced the beta of AI code review on September 23, 2025, available to GitHub users, extending Sentry into the pre-release phase of development.",
+          "category": "news",
+          "source_url": "https://sentry.io/about/press-releases/sentry-announces-ai-code-review/",
+          "evidence": [
+            "today announced the beta of AI code review, an AI-powered solution that identifies and fixes critical code issues before they reach production.",
+            "AI code review is now available in beta for GitHub users."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Sentry's expansion upstream followed acquisitions of Codecov (2022) and Emerge Tools (2025).",
+          "category": "news",
+          "source_url": "https://sentry.io/about/press-releases/sentry-announces-ai-code-review/",
+          "evidence": [
+            "Following its strategic acquisitions of Codecov (2022) and Emerge Tools (2025), AI code review marks a significant step in Sentry’s expansion into the pre-release phase of software development."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "CEO Milin Desai says Sentry's AI debugging agent Seer root causes issues with over 94% accuracy.",
+          "category": "product",
+          "source_url": "https://sentry.io/about/press-releases/sentry-announces-ai-code-review/",
+          "evidence": [
+            "with Seer we proved it could revolutionize debugging by root causing issues with over 94% accuracy and delivering context-aware fixes in seconds."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Sentry launched MCP Server Monitoring on August 14, 2025; its own MCP server passed 30 million requests a month soon after launch.",
+          "category": "news",
+          "source_url": "https://sentry.io/about/press-releases/sentry-launches-monitoring-tool-for-mcp-servers/",
+          "evidence": [
+            "today announced the launch of MCP Server Monitoring.",
+            "Soon after launch, our MCP shot past 30 million requests a month."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Sentry Logs became generally available on September 3, 2025, after more than 5,000 companies used it in beta; every plan includes 5GB/month free, then $0.50/GB.",
+          "category": "product",
+          "source_url": "https://sentry.io/about/press-releases/sentry-structured-logs-now-available-to-all/",
+          "evidence": [
+            "more than 5,000 companies have been using the feature through its beta phase, sending terabytes of structured logs through Sentry each day.",
+            "Every plan includes 5GB of logs per month free, with additional logs priced at $0.50/GB ."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Sentry reports being used by over 4 million developers and 140,000 organizations, including Disney+, Cloudflare, GitHub, Anthropic, Vercel and Atlassian.",
+          "category": "customers",
+          "source_url": "https://sentry.io/about/press-releases/sentry-structured-logs-now-available-to-all/",
+          "evidence": [
+            "Sentry is used by over 4 million developers and 140,000 organizations, including Disney+, Cloudflare, GitHub, Anthropic, Vercel, and Atlassian."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Sentry's About page says it has raised $217M in 6 funding rounds, has 200+ employees in four offices, and started as an open-source project.",
+          "category": "funding",
+          "source_url": "https://sentry.io/about/",
+          "evidence": [
+            "and $217M raised in 6 rounds of funding",
+            "Sentry started out as an open-source project.",
+            "200+ employees in four offices worldwide."
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Sentry's homepage promotes Seer (AI debugger and code reviewer), agent tracing for AI agents, and an MCP server integrating with GitHub, Slack, Jira and Linear; the logo wall includes Cursor, Anthropic, Supabase and Vercel.",
+          "category": "product",
+          "source_url": "https://sentry.io/",
+          "evidence": [
+            "Catch critical issues before you merge and fix them when they hit prod with Seer, our debugging agent and code reviewer.",
+            "Agent tracing helps you catch unexpected output issues, bad tool calls and visualize the spend and performance across all your agents."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Getting new users to activate across a fast-growing product surface",
+      "rationale": "Sentry has launched several products in a short span: AI code review beta (f1), MCP Server Monitoring (f4), Logs GA (f5), and Seer and agent tracing promoted on the homepage (f8). A self-serve product that now covers many things probably makes it harder for a new signup to reach first value. They have to pick, install and configure the relevant capability. Logs reached over 5,000 companies in beta (f5), and every plan includes a free logs allowance (f5). That suggests a wide top-of-funnel where activation and trial-to-paid conversion matter to a Head of Growth. Onboardly's work on finding and fixing onboarding drop-off, and on time-to-first-value, maps directly onto this. This is a hypothesis, not a confirmed problem.",
+      "supporting_fact_ids": [
+        "f1",
+        "f4",
+        "f5",
+        "f8"
+      ]
+    },
+    "email": {
+      "subject": "Logs GA and new-user activation",
+      "body": "Hi Drew,\n\nSentry Logs going GA after more than 5,000 companies used it in beta caught my eye, especially alongside MCP Server Monitoring landing a few weeks earlier.\n\nWith a product surface growing that fast, new signups often struggle to work out which capability to pick, install and configure before they see any value. That's usually where activation quietly leaks.\n\nAt Onboardly we find and fix those drop-off steps. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f5",
+        "f4"
+      ]
+    },
+    "cost_usd": 0.09959289999999998
+  },
+  {
+    "lead": {
+      "domain": "mercury.com",
+      "person_name": "Avery Kim",
+      "person_role": "Head of Onboarding"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "mercury.com",
+      "company_name": "Mercury",
+      "summary": "Mercury is a fintech offering business banking, cards and finance software to startups and small businesses, and raised a $300M Series C in March 2025. It has since expanded into consumer banking with Mercury Personal and is growing headcount past 1,000.",
+      "facts": [
+        {
+          "id": "f2",
+          "claim": "Mercury reported $500M revenue in 2024 and 10 consecutive quarters of profitability.",
+          "category": "news",
+          "source_url": "https://techcrunch.com/2025/03/26/fintech-mercury-lands-300m-in-sequoia-led-series-c-doubles-valuation-to-3-5b/",
+          "evidence": [
+            "the startup notched $500 million in revenue in 2024 and that it has seen 10 consecutive quarters of profitability on both EBITDA and GAAP net income."
+          ]
+        },
+        {
+          "id": "f3",
+          "claim": "Mercury claimed 40% year-over-year customer growth, with over 200,000 customers (as of March 2025); customers include Linear, Phantom and ElevenLabs.",
+          "category": "customers",
+          "source_url": "https://techcrunch.com/2025/03/26/fintech-mercury-lands-300m-in-sequoia-led-series-c-doubles-valuation-to-3-5b/",
+          "evidence": [
+            "The company counts over 200,000 companies as customers and claims it has seen 40% year-over-year customer growth.",
+            "include tech companies such as Linear, Phantom, and ElevenLabs"
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Mercury had 850 employees in March 2025 and planned to grow to more than 1,000 in 2025, so hiring is a priority.",
+          "category": "hiring",
+          "source_url": "https://techcrunch.com/2025/03/26/fintech-mercury-lands-300m-in-sequoia-led-series-c-doubles-valuation-to-3-5b/",
+          "evidence": [
+            "Presently, Mercury has 850 employees with plans to grow to more than 1,000 in 2025."
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "On Dec 11, 2025 Mercury opened Mercury Personal to the public (no waitlist), with joint accounts for up to four people, Mercury Invest portfolios and a 3.50% APY savings account.",
+          "category": "product",
+          "source_url": "https://mercury.com/blog/mercury-personal-ga",
+          "evidence": [
+            "Starting today, Mercury Personal is no longer gated behind a waitlist.",
+            "One joint account for up to four people",
+            "earn 3.50% APY with no minimums"
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Mercury is remote-first with offices in San Francisco, New York and Portland.",
+          "category": "hiring",
+          "source_url": "https://mercury.com/jobs",
+          "evidence": [
+            "A remote-first culture, plus the option to work from one of our offices",
+            "- Portland, OR"
+          ]
+        },
+        {
+          "id": "f9",
+          "claim": "Mercury's About page states it has 1,000+ employees.",
+          "category": "other",
+          "source_url": "https://mercury.com/about",
+          "evidence": [
+            "Our 1,000+ employees are all encouraged to question processes, voice their opinions, and pursue and recognize excellence."
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Onboarding a fast-growing customer base (200k+, 40% YoY growth)",
+      "rationale": "Mercury reports over 200,000 customers and 40% year-over-year customer growth (f3), and revenue of $500M in 2024 (f2). At that volume, even small drop-offs in the account-opening and activation flow likely mean many lost or slow-to-activate customers. This is a hypothesis: onboarding friction probably grows with volume, and a Head of Onboarding would own it. Onboardly's drop-off diagnosis fits directly.",
+      "supporting_fact_ids": [
+        "f3",
+        "f2"
+      ]
+    },
+    "email": {
+      "subject": "Onboarding at 200,000+ customers",
+      "body": "Hi Avery,\n\nMercury passing 200,000 customers, with customer growth running 40% year over year, caught my eye.\n\nTeams growing that fast often find that small drop-offs in account opening and activation quietly add up to a lot of customers who stall or never finish setup.\n\nAt Onboardly we help B2B software companies find and fix the onboarding steps where new users drop off. For a payroll software company, we cut time-to-first-value from 9 days to 3.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f3"
+      ]
+    },
+    "cost_usd": 0.10372960000000002
+  },
+  {
+    "lead": {
+      "domain": "cal.com",
+      "person_name": "Quinn Rivera",
+      "person_role": "Head of Product"
+    },
+    "status": "succeeded",
+    "report": {
+      "domain": "cal.com",
+      "company_name": "Cal.com",
+      "summary": "Cal.com is an open, programmable scheduling platform positioned as \"infrastructure for time\", used by over a million people, from individuals to enterprise teams. It ships monthly product updates (routing, round-robin groups, Insights, API v2) and is a fully distributed, open-startup company backed by a $25M Series A.",
+      "facts": [
+        {
+          "id": "f1",
+          "claim": "Cal.com's stated mission is to connect a billion people by 2031 by making time coordination effortless for businesses, products, and public services.",
+          "category": "other",
+          "source_url": "https://cal.com/about",
+          "evidence": [
+            "CONNECTING A BILLION PEOPLE BY 2031",
+            "By making time coordination effortless for businesses, products, and public services."
+          ]
+        },
+        {
+          "id": "f2",
+          "claim": "Cal.com positions itself as infrastructure-first scheduling that can be embedded inside products and workflows, rather than a bolt-on tool.",
+          "category": "product",
+          "source_url": "https://cal.com/about",
+          "evidence": [
+            "Cal.com is that infrastructure.",
+            "From simple booking links to fully embedded scheduling inside products, we support everything from individual use to complex, multi-team operations."
+          ]
+        },
+        {
+          "id": "f4",
+          "claim": "Cal.com offers Teams ($16/user/month) and Organizations ($37/user/month) tiers plus custom-priced Enterprise, and cites HIPAA compliance and SOC 2 Type II certification for healthcare use.",
+          "category": "product",
+          "source_url": "https://cal.com/",
+          "evidence": [
+            "Teams ($16/user/month) adds round-robin scheduling, shared availability, and team workflows",
+            "Organizations ($37/user/month) include org-wide admin controls and centralized management for larger companies",
+            "HIPAA compliance, SOC 2 Type II certification, and encrypted storage"
+          ]
+        },
+        {
+          "id": "f5",
+          "claim": "Cal.com's v5.6 update (Aug 2025) added Round-Robin Groups, advanced private links with expiry, and Insights charts such as a routing form drop-off funnel.",
+          "category": "news",
+          "source_url": "https://cal.com/blog/calcom-v5-6",
+          "evidence": [
+            "With Round-Robin Groups, you can split your hosts into different teams and we’ll make sure one person from each group joins the meeting.",
+            "We’ve added a funnel chart to Insights to show routing form drop-off."
+          ]
+        },
+        {
+          "id": "f6",
+          "claim": "Cal.com announced it will discontinue API v1 on February 28, 2026, urging developers to migrate to API v2.",
+          "category": "product",
+          "source_url": "https://cal.com/blog/calcom-v5-6",
+          "evidence": [
+            "We will discontinue support for API v1 on February 28, 2026. Please migrate to API v2, which offers improved performance, expanded endpoints, and better developer tooling."
+          ]
+        },
+        {
+          "id": "f7",
+          "claim": "Cal.com raised a $25M Series A led by Alexis Ohanian's Seven Seven Six, and launched its App Store and Cal Video with Daily.co (also an investor).",
+          "category": "funding",
+          "source_url": "https://cal.com/blog/cal-v-1-5",
+          "evidence": [
+            "announcing our 25M Series A led by Alexis Ohanian from Seven Seven Six",
+            "we’re more than excited to be officially launching Cal.com Video, our native video conferencing service."
+          ]
+        },
+        {
+          "id": "f8",
+          "claim": "Cal.com is a fully distributed company with no physical headquarters and follows an Open Startup approach, publicly sharing KPIs and salaries (opt-in).",
+          "category": "other",
+          "source_url": "https://cal.com/about",
+          "evidence": [
+            "Our team is fully distributed and works online. We have no physical headquarter and don’t plan to have one.",
+            "We're big evangelists of the Open Startup philosophy of publicly showing our core KPIs and company-related metrics"
+          ]
+        }
+      ]
+    },
+    "pain_point": {
+      "rank": 1,
+      "title": "Activating new users across a multi-tier, multi-team product",
+      "rationale": "Cal.com sells Teams ($16/user/month) and Organizations ($37/user/month) tiers with round-robin scheduling, shared availability, team workflows and org-wide admin controls (f4). The v5.6 update added Round-Robin Groups and private links with expiry (f5). Each new feature adds setup steps before a team gets value. This suggests a likely hypothesis: new individual and team signups stall in setup, so trial-to-paid conversion and time-to-first-value suffer. This is an inference, not a confirmed fact. It is relevant to a Head of Product, and onboarding work is what Onboardly offers.",
+      "supporting_fact_ids": [
+        "f4",
+        "f5"
+      ]
+    },
+    "email": {
+      "subject": "Setup steps after Round-Robin Groups",
+      "body": "Hi Quinn,\n\nCal.com's latest update added Round-Robin Groups and private links with expiry. Both are useful, but with Teams and Organizations tiers on top, every new feature likely adds another setup step before a team sees value, and that's often where new signups stall.\n\nAt Onboardly we help B2B software companies find and fix the onboarding steps where new users drop off. We cut time-to-first-value from 9 days to 3 for a payroll software company.\n\nOpen to a 15-minute call next week?\n\nSam",
+      "used_fact_ids": [
+        "f4",
+        "f5"
+      ]
+    },
+    "cost_usd": 0.112305
+  },
+  {
+    "lead": {
+      "domain": "allbirds.com",
+      "person_name": "Sky Morgan",
+      "person_role": "Head of Retail Operations"
+    },
+    "status": "stopped",
+    "report": null,
+    "pain_point": null,
+    "email": null,
+    "cost_usd": 0.001305
+  }
+]

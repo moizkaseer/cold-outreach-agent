@@ -321,4 +321,17 @@ Progress log after every working session (what was built, what broke, what's nex
   Spend 2026-10-09 ≈ $0.62 estimated (2 smoke runs $0.55 + judging/redraft $0.08).
   Next ideas: prefer news (launch/hire/funding) over marketing copy for the opener;
   grow the fixture to ~10 leads before trusting rubric deltas; then Docker + deploy.
+- 2026-10-09 — Fixture grown to 10 leads (`evals/results/writer-fixture-10.json`; 7 new
+  leads via smoke run 3, $0.753). 7/7 new leads verified with 0 revisions; cost
+  $0.097-0.138/lead (webflow highest), 40-59s. Score gate works: allbirds.com (retail,
+  deliberate poor fit) stopped at score 1/5 for $0.0013, no research paid.
+  NOTE: fixture mixes drafts from two writer prompts (3 old, 7 new).
+  Rubric baseline on all 10: 80/80 (judge $0.066). The judge is SATURATED: the stripe
+  opener it failed earlier today passed now, so it's inconsistent and can't separate good
+  from bad. Further writer tuning against it is pointless until it's calibrated.
+  My read of the 7 new emails: openers are real news (launches, GA, milestones), grounded;
+  but formulaic ("teams ... often find ... stall" in ~all), "caught my eye" x2, and mercury
+  used 2 company numbers despite the one-number instruction (code check allows <=2).
+  Next: Moiz labels the 10 emails (send / don't send + why) -> calibrate or replace the
+  judge (stricter prompt, maybe Sonnet), then tune. Spend 2026-10-09 ≈ $1.44 estimated.
 
