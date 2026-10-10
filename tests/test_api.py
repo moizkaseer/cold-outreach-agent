@@ -147,6 +147,27 @@ async def test_resume_only_failed_runs(env) -> None:
     r = await env.client.post(f"/runs/{run_id}/resume")
     assert r.status_code == 202
     assert env.enqueued[-1] == (uuid.UUID(run_id), 1)  # new job id: not a duplicate
+    # Shown as queued right away (found on real Redis: a re-opened progress stream saw
+    # the stale "failed" and closed), and a second click can't queue it twice.
+    assert (await env.client.get(f"/runs/{run_id}")).json()["status"] == "pending"
+    assert (await env.client.post(f"/runs/{run_id}/resume")).status_code == 409
+    assert len(env.enqueued) == 2
+
+
+async def test_queue_outage_leaves_a_resumable_run(env) -> None:
+    async def down(run_id: uuid.UUID, attempt: int) -> bool:
+        raise ConnectionError("redis is down")
+
+    env.deps.enqueue = down
+    r = await env.client.post("/runs", json=BODY)
+    assert r.status_code == 503
+    run_id = r.json()["run_id"]
+    view = (await env.client.get(f"/runs/{run_id}")).json()
+    assert view["status"] == "failed" and "queue" in view["error"]
+
+    env.deps.enqueue = env.enqueue  # queue is back
+    assert (await env.client.post(f"/runs/{run_id}/resume")).status_code == 202
+    assert env.enqueued == [(uuid.UUID(run_id), 0)]
 
 
 async def read_events(client: httpx.AsyncClient, run_id: str) -> list[tuple[str, dict]]:

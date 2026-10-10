@@ -28,12 +28,12 @@ import logfire
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, ValidationError
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
 
 from app.api.limits import Limits, Refusal, check_new_run, check_resume, client_key
-from app.db.models import Run, RunStatus
+from app.db.models import Run, RunStatus, utcnow
 from app.pipeline.orchestrator import create_run
 from app.pipeline.steps import STEP_NAMES
 from app.schemas import Lead, Sender, load_sender
@@ -55,6 +55,25 @@ class AppDeps:
 def refused(r: Refusal) -> JSONResponse:
     return JSONResponse({"detail": r.detail}, status_code=r.status_code,
                         headers={"Retry-After": str(r.retry_after_s)})  # fmt: skip
+
+
+async def enqueue_or_fail(d: AppDeps, run_id: uuid.UUID, attempt: int) -> JSONResponse | None:
+    """Queue the run. If the queue is down, don't leave the run PENDING forever with no
+    job behind it: mark it FAILED (so it can be resumed) and tell the client."""
+    try:
+        await d.enqueue(run_id, attempt)
+    except Exception:
+        logfire.exception("enqueue failed", run_id=str(run_id))
+        async with d.sessions() as s:
+            await s.execute(
+                update(Run)
+                .where(Run.id == run_id, Run.status == RunStatus.PENDING)
+                .values(status=RunStatus.FAILED, error="could not queue the run; resume to retry")
+            )
+            await s.commit()
+        return JSONResponse({"detail": "job queue unavailable; the run is saved, resume it later",
+                             "run_id": str(run_id)}, status_code=503)  # fmt: skip
+    return None
 
 
 # --- request / response models ---
@@ -219,7 +238,8 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
         if refusal := await check_new_run(d.sessions, d.limits, key):
             return refused(refusal)
         run_id = await create_run(d.sessions, lead, sender, STEP_NAMES, client_key=key)
-        await d.enqueue(run_id, 0)
+        if failure := await enqueue_or_fail(d, run_id, 0):
+            return failure
         return {"run_id": str(run_id), "status": RunStatus.PENDING.value}
 
     @app.get("/runs/{run_id}")
@@ -239,9 +259,22 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             raise HTTPException(409, f"only failed runs can be resumed (status: {view.status})")
         if refusal := await check_resume(d.sessions, d.limits):
             return refused(refusal)
+        # FAILED -> PENDING before queueing, in one conditional UPDATE. Without it the run
+        # still reads "failed" until a worker picks it up, so a client re-opening the
+        # progress stream is told it's over. It also makes a double-clicked resume a 409.
+        async with d.sessions() as s:
+            claimed = await s.execute(
+                update(Run)
+                .where(Run.id == run_id, Run.status == RunStatus.FAILED)
+                .values(status=RunStatus.PENDING, error=None, updated_at=utcnow())
+            )
+            await s.commit()
+        if claimed.rowcount != 1:
+            raise HTTPException(409, "run is already being resumed")
         # New job id per resume attempt, so it isn't swallowed as a duplicate enqueue.
         attempt = max((st.attempts for st in view.steps), default=0)
-        await d.enqueue(run_id, attempt)
+        if failure := await enqueue_or_fail(d, run_id, attempt):
+            return failure
         return {"run_id": str(run_id), "status": "requeued"}
 
     @app.get("/runs/{run_id}/events")

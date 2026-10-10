@@ -27,10 +27,11 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 4 — Backend
 - [x] Postgres models: runs, steps, leads, research cache, emails (+ Alembic) — applied to
-  Supabase 2026-10-07 (schema + RLS at head); app itself not yet run against Postgres
+  Supabase 2026-10-07 (schema + RLS at head); app run against local Postgres 16 2026-10-10
 - [x] Orchestrator state machine with resume-from-failed-step (fakes + SQLite; no real run yet)
-- [x] Redis + Arq worker (job + enqueue tested with fakes; no real Redis run yet)
-- [x] FastAPI: create run, get run, SSE progress stream (+ resume) — in-process tests; no auth yet
+- [x] Redis + Arq worker — real Redis round trip 2026-10-10 (`scripts/infra_smoke.py`)
+- [x] FastAPI: create run, get run, SSE progress stream (+ resume) — run as a real server
+  against Postgres + Redis 2026-10-10; no auth yet
 
 ## Week 5 — Production hardening
 - [x] Tracing (Langfuse or Logfire) with cost per run — Logfire; tested in-memory, no account yet
@@ -40,7 +41,8 @@ Progress log after every working session (what was built, what broke, what's nex
 ## Week 6 — Ship the demo
 - [ ] Connect "Run" button on moizali.vercel.app
 - [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; tested with SQLite only)
-- [~] Docker + deploy (Dockerfile written, never built: no Docker locally; deploy needs Moiz's accounts)
+- [~] Docker + deploy (image builds and the full stack boots locally via `docker compose`,
+  2026-10-10; deploy itself needs Moiz's accounts)
 
 ## Week 7 — Close the loop
 - [ ] Review UI (approve / edit / reject)
@@ -421,3 +423,25 @@ Progress log after every working session (what was built, what broke, what's nex
   of the file: edit one line, then republish the same path. This file stays the source of
   truth. Fixed stale checkboxes: Week 2 tools ticked (in real use since 2026-10-02); Week 3
   agents no longer say "no real run yet" (they ran 2026-10-09). No code changes, no API spend.
+- 2026-10-10 — Backend day, step 1: FIRST RUN ON REAL INFRASTRUCTURE (local Docker: Postgres
+  16 + Redis 7; Moiz is now in the `docker` group). Added `docker-compose.yml` (postgres,
+  redis, migrate, api, worker; local only) and `scripts/infra_smoke.py`: real uvicorn + real
+  Arq worker as separate processes, FAKE steps (no LLM spend), own throwaway database
+  `outreach_smoke` + Redis db 1. Passing, repeatable: migrations up/down/up on Postgres,
+  `alembic check` clean, RLS on all tables, request -> Redis -> worker -> Postgres -> SSE ->
+  email row, fail -> resume re-runs only the failed step, duplicate enqueue ignored, 429 on
+  the 4th run/hour. Docker image built for the first time (429MB, non-root); `docker compose
+  up` boots migrate -> api + worker, /health OK. Real bugs found, all invisible to the tests:
+  (1) the API could never start: `logfire.instrument_fastapi` needs the `logfire[fastapi]`
+  extra (tests inject deps and skip real startup) -> dependency + regression test;
+  (2) resume left the run `failed` until a worker claimed it, so a re-opened SSE stream
+  said "done: failed" -> resume now flips FAILED -> PENDING in one conditional UPDATE
+  (double resume = 409); (3) Redis down at create/resume left a run PENDING forever -> now
+  marked FAILED (resumable) + 503. 240 tests.
+  MY MISTAKE, unapproved spend ≈ $0.024 (estimated): the first smoke attempt used Redis db 0
+  and left 2 jobs queued; starting the real worker via compose executed them with real
+  agents (one Haiku score $0.0013; one research on a fake domain $0.0224; both stopped
+  correctly). Fixed: smoke has its own DB + Redis db and flushes its queue on exit. Rule:
+  check the queue is empty before starting a real worker.
+  Not covered: the real agents on Postgres/Redis (needs an approved paid run); Supabase
+  from a deploy host. Next: review API.

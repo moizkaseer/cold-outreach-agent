@@ -1,0 +1,58 @@
+# Local stack: Postgres + Redis + the app image (API, worker, migrations).
+#
+#   docker compose up -d postgres redis      # just the infrastructure (run the app with uv)
+#   docker compose up --build                # everything, API on http://localhost:8000
+#
+# Local development only: the database password below is not a secret and both
+# services listen on 127.0.0.1 only. Production uses Supabase + a managed Redis.
+
+x-app: &app
+  image: outreach-agent
+  build: .
+  env_file: .env # API keys; the two URLs below override whatever .env says
+  environment:
+    DATABASE_URL: postgresql+asyncpg://postgres:outreach@postgres:5432/outreach
+    REDIS_URL: redis://redis:6379
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: outreach
+      POSTGRES_DB: outreach
+    ports: ["127.0.0.1:5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d outreach"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  # Runs once and exits; api and worker wait for it, so they never see a half-built schema.
+  migrate:
+    <<: *app
+    command: alembic upgrade head
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  api:
+    <<: *app
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+
+  worker:
+    <<: *app
+    command: arq app.workers.worker.WorkerSettings
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }

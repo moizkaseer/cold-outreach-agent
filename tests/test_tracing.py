@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+import logfire
 import pytest
 
 from app.agents.loop import FINISH_TOOL_NAME, run_agent_loop
@@ -77,3 +78,12 @@ def test_setup_tracing_without_token_sends_nothing() -> None:
     from app.observability import setup_tracing
 
     setup_tracing("test", None)  # must not raise or require an account
+
+
+def test_fastapi_instrumentation_is_installed() -> None:
+    # The API's real startup calls this. It needs the logfire[fastapi] extra, which was
+    # missing until the first real server start (2026-10-10): tests inject their own deps
+    # and never ran that path, so the server crashed on boot with every test green.
+    from fastapi import FastAPI
+
+    logfire.instrument_fastapi(FastAPI())
