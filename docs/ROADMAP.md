@@ -531,3 +531,12 @@ Progress log after every working session (what was built, what broke, what's nex
   only accepts cache mounts with its own id format. Removed all RUN mounts (plain COPY +
   `uv sync --no-cache`); image still builds locally (433MB) and both entrypoints import.
   Standing rule from Moiz: commit AND push after every finished step.
+- 2026-10-10 — Railway deploy, in progress. Build passes after the Dockerfile fix. Crash 1:
+  no variables on the service (`anthropic_api_key` missing, `input_value={}`); fixed by
+  pasting the variables (helper files `.env.railway*`, gitignored, built from `.env`
+  without printing secrets). Crash 2: `RuntimeError: invalid DSN scheme` from arq =
+  `${{Redis.REDIS_URL}}` resolved to nothing (no service with that exact name yet).
+  Code change so config mistakes explain themselves: `InfraSettings` now validates
+  REDIS_URL / DATABASE_URL at startup with a message naming the variable and what it got
+  ("is empty", "starts with postgresql://"), and `hide_input_in_errors=True` keeps URL
+  passwords out of host logs. 290 tests.

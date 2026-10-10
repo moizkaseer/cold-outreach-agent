@@ -6,8 +6,16 @@ logic. Add a field here when a step actually needs it — not before.
 
 from functools import lru_cache
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def _describe(value: str) -> str:
+    """Say what is wrong with a URL setting without revealing it (it holds a password)."""
+    if not value.strip():
+        return "is empty"
+    scheme = value.split("://", 1)[0] if "://" in value else None
+    return f"starts with {scheme}://" if scheme and len(scheme) < 30 else "is not a URL"
 
 
 class InfraSettings(BaseSettings):
@@ -17,6 +25,9 @@ class InfraSettings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",  # unrelated vars in .env shouldn't crash startup
+        # Validation errors normally echo the bad value. These values are URLs with
+        # passwords in them, and errors end up in the host's logs.
+        hide_input_in_errors=True,
     )
 
     # Local default needs no setup; production sets a Postgres URL, e.g.
@@ -25,6 +36,30 @@ class InfraSettings(BaseSettings):
 
     # Arq job queue. Production: the managed Redis URL from Railway/Render/Fly.
     redis_url: str = "redis://localhost:6379"
+
+    # Fail at startup with a message that names the variable. Without this a bad value
+    # surfaces later as a library error ("invalid DSN scheme") that doesn't say which
+    # setting is wrong; that cost a debugging round on the first deploy (2026-10-10).
+    @field_validator("redis_url")
+    @classmethod
+    def _redis_url_shape(cls, v: str) -> str:
+        if not v.startswith(("redis://", "rediss://", "unix://")):
+            raise ValueError(
+                f"REDIS_URL must start with redis:// or rediss://, but it {_describe(v)}. "
+                "On Railway set it to ${{<name of your Redis service>.REDIS_URL}}; an empty "
+                "value means no service with that exact name was found."
+            )
+        return v
+
+    @field_validator("database_url")
+    @classmethod
+    def _database_url_shape(cls, v: str) -> str:
+        if not v.startswith(("postgresql+asyncpg://", "sqlite+aiosqlite://")):
+            raise ValueError(
+                f"DATABASE_URL must start with postgresql+asyncpg://, but it {_describe(v)}. "
+                "Supabase shows postgresql://...; add +asyncpg after postgresql."
+            )
+        return v
 
     # Tracing (Logfire). Unset = traces stay in-process; nothing is sent anywhere.
     logfire_token: SecretStr | None = None
