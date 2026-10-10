@@ -460,3 +460,15 @@ Progress log after every working session (what was built, what broke, what's nex
   Known limits: one key = one team (no per-user identity inside a team); browser
   `EventSource` can't send an Authorization header, so a keyed frontend must read the
   stream with `fetch`. Next: review API.
+- 2026-10-10 — Backend day, step 3: REVIEW API (`app/api/review.py`, migration
+  `240338cb0545`). `GET /emails` (team's queue; filter to_review/approved/rejected/sent/
+  all), `GET /emails/{id}` (draft + the evidence: used facts with source URLs and quotes,
+  verifier claims, pain point), `PATCH` (edit), `POST .../approve`, `POST .../reject`
+  (reason required: first real quality labels). Key required; reviewer = key name; other
+  teams get 404. Decisions and edits are conditional UPDATEs on status: one decision wins,
+  approved text can't change. An edit keeps the machine's original draft
+  (`original_subject/body`), drops the status to needs_human with "claims were not
+  re-checked", enforces the hard rules (422 at >=120 words) and reports style-rule
+  problems without blocking. `RunView.email` now carries `email_id`. 261 tests; smoke on
+  real Postgres incl. a concurrent approve + reject race (200 + 409). Known limits: no
+  undo of a decision; an edit is not re-verified by the LLM (would cost money per edit).

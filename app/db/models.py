@@ -161,6 +161,10 @@ class EmailDraft(Base):
     status: Mapped[EmailStatus] = mapped_column(_enum(EmailStatus))
     verification: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
     problems: Mapped[list[Any]] = mapped_column(JSONType, default=list)
+    # Set on the first human edit: the machine's draft as it was (app/api/review.py).
+    original_subject: Mapped[str | None] = mapped_column(String(200))
+    original_body: Mapped[str | None] = mapped_column(Text)
+    review_note: Mapped[str | None] = mapped_column(Text)  # approval note or reject reason
     reviewed_by: Mapped[str | None] = mapped_column(String(200))
     reviewed_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

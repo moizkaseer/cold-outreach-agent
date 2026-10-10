@@ -9,6 +9,8 @@
     GET  /runs/{id}/events     live progress (Server-Sent Events) until the run ends
     POST /runs/{id}/resume     re-enqueue a FAILED run (resumes at the failed step)
     GET  /health
+    /emails...                 human review: queue, evidence, edit, approve, reject
+                               (app/api/review.py)
 
 Who may do what is in app/api/deps.py (API keys; anonymous only if the deploy allows it).
 Guards (app/api/limits.py): new runs are rate-limited per client (429) and everything
@@ -35,6 +37,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
 
+from app.api import review
 from app.api.deps import AppDeps, Caller, Team, get_deps
 from app.api.limits import Limits, Refusal, check_new_run, check_resume, client_key
 from app.db.models import Run, RunStatus, utcnow
@@ -98,6 +101,7 @@ class StepView(BaseModel):
 
 
 class EmailView(BaseModel):
+    email_id: uuid.UUID  # for the review routes (/emails/{id})
     subject: str
     body: str
     status: str
@@ -165,6 +169,7 @@ async def load_run_view(sessions: async_sessionmaker[AsyncSession], run_id: uuid
                 for st in run.steps
             ],  # fmt: skip
             email=EmailView(
+                email_id=run.email.id,
                 subject=run.email.subject,
                 body=run.email.body,
                 status=run.email.status.value,
@@ -240,6 +245,8 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
         app.add_middleware(CORSMiddleware, allow_origins=list(origins),
                            allow_methods=["GET", "POST", "PATCH"],
                            allow_headers=["Authorization", "Content-Type"])  # fmt: skip
+
+    app.include_router(review.router)
 
     @app.get("/health")
     async def health() -> dict[str, str]:

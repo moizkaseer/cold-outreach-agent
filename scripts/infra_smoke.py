@@ -202,6 +202,23 @@ async def drive(check: Check) -> None:
         r = await c.get("/runs", headers={"Authorization": "Bearer oa_wrong"})
         check(r.status_code == 401, "wrong key is 401", str(r.status_code))
 
+        print("review")
+        queue = (await c.get("/emails", headers=as_acme)).json()
+        check(len(queue) == 1 and queue[0]["run_id"] == run_id, "email is in the review queue")
+        email_id = queue[0]["email_id"]
+        r = await c.patch(f"/emails/{email_id}", headers=as_acme, json={"subject": "edited"})
+        check(r.status_code == 200 and r.json()["original_subject"] == "smoke test",
+              "edit keeps the original draft")  # fmt: skip
+        r = await c.post(f"/emails/{email_id}/approve", headers=as_rival)
+        check(r.status_code == 404, "another team can't approve it", str(r.status_code))
+        # Two reviewers click at the same moment: exactly one decision may win.
+        both = await asyncio.gather(
+            c.post(f"/emails/{email_id}/approve", headers=as_acme),
+            c.post(f"/emails/{email_id}/reject", headers=as_acme, json={"reason": "race"}),
+        )
+        codes = sorted(r.status_code for r in both)
+        check(codes == [200, 409], "concurrent approve + reject: one wins", str(codes))
+
         print("guards")
         redis = await create_pool(RedisSettings.from_dsn(REDIS_URL))
         rid = uuid.uuid4()  # never created: the worker will log an error for it, harmlessly
