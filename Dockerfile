@@ -14,15 +14,16 @@
 # --- build: resolve dependencies from the lockfile with uv ---
 FROM python:3.12-slim AS builder
 COPY --from=ghcr.io/astral-sh/uv:0.12.21 /uv /bin/uv
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=0
+ENV UV_COMPILE_BYTECODE=1 UV_PYTHON_DOWNLOADS=0
 WORKDIR /app
 # Dependencies first, in their own layer: code changes don't reinstall them.
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-dev --no-install-project
+# Plain COPY/RUN only, no BuildKit cache or bind mounts on RUN: Railway's builder refuses
+# cache mounts that lack its own id format ("The Dockerfile failed validation",
+# 2026-10-10), and layer caching already gives us most of the speed-up.
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project --no-cache
 COPY . /app
-RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --no-cache
 
 # --- runtime: no uv, no build cache, non-root ---
 FROM python:3.12-slim

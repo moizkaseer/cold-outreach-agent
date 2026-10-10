@@ -524,3 +524,10 @@ Progress log after every working session (what was built, what broke, what's nex
   configured). n=1: this proves the plumbing, it says nothing new about quality.
   Day's API spend ≈ $0.11 estimated ($0.085 approved + $0.024 my mistake).
   Still unproven: deploy host -> Supabase; a real email via Resend.
+- 2026-10-10 — Deploy started on Railway (Moiz's choice; repo pushed to GitHub for the first
+  time, history scanned for secrets first). First Railway build failed in seconds: "The
+  Dockerfile failed validation", no detail. Most likely cause (my inference from Railway's
+  documented rule, not confirmed by a log): our `RUN --mount=type=cache` lines; Railway
+  only accepts cache mounts with its own id format. Removed all RUN mounts (plain COPY +
+  `uv sync --no-cache`); image still builds locally (433MB) and both entrypoints import.
+  Standing rule from Moiz: commit AND push after every finished step.
