@@ -43,8 +43,8 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; atomic via a
   Postgres advisory lock; burst-tested on real Postgres 2026-10-10)
 - [x] Auth: API keys, per-team ownership of runs and emails, CORS (2026-10-10)
-- [~] Docker + deploy (image builds and the full stack boots locally via `docker compose`,
-  2026-10-10; deploy itself needs Moiz's accounts)
+- [x] Docker + deploy: Railway (API + worker + Redis) with Supabase; first real run
+  through the live deployment 2026-10-11
 
 ## Week 7 — Close the loop
 - [~] Review UI (approve / edit / reject) — API done 2026-10-10 (`app/api/review.py`);
@@ -549,3 +549,16 @@ Progress log after every working session (what was built, what broke, what's nex
   is in the gitignored `.env.railway.key`. Worker service not created yet, so nothing
   processes runs. ALLOW_ANONYMOUS_RUNS=true there: once the worker runs, the public can
   spend up to the $2/day cap.
+- 2026-10-11 — FIRST REAL RUN ON THE LIVE DEPLOYMENT (Moiz's OK; Supabase checked first: 0
+  runs, nothing in flight). Railway API -> Railway Redis -> Railway worker -> real agents ->
+  Supabase. posthog.com / Head of Growth, fake test sender (never send), started with the
+  "Moiz" API key. Succeeded: 36.9s of worker time (first step start -> last step finish,
+  from the DB), $0.086 estimated (score $0.0025, research $0.0528, painpoints $0.014, draft
+  $0.0167), email `verified`, 83 words, no problems; visible in the review API with its
+  source URL + quote. n=1: proves the deployment, says nothing new about quality.
+  One more deploy mistake on the way: the worker box was green but had no start command,
+  so it ran a second copy of the API and the run sat `pending` for 20 minutes at $0. Once
+  the command was set, the worker picked up the SAME queued job (no second run paid for).
+  Lesson: "online and green" only means the process is up; a pending run that never starts
+  = no worker on the queue. Open: ALLOW_ANONYMOUS_RUNS=true on the live API (public can
+  spend up to the $2/day cap); a real email via Resend; frontend.

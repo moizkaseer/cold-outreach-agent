@@ -138,9 +138,9 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <h1>Outreach Agent Roadmap</h1>
     <p>A company domain plus a person's name and role goes in. A short cold email comes out, with every company fact backed by a source URL. This page tracks what is built, what has run for real, and what is still open.</p>
     <div class="meta label">
-      <span>Updated 2026-10-10, evening</span>
+      <span>Updated 2026-10-11</span>
       <span>Source: docs/ROADMAP.md</span>
-      <span>283 tests passing</span>
+      <span>290 tests passing</span>
     </div>
     <div class="tally" id="tally"></div>
   </header>
@@ -148,15 +148,14 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section class="now" aria-label="Current state">
     <div>
       <span class="label">Where we stopped</span>
-      <h2>The backend is code complete and runs on real Postgres and Redis</h2>
-      <p>On 2026-10-10 the API, queue and worker ran for the first time as real processes against Postgres and Redis in Docker, and the image built. That found three bugs the tests could not see, including that the API could not start at all. Added the same day: API keys with per-team ownership, the review API, sending behind an interface, and atomic rate limits.</p>
-      <p>The real agents then ran through that whole stack: one lead, API key to verified email in 38 seconds for an estimated $0.085, approved through the review API.</p>
-      <p class="muted">Not proven yet: Supabase from a deploy host, and a real email through the provider. Email judge v2.2 is still built but not measured.</p>
+      <h2>The backend is deployed on Railway and ran a real lead end to end</h2>
+      <p>The API, the worker and Redis run on Railway, with Supabase as the database. On 2026-10-11 one real lead went through the live deployment: API key, queue, worker, real agents, Supabase. The worker took 37 seconds and an estimated $0.086, and the email came out verified with its source URL and quote visible in the review API.</p>
+      <p>The backend was finished the day before: API keys with per-team ownership, the review API, sending behind an interface, and atomic rate limits, all proven first on local Postgres and Redis in Docker.</p>
+      <p class="muted">Not proven yet: a real email through the provider. Email judge v2.2 is still built but not measured. Anonymous runs are switched on in the live deployment, so the public can spend up to the $2 daily cap.</p>
     </div>
     <div>
       <span class="label">Next, in order</span>
       <ol>
-        <li>Deploy API, worker and Redis to a host.</li>
         <li>Frontend: the Run button and a review screen.</li>
         <li>Send one real email to ourselves through the provider.</li>
         <li>Back to quality: measure judge v2.2 cheaply, then writer tuning.</li>
@@ -171,7 +170,8 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <li><span class="tag">Blocks judge work</span><span>Say OK to paid runs, or pick the cheaper measuring route.</span></li>
       <li><span class="tag">Blocks trusted eval numbers</span><span>Verify the golden facts. 0 of 101 checked so far. See <code>evals/golden_set/README.md</code>.</span></li>
       <li><span class="tag">Blocks trusted eval numbers</span><span>Label 24 facts in <code>evals/calibration/labels.csv</code> to calibrate the fact judge.</span></li>
-      <li><span class="tag">Blocks deploy</span><span>Pick a host (Railway, Render or Fly) and a managed Redis.</span></li>
+      <li><span class="tag soft">Decision</span><span>Anonymous runs are on in the live deployment. Turn them off until the Run button exists?</span></li>
+      <li><span class="tag soft">To do</span><span>Set a monthly spend limit in the Anthropic console, and the healthcheck and pre-deploy command on the API service.</span></li>
       <li><span class="tag soft">Decision</span><span>Supabase flags <code>public.rls_auto_enable()</code> as callable by anon. It is not ours. Keep or drop?</span></li>
       <li><span class="tag soft">Decision</span><span>"Never mention AI" also blocks openers about an AI company's own product. Strict for now.</span></li>
       <li><span class="tag soft">Shelved</span><span>Send or don't-send labels for the 10 emails wait until 2 or 3 real sales people can label them.</span></li>
@@ -191,7 +191,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <span class="stage off">human review</span><span class="arrow">&rarr;</span>
       <span class="stage off">send</span>
     </div>
-    <p class="muted">Filled stages ran with the real agents through the real API, Redis queue, worker and Postgres on 2026-10-10 (one lead). Dashed stages are built as an API: review was used once through the API and has no screen yet, and no real email has been sent.</p>
+    <p class="muted">Filled stages ran with the real agents on the live Railway deployment on 2026-10-11 (one lead). Dashed stages are built as an API: review has been used through the API and has no screen yet, and no real email has been sent.</p>
   </section>
 
   <section>
@@ -211,7 +211,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <div><dt>Research share of cost</dt><dd>60&ndash;70%<small>first run, 3 leads</small></dd></div>
       <div><dt>Emails that passed the verifier</dt><dd>10 of 10<small>fixture leads</small></dd></div>
       <div><dt>Poor-fit lead stopped at the score gate</dt><dd>$0.0013<small>allbirds.com, scored 1 of 5</small></dd></div>
-      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79 + $0.02<small>2026-10-02, 10-09 and 10-10 (before the $0.085 run)</small></dd></div>
+      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79 + $0.02<small>2026-10-02, 10-09 and 10-10, then $0.085 and $0.086 for the two full-stack runs</small></dd></div>
     </dl>
   </section>
 
@@ -247,6 +247,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>History</h2>
     <ul class="log">
+      <li><time datetime="2026-10-11">2026-10-11</time><span>Deployed on Railway: API, worker and Redis, with Supabase. Fixed on the way: a Dockerfile Railway rejected, missing variables, an empty Redis URL, a worker box running the API command. First real lead through the live deployment.</span></li>
       <li><time datetime="2026-10-10">2026-10-10</time><span>Backend day. First run on real Postgres and Redis, Docker image built. Fixed: API could not start, resume race, stranded runs when the queue is down. Added API keys, review API, sending with unsubscribe, atomic limits. About $0.02 spent by mistake when a real worker picked up leftover test jobs.</span></li>
       <li><time datetime="2026-10-09">2026-10-09</time><span>Direction set: users are sales teams, so the sender profile arrives with each request. First real end-to-end runs, 10 leads. Writer tuning loop with saved research. Judge check with planted flaws. Email judge v1 to v2.2.</span></li>
       <li><time datetime="2026-10-07">2026-10-07</time><span>All three migrations applied to Supabase. Row-level security confirmed on all 6 tables.</span></li>
@@ -281,8 +282,8 @@ var WEEKS = [
   { n: 4, name: "Backend", items: [
     { s: "done", t: "Postgres models and Alembic", note: "6 migrations tested up and down on Postgres 16. Supabase is at head." },
     { s: "done", t: "Orchestrator with resume from the failed step", note: "Resume proven through the real queue on Postgres." },
-    { s: "done", t: "Redis and Arq worker", note: "Real round trip 2026-10-10, with fake steps." },
-    { s: "done", t: "FastAPI: create run, get run, SSE, resume", note: "Run as a real server 2026-10-10." }
+    { s: "done", t: "Redis and Arq worker", note: "Ran a real lead on Railway 2026-10-11." },
+    { s: "done", t: "FastAPI: create run, get run, SSE, resume", note: "Live on Railway." }
   ]},
   { n: 5, name: "Production hardening", items: [
     { s: "tests", t: "Tracing with cost per run (Logfire)", note: "No Logfire account yet." },
@@ -293,7 +294,7 @@ var WEEKS = [
     { s: "todo", t: "Connect the Run button on moizali.vercel.app" },
     { s: "done", t: "Rate limiting and daily spending cap", note: "Atomic. Burst-tested on Postgres." },
     { s: "done", t: "Auth: API keys, per-team ownership, CORS" },
-    { s: "partial", t: "Docker and deploy", note: "Image builds and the stack boots locally. Not deployed." }
+    { s: "done", t: "Docker and deploy", note: "Railway: API, worker, Redis. Supabase database. One real run 2026-10-11." }
   ]},
   { n: 7, name: "Close the loop", items: [
     { s: "partial", t: "Review UI: approve, edit, reject", note: "API done. No screen yet." },
