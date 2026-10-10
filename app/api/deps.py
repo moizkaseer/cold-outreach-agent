@@ -25,6 +25,7 @@ from app.api.auth import find_key
 from app.api.limits import Limits
 from app.db.models import ApiKey
 from app.schemas import Sender
+from app.sending import EmailSender
 
 
 @dataclass
@@ -36,6 +37,10 @@ class AppDeps:
     poll_seconds: float = 1.0
     allow_anonymous: bool = False  # the public demo turns this on
     cors_origins: tuple[str, ...] = ()
+    # Sending is off unless a provider AND a public URL (for unsubscribe links) are set.
+    mailer: EmailSender | None = None
+    public_base_url: str | None = None
+    sends_per_key_per_day: int | None = 30  # None = no cap
 
 
 def get_deps(request: Request) -> AppDeps:

@@ -40,13 +40,18 @@ Progress log after every working session (what was built, what broke, what's nex
 
 ## Week 6 — Ship the demo
 - [ ] Connect "Run" button on moizali.vercel.app
-- [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; tested with SQLite only)
+- [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; atomic via a
+  Postgres advisory lock; burst-tested on real Postgres 2026-10-10)
+- [x] Auth: API keys, per-team ownership of runs and emails, CORS (2026-10-10)
 - [~] Docker + deploy (image builds and the full stack boots locally via `docker compose`,
   2026-10-10; deploy itself needs Moiz's accounts)
 
 ## Week 7 — Close the loop
-- [ ] Review UI (approve / edit / reject)
-- [ ] Sending integration (after approval only)
+- [~] Review UI (approve / edit / reject) — API done 2026-10-10 (`app/api/review.py`);
+  no frontend yet
+- [~] Sending integration (after approval only) — built 2026-10-10 behind an interface
+  (`app/sending/`, `app/api/sending.py`) with unsubscribe + suppression list; tested with a
+  fake provider only, NEVER run against Resend (needs an account + sending domain)
 - [ ] Connect reply-classification workflow
 
 ## Week 8 — Discovery and story
@@ -472,3 +477,32 @@ Progress log after every working session (what was built, what broke, what's nex
   problems without blocking. `RunView.email` now carries `email_id`. 261 tests; smoke on
   real Postgres incl. a concurrent approve + reject race (200 + 409). Known limits: no
   undo of a decision; an edit is not re-verified by the LLM (would cost money per edit).
+- 2026-10-10 — Backend day, step 4: SENDING (`app/sending/`, `app/api/sending.py`, migration
+  `f028981b3077`). `POST /emails/{id}/send {to, postal_address, reply_to?}`: only APPROVED
+  emails, only the owning team. At most once: claim APPROVED -> SENDING in one conditional
+  UPDATE, then call the provider with the email id as idempotency key; provider error ->
+  back to APPROVED (retryable), process death mid-send -> stays SENDING for a human to
+  check (chosen over any double send). Code appends a footer (sender, postal address,
+  unsubscribe link) and List-Unsubscribe one-click headers. `GET /unsubscribe/{token}`
+  shows a confirm page (a GET must not unsubscribe: mail scanners open links), `POST`
+  suppresses; suppression is per team; `GET/POST /suppressions`. Daily cap per key
+  (default 30). Off unless RESEND_API_KEY + SEND_FROM_EMAIL + PUBLIC_BASE_URL are set.
+  Provider = Resend via httpx behind `EmailSender` (request shape checked against their
+  docs, tested with a mock transport, NEVER called for real). A test asserts no module in
+  agents/tools/pipeline/workers imports `app.sending` or `app.api`. Gaps: the recipient
+  address is typed by the sender (contact discovery is Week 8); no bounce/complaint
+  webhooks; daily-cap check isn't atomic (can overshoot by concurrent sends).
+- 2026-10-10 — Backend day, step 5: ATOMIC LIMITS. Proved the 2026-10-04 "known gap" on real
+  Postgres first: with one run left in the hourly allowance, 6 simultaneous requests got 5
+  runs through. Fix: `admission_lock` (Postgres `pg_advisory_xact_lock`; in-process lock on
+  SQLite) around "check limits, then create the run" and around resume. After: exactly 1 of
+  6, twice in a row. 283 tests, ruff clean. `scripts/infra_smoke.py` now covers: migrations,
+  run round trip, fail + resume, API keys, review (incl. approve/reject race), no sending
+  without a provider, burst vs rate limit.
+  BACKEND STATUS: code complete for the roadmap's backend items. Still unproven: real
+  agents running through Redis + worker + Postgres (needs an approved paid run, ~$0.10
+  est.); Supabase from a deploy host; a real email through Resend. Supabase is 3
+  migrations behind (bdb9504cf090, 240338cb0545, f028981b3077). Day's API spend: ≈ $0.024
+  estimated, all of it my unapproved-worker mistake (step 1).
+  Next: Moiz decides on applying migrations to Supabase, a paid end-to-end run on the
+  local stack, host + Redis + Resend accounts; then frontend (Run button, review UI).

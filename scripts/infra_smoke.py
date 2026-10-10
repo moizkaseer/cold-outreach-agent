@@ -219,15 +219,26 @@ async def drive(check: Check) -> None:
         codes = sorted(r.status_code for r in both)
         check(codes == [200, 409], "concurrent approve + reject: one wins", str(codes))
 
+        winner = (await c.get(f"/emails/{email_id}", headers=as_acme)).json()["status"]
+        send = {"to": "nobody@example.com", "postal_address": "1 Test Street, Testville"}
+        r = await c.post(f"/emails/{email_id}/send", headers=as_acme, json=send)
+        want = 503 if winner == "approved" else 409  # no email provider is configured here
+        check(r.status_code == want, "nothing can be sent from this stack",
+              f"{winner} -> {r.status_code}")  # fmt: skip
+
         print("guards")
         redis = await create_pool(RedisSettings.from_dsn(REDIS_URL))
         rid = uuid.uuid4()  # never created: the worker will log an error for it, harmlessly
         first, second = await enqueue_run(redis, rid, 9), await enqueue_run(redis, rid, 9)
         await redis.aclose()
         check(first and not second, "duplicate enqueue ignored by Redis")
-        codes = [(await c.post("/runs", json={**lead, "domain": f"limit{i}-smoke.com"})).status_code
-                 for i in range(2)]  # fmt: skip
-        check(codes == [202, 429], "4th run in an hour from one client gets 429", str(codes))
+        # Anonymous allowance is 3 runs/hour and 2 are used. Six requests at the same
+        # instant must admit exactly one: the check and the insert have to be atomic.
+        burst = await asyncio.gather(*[
+            c.post("/runs", json={**lead, "domain": f"burst{i}-smoke.com"}) for i in range(6)
+        ])  # fmt: skip
+        codes = sorted(r.status_code for r in burst)
+        check(codes == [202] + [429] * 5, "a burst can't get past the rate limit", str(codes))
 
 
 async def reset() -> None:

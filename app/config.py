@@ -42,6 +42,12 @@ class InfraSettings(BaseSettings):
     def cors_origin_list(self) -> tuple[str, ...]:
         return tuple(o.strip().rstrip("/") for o in self.cors_origins.split(",") if o.strip())
 
+    # --- Sending (app/api/sending.py). Off unless all three are set.
+    resend_api_key: SecretStr | None = None
+    send_from_email: str | None = None  # an address on a domain verified with the provider
+    public_base_url: str | None = None  # where this API is reachable; used in unsubscribe links
+    sends_per_key_per_day: int = Field(default=30, ge=0)  # low volume on purpose; 0 = no cap
+
     # --- Public demo guards (app/api/limits.py). 0 disables a guard.
     demo_runs_per_client_per_hour: int = Field(default=3, ge=0)
     # Estimated USD per UTC day across all runs. Keep it at or below what you're willing

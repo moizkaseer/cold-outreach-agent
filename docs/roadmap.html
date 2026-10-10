@@ -138,9 +138,9 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <h1>Outreach Agent Roadmap</h1>
     <p>A company domain plus a person's name and role goes in. A short cold email comes out, with every company fact backed by a source URL. This page tracks what is built, what has run for real, and what is still open.</p>
     <div class="meta label">
-      <span>Updated 2026-10-10</span>
-      <span>Source: docs/ROADMAP.md at ec46224</span>
-      <span>238 tests passing</span>
+      <span>Updated 2026-10-10, evening</span>
+      <span>Source: docs/ROADMAP.md</span>
+      <span>283 tests passing</span>
     </div>
     <div class="tally" id="tally"></div>
   </header>
@@ -148,19 +148,19 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section class="now" aria-label="Current state">
     <div>
       <span class="label">Where we stopped</span>
-      <h2>Email judge v2.2 is built but not measured</h2>
-      <p>The judge that scores email quality went through four versions on 2026-10-09. Version 2.1 caught 69 of 70 planted flaws but gave different verdicts on the same email too often. Version 2.2 moves the tone decision into code to fix that. Paid runs are paused until we agree a cheaper way to measure it.</p>
-      <p class="muted">Cost finding: the Message Batches API takes 50% off every token. Prompt caching cannot help here because the judge prompt is about 1.5k tokens and Haiku 4.5 only caches prompts of 4,096 tokens or more.</p>
+      <h2>The backend is code complete and runs on real Postgres and Redis</h2>
+      <p>On 2026-10-10 the API, queue and worker ran for the first time as real processes against Postgres and Redis in Docker, and the image built. That found three bugs the tests could not see, including that the API could not start at all. Added the same day: API keys with per-team ownership, the review API, sending behind an interface, and atomic rate limits.</p>
+      <p class="muted">Not proven yet: the real agents running through the queue (needs a paid run), Supabase from a deploy host, and a real email through the provider. Email judge v2.2 is still built but not measured.</p>
     </div>
     <div>
       <span class="label">Next, in order</span>
       <ol>
-        <li>Agree how to measure the judge cheaply. The Batches API is the leading option.</li>
-        <li>Measure judge v2.2. Report catch rate and flip rate together.</li>
-        <li>Add a code check for formulaic phrasing across a batch of emails.</li>
-        <li>Resume writer tuning on the fixture of 10 leads.</li>
-        <li>Build the Docker image, then deploy API, worker and Redis.</li>
-        <li>Week 7: review API and UI (approve, edit, reject).</li>
+        <li>Apply the 3 new migrations to Supabase.</li>
+        <li>One paid end-to-end run on the local stack, about $0.10 estimated.</li>
+        <li>Deploy API, worker and Redis to a host.</li>
+        <li>Frontend: the Run button and a review screen.</li>
+        <li>Send one real email to ourselves through the provider.</li>
+        <li>Back to quality: measure judge v2.2 cheaply, then writer tuning.</li>
       </ol>
     </div>
   </section>
@@ -168,10 +168,12 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>Waiting on Moiz</h2>
     <ul class="wait">
+      <li><span class="tag">Blocks deploy</span><span>OK to apply 3 migrations to Supabase (API keys, review fields, sending).</span></li>
+      <li><span class="tag">Blocks the last backend proof</span><span>OK for one paid end-to-end run on the local stack, about $0.10 estimated.</span></li>
+      <li><span class="tag">Blocks real sending</span><span>A Resend account and a sending domain with SPF, DKIM and DMARC.</span></li>
       <li><span class="tag">Blocks judge work</span><span>Say OK to paid runs, or pick the cheaper measuring route.</span></li>
       <li><span class="tag">Blocks trusted eval numbers</span><span>Verify the golden facts. 0 of 101 checked so far. See <code>evals/golden_set/README.md</code>.</span></li>
       <li><span class="tag">Blocks trusted eval numbers</span><span>Label 24 facts in <code>evals/calibration/labels.csv</code> to calibrate the fact judge.</span></li>
-      <li><span class="tag">Blocks Docker build</span><span>Run <code>sudo usermod -aG docker $USER</code>, then log out and back in.</span></li>
       <li><span class="tag">Blocks deploy</span><span>Pick a host (Railway, Render or Fly) and a managed Redis.</span></li>
       <li><span class="tag soft">Decision</span><span>Supabase flags <code>public.rls_auto_enable()</code> as callable by anon. It is not ours. Keep or drop?</span></li>
       <li><span class="tag soft">Decision</span><span>"Never mention AI" also blocks openers about an AI company's own product. Strict for now.</span></li>
@@ -192,7 +194,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <span class="stage off">human review</span><span class="arrow">&rarr;</span>
       <span class="stage off">send</span>
     </div>
-    <p class="muted">Filled stages ran against the real APIs on 2026-10-09, in one process on a throwaway SQLite database. Not yet run through Redis, the worker, the HTTP API or Postgres. Dashed stages are not built.</p>
+    <p class="muted">Filled stages ran with the real agents on 2026-10-09, in one process on SQLite. The queue, worker, API and Postgres around them were proven on 2026-10-10 with free fake steps. Dashed stages are built as an API and tested, but have never been used for real: review has no screen yet and no real email has been sent.</p>
   </section>
 
   <section>
@@ -212,7 +214,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <div><dt>Research share of cost</dt><dd>60&ndash;70%<small>first run, 3 leads</small></dd></div>
       <div><dt>Emails that passed the verifier</dt><dd>10 of 10<small>fixture leads</small></dd></div>
       <div><dt>Poor-fit lead stopped at the score gate</dt><dd>$0.0013<small>allbirds.com, scored 1 of 5</small></dd></div>
-      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79<small>2026-10-02 and 2026-10-09</small></dd></div>
+      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79 + $0.02<small>2026-10-02, 10-09 and 10-10</small></dd></div>
     </dl>
   </section>
 
@@ -236,8 +238,10 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <h2>Known limits</h2>
     <ul class="plain">
       <li>Grounding proves a quote is on the page. It does not prove the page is honest. Injected text can be quoted and pass.</li>
-      <li>No auth on the API. Rate limits are per IP and weak against rotating IPs.</li>
-      <li>The rate-limit check and insert are not atomic, so simultaneous requests can overshoot by about one run.</li>
+      <li>Anonymous rate limits are per IP and weak against rotating IPs. The daily spending cap is the real backstop.</li>
+      <li>One API key is one team. There is no per-person identity inside a team.</li>
+      <li>An edited email is not re-verified. It is marked as edited and goes back to a human.</li>
+      <li>Sending has no bounce or complaint handling, and the recipient address is typed by hand.</li>
       <li>The rubric has no criterion for templated phrasing, so the judge cannot see it.</li>
       <li>This network blocks outbound ports 5432 and 6543. Migrations were applied to Supabase over HTTPS instead.</li>
     </ul>
@@ -246,6 +250,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>History</h2>
     <ul class="log">
+      <li><time datetime="2026-10-10">2026-10-10</time><span>Backend day. First run on real Postgres and Redis, Docker image built. Fixed: API could not start, resume race, stranded runs when the queue is down. Added API keys, review API, sending with unsubscribe, atomic limits. About $0.02 spent by mistake when a real worker picked up leftover test jobs.</span></li>
       <li><time datetime="2026-10-09">2026-10-09</time><span>Direction set: users are sales teams, so the sender profile arrives with each request. First real end-to-end runs, 10 leads. Writer tuning loop with saved research. Judge check with planted flaws. Email judge v1 to v2.2.</span></li>
       <li><time datetime="2026-10-07">2026-10-07</time><span>All three migrations applied to Supabase. Row-level security confirmed on all 6 tables.</span></li>
       <li><time datetime="2026-10-04">2026-10-04</time><span>Rate limit and daily spending cap. Dockerfile written. RLS migration.</span></li>
@@ -277,10 +282,10 @@ var WEEKS = [
     { s: "done", t: "Email quality judge", note: "v2.2 built, not measured. Uncalibrated." }
   ]},
   { n: 4, name: "Backend", items: [
-    { s: "done", t: "Postgres models and Alembic", note: "Schema and RLS on Supabase. The app has not run against Postgres yet." },
-    { s: "done", t: "Orchestrator with resume from the failed step", note: "Real runs in-process on SQLite." },
-    { s: "tests", t: "Redis and Arq worker", note: "No real Redis round trip yet." },
-    { s: "tests", t: "FastAPI: create run, get run, SSE, resume", note: "In-process tests. No auth." }
+    { s: "done", t: "Postgres models and Alembic", note: "7 migrations tested up and down on Postgres 16. Supabase is 3 behind." },
+    { s: "done", t: "Orchestrator with resume from the failed step", note: "Resume proven through the real queue on Postgres." },
+    { s: "done", t: "Redis and Arq worker", note: "Real round trip 2026-10-10, with fake steps." },
+    { s: "done", t: "FastAPI: create run, get run, SSE, resume", note: "Run as a real server 2026-10-10." }
   ]},
   { n: 5, name: "Production hardening", items: [
     { s: "tests", t: "Tracing with cost per run (Logfire)", note: "No Logfire account yet." },
@@ -289,12 +294,13 @@ var WEEKS = [
   ]},
   { n: 6, name: "Ship the demo", items: [
     { s: "todo", t: "Connect the Run button on moizali.vercel.app" },
-    { s: "tests", t: "Rate limiting and daily spending cap", note: "Tested on SQLite only." },
-    { s: "partial", t: "Docker and deploy", note: "Dockerfile written, never built." }
+    { s: "done", t: "Rate limiting and daily spending cap", note: "Atomic. Burst-tested on Postgres." },
+    { s: "done", t: "Auth: API keys, per-team ownership, CORS" },
+    { s: "partial", t: "Docker and deploy", note: "Image builds and the stack boots locally. Not deployed." }
   ]},
   { n: 7, name: "Close the loop", items: [
-    { s: "todo", t: "Review UI: approve, edit, reject" },
-    { s: "todo", t: "Sending integration, after approval only" },
+    { s: "partial", t: "Review UI: approve, edit, reject", note: "API done. No screen yet." },
+    { s: "tests", t: "Sending integration, after approval only", note: "Fake provider only. No real email sent." },
     { s: "todo", t: "Reply-classification workflow" }
   ]},
   { n: 8, name: "Discovery and story", items: [

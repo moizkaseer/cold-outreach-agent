@@ -11,6 +11,7 @@
     GET  /health
     /emails...                 human review: queue, evidence, edit, approve, reject
                                (app/api/review.py)
+    /emails/{id}/send, /unsubscribe, /suppressions      (app/api/sending.py)
 
 Who may do what is in app/api/deps.py (API keys; anonymous only if the deploy allows it).
 Guards (app/api/limits.py): new runs are rate-limited per client (429) and everything
@@ -37,9 +38,16 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
 
-from app.api import review
+from app.api import review, sending
 from app.api.deps import AppDeps, Caller, Team, get_deps
-from app.api.limits import Limits, Refusal, check_new_run, check_resume, client_key
+from app.api.limits import (
+    Limits,
+    Refusal,
+    admission_lock,
+    check_new_run,
+    check_resume,
+    client_key,
+)
 from app.db.models import Run, RunStatus, utcnow
 from app.pipeline.orchestrator import create_run
 from app.pipeline.steps import STEP_NAMES
@@ -221,9 +229,21 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             daily_spend_usd=s.demo_daily_spend_usd or None,
             reserve_per_run_usd=s.demo_reserve_per_run_usd,
         )
+        http = mailer = None
+        if s.resend_api_key and s.send_from_email and s.public_base_url:
+            import httpx
+
+            from app.sending import ResendSender
+
+            http = httpx.AsyncClient()
+            mailer = ResendSender(s.resend_api_key.get_secret_value(), s.send_from_email, http)
         app.state.deps = AppDeps(make_sessionmaker(engine), enqueue, sender, limits,
-                                 allow_anonymous=s.allow_anonymous_runs)  # fmt: skip
+                                 allow_anonymous=s.allow_anonymous_runs, mailer=mailer,
+                                 public_base_url=s.public_base_url,
+                                 sends_per_key_per_day=s.sends_per_key_per_day or None)  # fmt: skip
         yield
+        if http is not None:
+            await http.aclose()
         await redis.aclose()
         await engine.dispose()
 
@@ -247,6 +267,7 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
                            allow_headers=["Authorization", "Content-Type"])  # fmt: skip
 
     app.include_router(review.router)
+    app.include_router(sending.router)
 
     @app.get("/health")
     async def health() -> dict[str, str]:
@@ -278,10 +299,12 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             key = caller.id.hex
         else:
             key = client_key(request.client.host if request.client else None)
-        if refusal := await check_new_run(d.sessions, d.limits, key, keyed=caller is not None):
-            return refused(refusal)
-        run_id = await create_run(d.sessions, lead, sender, STEP_NAMES, client_key=key,
-                                  api_key_id=_viewer_id(caller))  # fmt: skip
+        async with admission_lock(d.sessions):  # check + record as one step
+            if refusal := await check_new_run(d.sessions, d.limits, key,
+                                              keyed=caller is not None):  # fmt: skip
+                return refused(refusal)
+            run_id = await create_run(d.sessions, lead, sender, STEP_NAMES, client_key=key,
+                                      api_key_id=_viewer_id(caller))  # fmt: skip
         if failure := await enqueue_or_fail(d, run_id, 0):
             return failure
         return {"run_id": str(run_id), "status": RunStatus.PENDING.value}
@@ -333,18 +356,19 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             raise HTTPException(404, "run not found")
         if view.status != RunStatus.FAILED.value:
             raise HTTPException(409, f"only failed runs can be resumed (status: {view.status})")
-        if refusal := await check_resume(d.sessions, d.limits):
-            return refused(refusal)
         # FAILED -> PENDING before queueing, in one conditional UPDATE. Without it the run
         # still reads "failed" until a worker picks it up, so a client re-opening the
         # progress stream is told it's over. It also makes a double-clicked resume a 409.
-        async with d.sessions() as s:
-            claimed = await s.execute(
-                update(Run)
-                .where(Run.id == run_id, Run.status == RunStatus.FAILED)
-                .values(status=RunStatus.PENDING, error=None, updated_at=utcnow())
-            )
-            await s.commit()
+        async with admission_lock(d.sessions):  # the spend check counts PENDING runs
+            if refusal := await check_resume(d.sessions, d.limits):
+                return refused(refusal)
+            async with d.sessions() as s:
+                claimed = await s.execute(
+                    update(Run)
+                    .where(Run.id == run_id, Run.status == RunStatus.FAILED)
+                    .values(status=RunStatus.PENDING, error=None, updated_at=utcnow())
+                )
+                await s.commit()
         if claimed.rowcount != 1:
             raise HTTPException(409, "run is already being resumed")
         # New job id per resume attempt, so it isn't swallowed as a duplicate enqueue.

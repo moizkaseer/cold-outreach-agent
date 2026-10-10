@@ -131,3 +131,18 @@ async def test_disabled_limits_allow_everything(sessions) -> None:
     for _ in range(10):
         assert (await env.client.post("/runs", json=BODY)).status_code == 202
     await env.client.aclose()
+
+
+async def test_a_burst_cannot_get_past_the_limits(sessions) -> None:
+    # Simultaneous requests used to all pass the check before any was recorded
+    # (found on Postgres by scripts/infra_smoke.py, which also covers the real lock).
+    import asyncio
+
+    env = Env(sessions, Limits(runs_per_client_per_hour=2, daily_spend_usd=None))
+    burst = await asyncio.gather(*[env.client.post("/runs", json=BODY) for _ in range(8)])
+    assert sorted(r.status_code for r in burst) == [202, 202] + [429] * 6
+
+    env = Env(sessions, CAP_ONLY)  # $1 cap, $0.25 reserve; 2 runs already in flight
+    burst = await asyncio.gather(*[env.client_from(f"10.1.1.{i}").post("/runs", json=BODY)
+                                   for i in range(8)])  # fmt: skip
+    assert sorted(r.status_code for r in burst) == [202, 202] + [503] * 6

@@ -9,18 +9,21 @@ worst-case estimate; a new run starts only if `spent today + reserved + one more
 stays under the cap. Costs are our estimates from token counts (`app/pricing.py`), not
 provider invoices.
 
-Known gap: the check and the insert aren't one transaction, so two requests arriving at
-the same instant can both pass. Overshoot is bounded by one run's cost each; acceptable
-for a low-traffic demo.
+The check and the insert that follows must be one step, or a burst of simultaneous
+requests all pass the check before any of them is recorded (measured on Postgres,
+2026-10-10: 5 of 6 got through with one run left). `admission_lock` serialises them.
 """
 
 from __future__ import annotations
 
+import asyncio
 import datetime as dt
 import hashlib
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.db.models import Run, RunStatus, Step, as_utc, utcnow
@@ -29,6 +32,31 @@ from app.db.models import Run, RunStatus, Step, as_utc, utcnow
 # 10 min), so it stops holding a reserve and can't block the demo forever.
 IN_FLIGHT_WINDOW = dt.timedelta(hours=1)
 RATE_WINDOW = dt.timedelta(hours=1)
+
+
+ADMISSION_LOCK_KEY = 7_203_001  # arbitrary; just has to be the same in every API process
+_local_lock = asyncio.Lock()  # SQLite (dev, tests): one process, so an in-process lock does
+
+
+@asynccontextmanager
+async def admission_lock(sessions: async_sessionmaker[AsyncSession]) -> AsyncIterator[None]:
+    """Hold this around "check the limits, then record the run".
+
+    On Postgres it takes a transaction-level advisory lock: a named lock in the database
+    itself, so it also works across several API instances, and it is released
+    automatically when the transaction ends, even if the request crashes. Everyone else
+    waits their turn and then sees the run that was just recorded. The guarded section is
+    a few fast queries; a waiter holds one pooled connection while it waits, which is
+    fine at demo traffic and would be the thing to revisit at high volume.
+    """
+    async with sessions() as s:
+        if s.get_bind().dialect.name != "postgresql":
+            async with _local_lock:
+                yield
+            return
+        async with s.begin():
+            await s.execute(text("SELECT pg_advisory_xact_lock(:k)"), {"k": ADMISSION_LOCK_KEY})
+            yield
 
 
 @dataclass(frozen=True)

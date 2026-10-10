@@ -13,7 +13,17 @@ import uuid
 from enum import StrEnum
 from typing import Any
 
-from sqlalchemy import JSON, DateTime, Float, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import (
+    JSON,
+    DateTime,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -61,6 +71,7 @@ class EmailStatus(StrEnum):
     NEEDS_HUMAN = "needs_human"  # flagged problems; awaiting human review
     APPROVED = "approved"
     REJECTED = "rejected"
+    SENDING = "sending"  # claimed for sending; stuck here = a send died midway, check by hand
     SENT = "sent"  # only ever after APPROVED
 
 
@@ -152,6 +163,8 @@ class ResearchCacheEntry(Base):
 
 class EmailDraft(Base):
     __tablename__ = "emails"
+    # Named, so migrations can drop it again (an unnamed constraint can't be rolled back).
+    __table_args__ = (UniqueConstraint("unsubscribe_token", name="uq_emails_unsubscribe_token"),)
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("runs.id"), unique=True)
@@ -167,6 +180,25 @@ class EmailDraft(Base):
     review_note: Mapped[str | None] = mapped_column(Text)  # approval note or reject reason
     reviewed_by: Mapped[str | None] = mapped_column(String(200))
     reviewed_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+    # Sending (app/api/sending.py). The recipient is given by the person who sends.
+    sent_to: Mapped[str | None] = mapped_column(String(320))
+    sent_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+    provider_message_id: Mapped[str | None] = mapped_column(String(200))
+    unsubscribe_token: Mapped[str | None] = mapped_column(String(64))
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     run: Mapped[Run] = relationship(back_populates="email")
+
+
+class Suppression(Base):
+    """An address a team must never email again (unsubscribed, or added by hand)."""
+
+    __tablename__ = "suppressions"
+    __table_args__ = (UniqueConstraint("api_key_id", "email", name="uq_suppressions_key_email"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    api_key_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("api_keys.id", name="fk_suppressions_api_key_id")
+    )
+    email: Mapped[str] = mapped_column(String(320))  # lowercased
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

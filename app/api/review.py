@@ -41,7 +41,7 @@ FILTERS: dict[str, tuple[EmailStatus, ...]] = {
     "to_review": REVIEWABLE,
     "approved": (EmailStatus.APPROVED,),
     "rejected": (EmailStatus.REJECTED,),
-    "sent": (EmailStatus.SENT,),
+    "sent": (EmailStatus.SENDING, EmailStatus.SENT),
     "all": tuple(EmailStatus),
 }
 PageLimit = Annotated[int, Query(ge=1, le=100)]
@@ -91,6 +91,8 @@ class EmailDetail(BaseModel):
     reviewed_by: str | None
     reviewed_at: dt.datetime | None
     review_note: str | None
+    sent_to: str | None
+    sent_at: dt.datetime | None
     created_at: dt.datetime
 
 
@@ -175,6 +177,8 @@ async def _detail(s: AsyncSession, email: EmailDraft) -> EmailDetail:
         reviewed_by=email.reviewed_by,
         reviewed_at=email.reviewed_at,
         review_note=email.review_note,
+        sent_to=email.sent_to,
+        sent_at=email.sent_at,
         created_at=email.created_at,
     )
 
