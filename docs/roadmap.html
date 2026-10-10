@@ -1,0 +1,366 @@
+<title>Outreach Agent Roadmap</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one scanning column. Current state first, then who is blocking what,
+   then the pipeline, then every roadmap item by week, then evidence and history. */
+:root {
+  --bg: #F2F4F7; --surface: #FFFFFF; --ink: #16202B; --muted: #5A6774; --line: #D3DAE1;
+  --accent: #2446C4; --accent-soft: #E6EBFB;
+  --ok: #1B7447; --ok-soft: #DDF1E6;
+  --warn: #8A5A00; --warn-soft: #F8EBCB;
+  --stop: #AB3329; --stop-soft: #F9E0DC;
+  --idle: #6C7783; --idle-soft: #E7EBEF;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F141A; --surface: #171E26; --ink: #E5EAF0; --muted: #96A3B0; --line: #2B3540;
+    --accent: #8FA6FF; --accent-soft: #1D2747;
+    --ok: #62C592; --ok-soft: #163325;
+    --warn: #E2B455; --warn-soft: #3A2D10;
+    --stop: #F08A7F; --stop-soft: #40201C;
+    --idle: #8C98A5; --idle-soft: #222B35;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F141A; --surface: #171E26; --ink: #E5EAF0; --muted: #96A3B0; --line: #2B3540;
+  --accent: #8FA6FF; --accent-soft: #1D2747;
+  --ok: #62C592; --ok-soft: #163325;
+  --warn: #E2B455; --warn-soft: #3A2D10;
+  --stop: #F08A7F; --stop-soft: #40201C;
+  --idle: #8C98A5; --idle-soft: #222B35;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.page { max-width: 1020px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 19px; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+code, .mono { font-family: var(--mono); font-size: 0.9em; }
+.label { font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.muted { color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 14px; }
+
+/* header */
+.head { display: flex; flex-direction: column; gap: 10px; }
+.head p { max-width: 68ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.tally { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* status pills, shared by tally, items and pipeline */
+.pill { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; padding: 2px 8px; border-radius: 3px; white-space: nowrap; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.s-done { color: var(--ok); background: var(--ok-soft); }
+.s-tests { color: var(--accent); background: var(--accent-soft); }
+.s-partial { color: var(--warn); background: var(--warn-soft); }
+.s-todo { color: var(--idle); background: var(--idle-soft); }
+
+/* now panel: the one carded block */
+.now { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.now > div { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.now ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; }
+.now ol li::marker { font-family: var(--mono); color: var(--muted); font-size: 12px; }
+
+/* waiting list */
+.wait { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.wait li { padding: 11px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wait .tag { font-family: var(--mono); font-size: 11.5px; color: var(--stop); }
+.wait .tag.soft { color: var(--muted); }
+
+/* pipeline */
+.pipe { display: flex; flex-wrap: wrap; gap: 8px 6px; align-items: center; }
+.stage { font-family: var(--mono); font-size: 12.5px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); display: inline-flex; align-items: center; gap: 7px; }
+.stage::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.stage.off { color: var(--muted); border-style: dashed; background: transparent; }
+.stage.off::before { background: transparent; border: 1.5px solid var(--idle); box-sizing: border-box; }
+.arrow { color: var(--muted); font-family: var(--mono); }
+
+/* weeks */
+.weeks-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+button.toggle { font: inherit; font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+button.toggle[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+button.toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.week { display: grid; grid-template-columns: 200px 1fr; gap: 8px 24px; padding: 16px 0; border-top: 1px solid var(--line); }
+.week > * { min-width: 0; }
+.week-side { display: flex; flex-direction: column; gap: 6px; }
+.bar { display: flex; gap: 3px; max-width: 150px; }
+.bar i { flex: 1; height: 6px; border-radius: 1px; background: var(--idle-soft); }
+.bar i.done { background: var(--ok); }
+.bar i.tests { background: var(--accent); }
+.bar i.partial { background: var(--warn); }
+.items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.item { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: start; }
+.item > div { min-width: 0; }
+.item .note { color: var(--muted); font-size: 13.5px; }
+.empty { color: var(--muted); font-size: 13.5px; }
+
+/* numbers */
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 28px; margin: 0; }
+.facts div { padding: 11px 0; border-top: 1px solid var(--line); min-width: 0; }
+.facts dt { color: var(--muted); font-size: 13px; }
+.facts dd { margin: 0; font-family: var(--mono); font-size: 17px; font-variant-numeric: tabular-nums; }
+.facts small { display: block; font-family: var(--body); font-size: 12.5px; color: var(--muted); }
+
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+th { text-align: left; font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 400; }
+th, td { padding: 9px 14px 9px 0; border-top: 1px solid var(--line); vertical-align: top; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.plain { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; max-width: 76ch; }
+.log { list-style: none; margin: 0; padding: 0; }
+.log li { display: grid; grid-template-columns: 100px 1fr; gap: 16px; padding: 10px 0; border-top: 1px solid var(--line); }
+.log li > * { min-width: 0; }
+.log time { font-family: var(--mono); font-size: 12.5px; color: var(--muted); padding-top: 2px; }
+
+@media (max-width: 720px) {
+  h1 { font-size: 25px; }
+  .now, .wait { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .week { grid-template-columns: 1fr; }
+  .log li { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (max-width: 440px) {
+  .facts { grid-template-columns: 1fr; }
+  .item { grid-template-columns: 1fr; gap: 3px; }
+}
+</style>
+
+<div class="page">
+
+  <header class="head">
+    <span class="label">Cold outreach agent</span>
+    <h1>Outreach Agent Roadmap</h1>
+    <p>A company domain plus a person's name and role goes in. A short cold email comes out, with every company fact backed by a source URL. This page tracks what is built, what has run for real, and what is still open.</p>
+    <div class="meta label">
+      <span>Updated 2026-10-10</span>
+      <span>Source: docs/ROADMAP.md at ec46224</span>
+      <span>238 tests passing</span>
+    </div>
+    <div class="tally" id="tally"></div>
+  </header>
+
+  <section class="now" aria-label="Current state">
+    <div>
+      <span class="label">Where we stopped</span>
+      <h2>Email judge v2.2 is built but not measured</h2>
+      <p>The judge that scores email quality went through four versions on 2026-10-09. Version 2.1 caught 69 of 70 planted flaws but gave different verdicts on the same email too often. Version 2.2 moves the tone decision into code to fix that. Paid runs are paused until we agree a cheaper way to measure it.</p>
+      <p class="muted">Cost finding: the Message Batches API takes 50% off every token. Prompt caching cannot help here because the judge prompt is about 1.5k tokens and Haiku 4.5 only caches prompts of 4,096 tokens or more.</p>
+    </div>
+    <div>
+      <span class="label">Next, in order</span>
+      <ol>
+        <li>Agree how to measure the judge cheaply. The Batches API is the leading option.</li>
+        <li>Measure judge v2.2. Report catch rate and flip rate together.</li>
+        <li>Add a code check for formulaic phrasing across a batch of emails.</li>
+        <li>Resume writer tuning on the fixture of 10 leads.</li>
+        <li>Build the Docker image, then deploy API, worker and Redis.</li>
+        <li>Week 7: review API and UI (approve, edit, reject).</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Waiting on Moiz</h2>
+    <ul class="wait">
+      <li><span class="tag">Blocks judge work</span><span>Say OK to paid runs, or pick the cheaper measuring route.</span></li>
+      <li><span class="tag">Blocks trusted eval numbers</span><span>Verify the golden facts. 0 of 101 checked so far. See <code>evals/golden_set/README.md</code>.</span></li>
+      <li><span class="tag">Blocks trusted eval numbers</span><span>Label 24 facts in <code>evals/calibration/labels.csv</code> to calibrate the fact judge.</span></li>
+      <li><span class="tag">Blocks Docker build</span><span>Run <code>sudo usermod -aG docker $USER</code>, then log out and back in.</span></li>
+      <li><span class="tag">Blocks deploy</span><span>Pick a host (Railway, Render or Fly) and a managed Redis.</span></li>
+      <li><span class="tag soft">Decision</span><span>Supabase flags <code>public.rls_auto_enable()</code> as callable by anon. It is not ours. Keep or drop?</span></li>
+      <li><span class="tag soft">Decision</span><span>"Never mention AI" also blocks openers about an AI company's own product. Strict for now.</span></li>
+      <li><span class="tag soft">Shelved</span><span>Send or don't-send labels for the 10 emails wait until 2 or 3 real sales people can label them.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Pipeline</h2>
+    <div class="pipe">
+      <span class="stage">validate</span><span class="arrow">&rarr;</span>
+      <span class="stage">dedupe</span><span class="arrow">&rarr;</span>
+      <span class="stage">score</span><span class="arrow">&rarr;</span>
+      <span class="stage">research</span><span class="arrow">&rarr;</span>
+      <span class="stage">pain points</span><span class="arrow">&rarr;</span>
+      <span class="stage">writer</span><span class="arrow">&rarr;</span>
+      <span class="stage">verifier</span><span class="arrow">&rarr;</span>
+      <span class="stage off">human review</span><span class="arrow">&rarr;</span>
+      <span class="stage off">send</span>
+    </div>
+    <p class="muted">Filled stages ran against the real APIs on 2026-10-09, in one process on a throwaway SQLite database. Not yet run through Redis, the worker, the HTTP API or Postgres. Dashed stages are not built.</p>
+  </section>
+
+  <section>
+    <div class="weeks-head">
+      <h2>Roadmap by week</h2>
+      <button class="toggle" id="hideDone" type="button" aria-pressed="false">Hide finished items</button>
+    </div>
+    <div id="weeks"></div>
+  </section>
+
+  <section>
+    <h2>Measured so far</h2>
+    <p class="muted">Costs are estimates from token counts plus the cost Exa reports. Samples are small. Treat these as indications.</p>
+    <dl class="facts">
+      <div><dt>Cost per lead</dt><dd>$0.08&ndash;0.14<small>10 leads, 2026-10-09</small></dd></div>
+      <div><dt>Time per lead</dt><dd>34&ndash;78 s<small>10 leads, in-process</small></dd></div>
+      <div><dt>Research share of cost</dt><dd>60&ndash;70%<small>first run, 3 leads</small></dd></div>
+      <div><dt>Emails that passed the verifier</dt><dd>10 of 10<small>fixture leads</small></dd></div>
+      <div><dt>Poor-fit lead stopped at the score gate</dt><dd>$0.0013<small>allbirds.com, scored 1 of 5</small></dd></div>
+      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79<small>2026-10-02 and 2026-10-09</small></dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Email judge versions</h2>
+    <p class="muted">Catch rate is how many deliberately broken emails the judge failed. Flip rate is how often it changed its verdict on the same unedited email across three runs. Both must be good.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Version</th><th>Flaws caught</th><th>Flip rate</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td class="num">v1</td><td class="num">23 / 35</td><td class="num">0.017</td><td>Consistent but lenient. Missed generic openers and wrong roles.</td></tr>
+          <tr><td class="num">v2</td><td class="num">35 / 35</td><td class="num">not measured</td><td>Overshot. Failed unedited emails for reasons that did not hold up.</td></tr>
+          <tr><td class="num">v2.1</td><td class="num">69 / 70</td><td class="num">0.167</td><td>Strict but noisy on borderline emails. Held-out half 35 / 35.</td></tr>
+          <tr><td class="num">v2.2</td><td class="num">not measured</td><td class="num">not measured</td><td>Tone decided by code from a list of concrete defects. Saves raw judge output.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Known limits</h2>
+    <ul class="plain">
+      <li>Grounding proves a quote is on the page. It does not prove the page is honest. Injected text can be quoted and pass.</li>
+      <li>No auth on the API. Rate limits are per IP and weak against rotating IPs.</li>
+      <li>The rate-limit check and insert are not atomic, so simultaneous requests can overshoot by about one run.</li>
+      <li>The rubric has no criterion for templated phrasing, so the judge cannot see it.</li>
+      <li>This network blocks outbound ports 5432 and 6543. Migrations were applied to Supabase over HTTPS instead.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>History</h2>
+    <ul class="log">
+      <li><time datetime="2026-10-09">2026-10-09</time><span>Direction set: users are sales teams, so the sender profile arrives with each request. First real end-to-end runs, 10 leads. Writer tuning loop with saved research. Judge check with planted flaws. Email judge v1 to v2.2.</span></li>
+      <li><time datetime="2026-10-07">2026-10-07</time><span>All three migrations applied to Supabase. Row-level security confirmed on all 6 tables.</span></li>
+      <li><time datetime="2026-10-04">2026-10-04</time><span>Rate limit and daily spending cap. Dockerfile written. RLS migration.</span></li>
+      <li><time datetime="2026-10-02">2026-10-02</time><span>Golden set drafted. Search tool, research agent, eval runner, first real research runs. Fact judge v2 and calibration tooling. Pain points, writer, verifier. Database, orchestrator, worker, API. Tracing. Injection evals.</span></li>
+      <li><time datetime="2026-10-01">2026-10-01</time><span>Repo setup, schemas, agent loop on the Anthropic SDK.</span></li>
+    </ul>
+    <p class="muted">The full dated log lives in <code>docs/ROADMAP.md</code>.</p>
+  </section>
+</div>
+
+<script>
+// One line per roadmap item. s: done | tests (built, never run for real) | partial | todo
+var WEEKS = [
+  { n: 1, name: "Fundamentals", items: [
+    { s: "done", t: "Repo setup: uv, ruff, pytest, config" },
+    { s: "done", t: "Pydantic schemas", note: "Grounding enforced in the types." },
+    { s: "done", t: "Agent loop on the Anthropic SDK", note: "Smoke run OK. Prompt caching confirmed." },
+    { s: "partial", t: "Golden set of 30 companies", note: "101 facts drafted and machine-checked. 0 of 101 verified by a human." }
+  ]},
+  { n: 2, name: "Research agent", items: [
+    { s: "done", t: "Tools: search (Exa), fetch_page, finish" },
+    { s: "done", t: "Research agent returns a cited report", note: "First real run 2026-10-02." },
+    { s: "done", t: "Eval runner: grounding, faithfulness, coverage", note: "Real runs so far scored against unverified golden facts. Fact judge uncalibrated." }
+  ]},
+  { n: 3, name: "Rest of the chain", items: [
+    { s: "done", t: "Pain point agent", note: "Ran for real 2026-10-09." },
+    { s: "done", t: "Writer agent", note: "Ran for real 2026-10-09. Prompt tuned once." },
+    { s: "done", t: "Verifier and revise loop (max 2)", note: "Ran for real 2026-10-09." },
+    { s: "done", t: "Email quality judge", note: "v2.2 built, not measured. Uncalibrated." }
+  ]},
+  { n: 4, name: "Backend", items: [
+    { s: "done", t: "Postgres models and Alembic", note: "Schema and RLS on Supabase. The app has not run against Postgres yet." },
+    { s: "done", t: "Orchestrator with resume from the failed step", note: "Real runs in-process on SQLite." },
+    { s: "tests", t: "Redis and Arq worker", note: "No real Redis round trip yet." },
+    { s: "tests", t: "FastAPI: create run, get run, SSE, resume", note: "In-process tests. No auth." }
+  ]},
+  { n: 5, name: "Production hardening", items: [
+    { s: "tests", t: "Tracing with cost per run (Logfire)", note: "No Logfire account yet." },
+    { s: "done", t: "Research cache, prompt caching, model routing" },
+    { s: "tests", t: "Prompt-injection evals", note: "Never run against the real model. Estimated $0.20 to $0.40." }
+  ]},
+  { n: 6, name: "Ship the demo", items: [
+    { s: "todo", t: "Connect the Run button on moizali.vercel.app" },
+    { s: "tests", t: "Rate limiting and daily spending cap", note: "Tested on SQLite only." },
+    { s: "partial", t: "Docker and deploy", note: "Dockerfile written, never built." }
+  ]},
+  { n: 7, name: "Close the loop", items: [
+    { s: "todo", t: "Review UI: approve, edit, reject" },
+    { s: "todo", t: "Sending integration, after approval only" },
+    { s: "todo", t: "Reply-classification workflow" }
+  ]},
+  { n: 8, name: "Discovery and story", items: [
+    { s: "todo", t: "Contact discovery through Apollo or Hunter" },
+    { s: "todo", t: "Fit signal: do they use the seller's product or a competitor's?" },
+    { s: "todo", t: "Optional: Claude Agent SDK research, compared on evals" },
+    { s: "todo", t: "Rewrite the case study with real eval metrics" }
+  ]}
+];
+var LABEL = { done: "Done", tests: "Tests only", partial: "Partial", todo: "Not started" };
+
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+var counts = { done: 0, tests: 0, partial: 0, todo: 0 };
+var root = document.getElementById("weeks");
+WEEKS.forEach(function (w) {
+  var row = el("div", "week");
+  var side = el("div", "week-side");
+  side.appendChild(el("span", "label", "Week " + w.n));
+  side.appendChild(el("h3", null, w.name));
+  var bar = el("div", "bar");
+  var list = el("ul", "items");
+  w.items.forEach(function (it) {
+    counts[it.s]++;
+    bar.appendChild(el("i", it.s));
+    var li = el("li", "item");
+    li.dataset.s = it.s;
+    li.appendChild(el("span", "pill s-" + it.s, LABEL[it.s]));
+    var body = el("div");
+    body.appendChild(el("div", null, it.t));
+    if (it.note) body.appendChild(el("div", "note", it.note));
+    li.appendChild(body);
+    list.appendChild(li);
+  });
+  side.appendChild(bar);
+  var main = el("div");
+  main.appendChild(list);
+  var empty = el("p", "empty", "All items finished.");
+  empty.hidden = true;
+  main.appendChild(empty);
+  row.appendChild(side);
+  row.appendChild(main);
+  root.appendChild(row);
+});
+
+var tally = document.getElementById("tally");
+[["done", "done"], ["tests", "built, tests only"], ["partial", "partial"], ["todo", "not started"]].forEach(function (p) {
+  tally.appendChild(el("span", "pill s-" + p[0], counts[p[0]] + " " + p[1]));
+});
+
+var btn = document.getElementById("hideDone");
+btn.addEventListener("click", function () {
+  var on = btn.getAttribute("aria-pressed") !== "true";
+  btn.setAttribute("aria-pressed", String(on));
+  document.querySelectorAll(".week").forEach(function (week) {
+    var shown = 0;
+    week.querySelectorAll(".item").forEach(function (li) {
+      li.hidden = on && li.dataset.s === "done";
+      if (!li.hidden) shown++;
+    });
+    week.querySelector(".empty").hidden = shown > 0;
+  });
+});
+</script>

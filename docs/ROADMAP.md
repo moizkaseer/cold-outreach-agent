@@ -12,17 +12,17 @@ Progress log after every working session (what was built, what broke, what's nex
   **human verification pending** — see `evals/golden_set/README.md`)
 
 ## Week 2 — Research agent
-- [ ] Tools: `search` (behind interface), `fetch_page` (httpx + trafilatura), `finish`
-  (`search` = Exa behind `SearchProvider` in `app/tools/search.py`; `fetch_page` and
-  `finish` done earlier — research agent wiring next)
+- [x] Tools: `search` (behind interface), `fetch_page` (httpx + trafilatura), `finish`
+  (`search` = Exa behind `SearchProvider` in `app/tools/search.py`; all three wired into
+  the research agent and used in real runs since 2026-10-02)
 - [x] Research agent returns cited `ResearchReport` (built + unit-tested; first real run pending API keys)
 - [x] `evals/run_evals.py`: fact accuracy + citation validity vs golden set (built + tested;
   no real eval run yet — needs API keys and verified golden facts)
 
 ## Week 3 — Rest of the chain
-- [x] Pain point agent (sequential, evidence-based) — unit-tested with fakes; no real run yet
-- [x] Writer agent (email rules from CLAUDE.md) — unit-tested with fakes; no real run yet
-- [x] Verifier + revise loop (max 2) — unit-tested with fakes; no real run yet
+- [x] Pain point agent (sequential, evidence-based) — first real runs 2026-10-09
+- [x] Writer agent (email rules from CLAUDE.md) — first real runs 2026-10-09
+- [x] Verifier + revise loop (max 2) — first real runs 2026-10-09
 - [x] LLM-as-judge rubric for email quality in evals (built + tested; uncalibrated, never run for real)
 
 ## Week 4 — Backend
@@ -415,3 +415,9 @@ Progress log after every working session (what was built, what broke, what's nex
   every token and stacks with caching; prompt caching can't help because Haiku 4.5 only
   caches prompts >= 4096 tokens and the judge prompt is ~1.5k; at $1/$5 per MTok the
   judge's cost is mostly OUTPUT tokens (lists + reasons), so trimming context won't help.
+- 2026-10-10 — Status page: `docs/roadmap.html`, published as a private Claude artifact at
+  https://claude.ai/artifact/BhNniHFEzrV4vC9BR2UFNd (where we stopped, next steps, waiting on
+  Moiz, every item by week, measured numbers). Items live in the `WEEKS` array at the bottom
+  of the file: edit one line, then republish the same path. This file stays the source of
+  truth. Fixed stale checkboxes: Week 2 tools ticked (in real use since 2026-10-02); Week 3
+  agents no longer say "no real run yet" (they ran 2026-10-09). No code changes, no API spend.
