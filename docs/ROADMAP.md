@@ -540,3 +540,12 @@ Progress log after every working session (what was built, what broke, what's nex
   REDIS_URL / DATABASE_URL at startup with a message naming the variable and what it got
   ("is empty", "starts with postgresql://"), and `hide_input_in_errors=True` keeps URL
   passwords out of host logs. 290 tests.
+- 2026-10-10 — API LIVE on Railway: https://cold-outreach-agent-production-2c24.up.railway.app
+  Checked from outside without creating a run: /health 200; reads Supabase (clean 404 for
+  an unknown run, so deploy host -> Supabase session pooler works); /runs and /emails 401
+  without a key; CORS allows moizali.vercel.app only; all 12 routes present. First API key
+  "Moiz" created (generated locally, only the hash inserted via the Supabase connector
+  because this network blocks 5432); the key authenticates against the live API. Raw key
+  is in the gitignored `.env.railway.key`. Worker service not created yet, so nothing
+  processes runs. ALLOW_ANONYMOUS_RUNS=true there: once the worker runs, the public can
+  spend up to the $2/day cap.
