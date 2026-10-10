@@ -513,3 +513,14 @@ Progress log after every working session (what was built, what broke, what's nex
   and 0 policies, new columns and the 4 named constraints present. Security advisor: only
   the expected "RLS enabled, no policy" notes, plus the old `public.rls_auto_enable()`
   warning (not ours; still Moiz's call).
+- 2026-10-10 — FIRST REAL RUN THROUGH THE FULL STACK (Moiz's OK; queue checked empty
+  first). `docker compose` image: API key -> POST /runs -> Redis -> Arq worker -> real
+  agents -> local Postgres 16, followed over HTTP. posthog.com / Head of Growth, fake test
+  sender (never send): succeeded in 37.9s (created -> finished, from the DB), $0.085
+  estimated (score $0.0013, research $0.0529, painpoints $0.0128, draft $0.018), 0
+  revisions, email `verified`, 77 words, one company number, 4/4 claims supported. Research
+  cache row written (expires 2026-10-17). Then via the review API: in the queue with its
+  source URL + quote, approved (reviewer = key name), send refused with 503 (no provider
+  configured). n=1: this proves the plumbing, it says nothing new about quality.
+  Day's API spend ≈ $0.11 estimated ($0.085 approved + $0.024 my mistake).
+  Still unproven: deploy host -> Supabase; a real email via Resend.

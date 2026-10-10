@@ -150,12 +150,12 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <span class="label">Where we stopped</span>
       <h2>The backend is code complete and runs on real Postgres and Redis</h2>
       <p>On 2026-10-10 the API, queue and worker ran for the first time as real processes against Postgres and Redis in Docker, and the image built. That found three bugs the tests could not see, including that the API could not start at all. Added the same day: API keys with per-team ownership, the review API, sending behind an interface, and atomic rate limits.</p>
-      <p class="muted">Not proven yet: the real agents running through the queue (needs a paid run), Supabase from a deploy host, and a real email through the provider. Email judge v2.2 is still built but not measured.</p>
+      <p>The real agents then ran through that whole stack: one lead, API key to verified email in 38 seconds for an estimated $0.085, approved through the review API.</p>
+      <p class="muted">Not proven yet: Supabase from a deploy host, and a real email through the provider. Email judge v2.2 is still built but not measured.</p>
     </div>
     <div>
       <span class="label">Next, in order</span>
       <ol>
-        <li>One paid end-to-end run on the local stack, about $0.10 estimated.</li>
         <li>Deploy API, worker and Redis to a host.</li>
         <li>Frontend: the Run button and a review screen.</li>
         <li>Send one real email to ourselves through the provider.</li>
@@ -167,7 +167,6 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>Waiting on Moiz</h2>
     <ul class="wait">
-      <li><span class="tag">Blocks the last backend proof</span><span>OK for one paid end-to-end run on the local stack, about $0.10 estimated.</span></li>
       <li><span class="tag">Blocks real sending</span><span>A Resend account and a sending domain with SPF, DKIM and DMARC.</span></li>
       <li><span class="tag">Blocks judge work</span><span>Say OK to paid runs, or pick the cheaper measuring route.</span></li>
       <li><span class="tag">Blocks trusted eval numbers</span><span>Verify the golden facts. 0 of 101 checked so far. See <code>evals/golden_set/README.md</code>.</span></li>
@@ -192,7 +191,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <span class="stage off">human review</span><span class="arrow">&rarr;</span>
       <span class="stage off">send</span>
     </div>
-    <p class="muted">Filled stages ran with the real agents on 2026-10-09, in one process on SQLite. The queue, worker, API and Postgres around them were proven on 2026-10-10 with free fake steps. Dashed stages are built as an API and tested, but have never been used for real: review has no screen yet and no real email has been sent.</p>
+    <p class="muted">Filled stages ran with the real agents through the real API, Redis queue, worker and Postgres on 2026-10-10 (one lead). Dashed stages are built as an API: review was used once through the API and has no screen yet, and no real email has been sent.</p>
   </section>
 
   <section>
@@ -212,7 +211,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <div><dt>Research share of cost</dt><dd>60&ndash;70%<small>first run, 3 leads</small></dd></div>
       <div><dt>Emails that passed the verifier</dt><dd>10 of 10<small>fixture leads</small></dd></div>
       <div><dt>Poor-fit lead stopped at the score gate</dt><dd>$0.0013<small>allbirds.com, scored 1 of 5</small></dd></div>
-      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79 + $0.02<small>2026-10-02, 10-09 and 10-10</small></dd></div>
+      <div><dt>API spend</dt><dd>&asymp; $0.67 + $2.79 + $0.02<small>2026-10-02, 10-09 and 10-10 (before the $0.085 run)</small></dd></div>
     </dl>
   </section>
 
