@@ -29,6 +29,19 @@ class InfraSettings(BaseSettings):
     # Tracing (Logfire). Unset = traces stay in-process; nothing is sent anywhere.
     logfire_token: SecretStr | None = None
 
+    # --- API access (app/api/deps.py)
+    # Off by default: every request needs an API key. The public demo turns this on so
+    # visitors can create (rate-limited) runs without one.
+    allow_anonymous_runs: bool = False
+    key_runs_per_hour: int = Field(default=60, ge=0)  # per API key; 0 = unlimited
+    # Browser origins allowed to call the API, comma-separated, e.g.
+    # "https://moizali.vercel.app". Empty = no cross-origin browser access.
+    cors_origins: str = ""
+
+    @property
+    def cors_origin_list(self) -> tuple[str, ...]:
+        return tuple(o.strip().rstrip("/") for o in self.cors_origins.split(",") if o.strip())
+
     # --- Public demo guards (app/api/limits.py). 0 disables a guard.
     demo_runs_per_client_per_hour: int = Field(default=3, ge=0)
     # Estimated USD per UTC day across all runs. Keep it at or below what you're willing

@@ -64,6 +64,19 @@ class EmailStatus(StrEnum):
     SENT = "sent"  # only ever after APPROVED
 
 
+class ApiKey(Base):
+    """A team's credential (app/api/auth.py). Only the hash of the key is stored."""
+
+    __tablename__ = "api_keys"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column(String(100))  # team / owner; recorded as reviewer
+    key_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    prefix: Mapped[str] = mapped_column(String(12))  # to recognise a key in listings
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    revoked_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Lead(Base):
     __tablename__ = "leads"
 
@@ -91,6 +104,10 @@ class Run(Base):
     # Hashed client IP for the public demo's rate limit (app/api/limits.py); None for runs
     # not created through the API (evals, scripts).
     client_key: Mapped[str | None] = mapped_column(String(32))
+    # Owner. None = anonymous (public demo): readable by whoever holds the run id.
+    api_key_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("api_keys.id", name="fk_runs_api_key_id"), index=True
+    )
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow, onupdate=utcnow

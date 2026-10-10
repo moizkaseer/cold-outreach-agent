@@ -4,13 +4,15 @@
 
     POST /runs                 create + enqueue a run         -> 202 {run_id}
                                (body carries the caller's sender profile)
+    GET  /runs                 this team's runs, newest first (API key required)
     GET  /runs/{id}            status, steps, email, cost
     GET  /runs/{id}/events     live progress (Server-Sent Events) until the run ends
     POST /runs/{id}/resume     re-enqueue a FAILED run (resumes at the failed step)
     GET  /health
 
+Who may do what is in app/api/deps.py (API keys; anonymous only if the deploy allows it).
 Guards (app/api/limits.py): new runs are rate-limited per client (429) and everything
-that spends money respects a daily spending cap (503). Still no auth.
+that spends money respects a daily spending cap (503).
 """
 
 from __future__ import annotations
@@ -19,19 +21,21 @@ import asyncio
 import datetime as dt
 import json
 import uuid
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
 from pathlib import Path
+from typing import Annotated
 
 import logfire
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, ValidationError
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
 
+from app.api.deps import AppDeps, Caller, Team, get_deps
 from app.api.limits import Limits, Refusal, check_new_run, check_resume, client_key
 from app.db.models import Run, RunStatus, utcnow
 from app.pipeline.orchestrator import create_run
@@ -43,13 +47,8 @@ SSE_MAX_SECONDS = 15 * 60
 SSE_HEARTBEAT_SECONDS = 15.0  # keeps proxies from closing an idle stream
 
 
-@dataclass
-class AppDeps:
-    sessions: async_sessionmaker[AsyncSession]
-    enqueue: Callable[[uuid.UUID, int], Awaitable[bool]]
-    sender: Sender | None  # server default (sender.json); requests may bring their own
-    limits: Limits = Limits()  # guarded by default; tests pass their own
-    poll_seconds: float = 1.0
+PageLimit = Annotated[int, Query(ge=1, le=100)]
+Before = Annotated[dt.datetime | None, Query(description="created_at of the last row seen")]
 
 
 def refused(r: Refusal) -> JSONResponse:
@@ -117,8 +116,23 @@ class RunView(BaseModel):
     created_at: dt.datetime
 
 
-async def load_run_view(sessions: async_sessionmaker[AsyncSession], run_id: uuid.UUID
-                        ) -> RunView | None:  # fmt: skip
+class RunSummary(BaseModel):
+    run_id: uuid.UUID
+    status: str
+    lead: CreateRun
+    email_status: str | None
+    cost_usd: float
+    created_at: dt.datetime
+
+
+def _viewer_id(caller: Caller) -> uuid.UUID | None:
+    return caller.id if caller else None
+
+
+async def load_run_view(sessions: async_sessionmaker[AsyncSession], run_id: uuid.UUID,
+                        viewer: uuid.UUID | None) -> RunView | None:  # fmt: skip
+    """None if the run doesn't exist OR belongs to another team (callers answer 404 for
+    both, so ids can't be probed). Anonymous runs are visible to anyone with the id."""
     async with sessions() as s:
         run = (
             await s.execute(
@@ -127,7 +141,7 @@ async def load_run_view(sessions: async_sessionmaker[AsyncSession], run_id: uuid
                 .options(selectinload(Run.steps), selectinload(Run.lead), selectinload(Run.email))
             )
         ).scalar_one_or_none()
-        if run is None:
+        if run is None or (run.api_key_id is not None and run.api_key_id != viewer):
             return None
         return RunView(
             run_id=run.id,
@@ -198,10 +212,12 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
 
         limits = Limits(
             runs_per_client_per_hour=s.demo_runs_per_client_per_hour or None,
+            runs_per_key_per_hour=s.key_runs_per_hour or None,
             daily_spend_usd=s.demo_daily_spend_usd or None,
             reserve_per_run_usd=s.demo_reserve_per_run_usd,
         )
-        app.state.deps = AppDeps(make_sessionmaker(engine), enqueue, sender, limits)
+        app.state.deps = AppDeps(make_sessionmaker(engine), enqueue, sender, limits,
+                                 allow_anonymous=s.allow_anonymous_runs)  # fmt: skip
         yield
         await redis.aclose()
         await engine.dispose()
@@ -210,16 +226,32 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
     if deps is not None:
         app.state.deps = deps  # available even when the server lifespan isn't run (tests)
 
-    def get_deps(request: Request) -> AppDeps:
-        return request.app.state.deps
+    # Middleware must be added before startup, so origins are read here, not in lifespan.
+    # InfraSettings needs no API keys, so importing this module stays safe anywhere.
+    if deps is not None:
+        origins = deps.cors_origins
+    else:
+        from app.config import InfraSettings
+
+        origins = InfraSettings().cors_origin_list
+    if origins:
+        # No cookies are used (auth is a header), so credentials stay off; that keeps a
+        # logged-in browser from being used against the API by another site.
+        app.add_middleware(CORSMiddleware, allow_origins=list(origins),
+                           allow_methods=["GET", "POST", "PATCH"],
+                           allow_headers=["Authorization", "Content-Type"])  # fmt: skip
 
     @app.get("/health")
     async def health() -> dict[str, str]:
         return {"status": "ok"}
 
     @app.post("/runs", status_code=202, response_model=None)
-    async def post_run(body: CreateRun, request: Request) -> dict[str, str] | JSONResponse:
+    async def post_run(body: CreateRun, request: Request, caller: Caller
+                       ) -> dict[str, str] | JSONResponse:  # fmt: skip
         d = get_deps(request)
+        if caller is None and not d.allow_anonymous:
+            raise HTTPException(401, "API key required",
+                                headers={"WWW-Authenticate": "Bearer"})  # fmt: skip
         sender = body.sender or d.sender
         if sender is None:
             raise HTTPException(422, "sender profile required (who you are, offer, outcomes)")
@@ -234,25 +266,62 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             raise HTTPException(422, e.errors(include_url=False, include_context=False)) from e
         # request.client is the direct peer; behind the host's proxy uvicorn must run with
         # --proxy-headers so this is the real client IP, not the proxy's.
-        key = client_key(request.client.host if request.client else None)
-        if refusal := await check_new_run(d.sessions, d.limits, key):
+        # A team is limited per key (wherever it calls from); anonymous callers per IP.
+        if caller is not None:
+            key = caller.id.hex
+        else:
+            key = client_key(request.client.host if request.client else None)
+        if refusal := await check_new_run(d.sessions, d.limits, key, keyed=caller is not None):
             return refused(refusal)
-        run_id = await create_run(d.sessions, lead, sender, STEP_NAMES, client_key=key)
+        run_id = await create_run(d.sessions, lead, sender, STEP_NAMES, client_key=key,
+                                  api_key_id=_viewer_id(caller))  # fmt: skip
         if failure := await enqueue_or_fail(d, run_id, 0):
             return failure
         return {"run_id": str(run_id), "status": RunStatus.PENDING.value}
 
+    @app.get("/runs")
+    async def list_runs(
+        request: Request,
+        team: Team,
+        limit: PageLimit = 20,
+        before: Before = None,
+    ) -> list[RunSummary]:
+        q = (
+            select(Run)
+            .where(Run.api_key_id == team.id)
+            .options(selectinload(Run.lead), selectinload(Run.email))
+            .order_by(Run.created_at.desc())
+            .limit(limit)
+        )
+        if before is not None:
+            q = q.where(Run.created_at < before)
+        async with get_deps(request).sessions() as s:
+            runs = (await s.execute(q)).scalars().all()
+        return [
+            RunSummary(
+                run_id=r.id,
+                status=r.status.value,
+                lead=CreateRun(domain=r.lead.domain, person_name=r.lead.person_name,
+                               person_role=r.lead.person_role),
+                email_status=r.email.status.value if r.email else None,
+                cost_usd=round(r.cost_usd, 4),
+                created_at=r.created_at,
+            )
+            for r in runs
+        ]  # fmt: skip
+
     @app.get("/runs/{run_id}")
-    async def get_run(run_id: uuid.UUID, request: Request) -> RunView:
-        view = await load_run_view(get_deps(request).sessions, run_id)
+    async def get_run(run_id: uuid.UUID, request: Request, caller: Caller) -> RunView:
+        view = await load_run_view(get_deps(request).sessions, run_id, _viewer_id(caller))
         if view is None:
             raise HTTPException(404, "run not found")
         return view
 
     @app.post("/runs/{run_id}/resume", status_code=202, response_model=None)
-    async def resume_run(run_id: uuid.UUID, request: Request) -> dict[str, str] | JSONResponse:
+    async def resume_run(run_id: uuid.UUID, request: Request, caller: Caller
+                         ) -> dict[str, str] | JSONResponse:  # fmt: skip
         d = get_deps(request)
-        view = await load_run_view(d.sessions, run_id)
+        view = await load_run_view(d.sessions, run_id, _viewer_id(caller))
         if view is None:
             raise HTTPException(404, "run not found")
         if view.status != RunStatus.FAILED.value:
@@ -278,9 +347,11 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
         return {"run_id": str(run_id), "status": "requeued"}
 
     @app.get("/runs/{run_id}/events")
-    async def run_events(run_id: uuid.UUID, request: Request) -> StreamingResponse:
+    async def run_events(run_id: uuid.UUID, request: Request, caller: Caller
+                         ) -> StreamingResponse:  # fmt: skip
         d = get_deps(request)
-        if await load_run_view(d.sessions, run_id) is None:
+        viewer = _viewer_id(caller)
+        if await load_run_view(d.sessions, run_id, viewer) is None:
             raise HTTPException(404, "run not found")
 
         async def stream() -> AsyncIterator[str]:
@@ -290,7 +361,7 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
             started = last_beat = loop.time()
             last: str | None = None
             while loop.time() - started < SSE_MAX_SECONDS:
-                view = await load_run_view(d.sessions, run_id)
+                view = await load_run_view(d.sessions, run_id, viewer)
                 assert view is not None
                 payload = view.model_dump_json()
                 if payload != last:

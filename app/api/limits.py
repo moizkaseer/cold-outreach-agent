@@ -33,7 +33,8 @@ RATE_WINDOW = dt.timedelta(hours=1)
 
 @dataclass(frozen=True)
 class Limits:
-    runs_per_client_per_hour: int | None = 3  # None = no rate limit
+    runs_per_client_per_hour: int | None = 3  # anonymous, per IP. None = no rate limit
+    runs_per_key_per_hour: int | None = 60  # per API key
     daily_spend_usd: float | None = 2.00  # None = no cap
     reserve_per_run_usd: float = 0.50  # worst-case estimate for one run in flight
 
@@ -89,11 +90,15 @@ async def check_new_run(
     limits: Limits,
     key: str,
     now: dt.datetime | None = None,
+    *,
+    keyed: bool = False,
 ) -> Refusal | None:
-    """None = allowed. Rate limit first: it's per client and says nothing about budget."""
+    """None = allowed. Rate limit first: it's per client and says nothing about budget.
+    `keyed` = the client is an API key (its own, higher allowance), not an anonymous IP."""
     now = now or utcnow()
+    per_hour = limits.runs_per_key_per_hour if keyed else limits.runs_per_client_per_hour
     async with sessions() as s:
-        if limits.runs_per_client_per_hour is not None:
+        if per_hour is not None:
             since = now - RATE_WINDOW
             recent = await s.scalars(
                 select(Run.created_at)
@@ -101,11 +106,10 @@ async def check_new_run(
                 .order_by(Run.created_at)
             )
             times = list(recent)
-            if len(times) >= limits.runs_per_client_per_hour:
+            if len(times) >= per_hour:
                 # Retry when the oldest run in the window ages out.
                 wait = int((as_utc(times[0]) + RATE_WINDOW - now).total_seconds()) + 1
-                return Refusal(429, f"rate limit: {limits.runs_per_client_per_hour} runs per "
-                               "hour", max(1, wait))  # fmt: skip
+                return Refusal(429, f"rate limit: {per_hour} runs per hour", max(1, wait))
         return await check_spend(s, limits, now)
 
 

@@ -26,16 +26,20 @@ NO_LIMITS = Limits(runs_per_client_per_hour=None, daily_spend_usd=None)
 
 
 class Env:
-    def __init__(self, sessions, limits: Limits = NO_LIMITS) -> None:
+    def __init__(self, sessions, limits: Limits = NO_LIMITS, **deps) -> None:
         self.sessions = sessions
         self.enqueued: list[tuple[uuid.UUID, int]] = []
-        self.deps = AppDeps(sessions, self.enqueue, SENDER, limits, poll_seconds=0.01)
+        # Anonymous allowed by default here (like the public demo); tests/test_auth.py
+        # covers the locked-down default.
+        deps.setdefault("allow_anonymous", True)
+        self.deps = AppDeps(sessions, self.enqueue, SENDER, limits, poll_seconds=0.01, **deps)
         self.app = create_app(self.deps)
         self.client = self.client_from("127.0.0.1")
 
-    def client_from(self, ip: str) -> httpx.AsyncClient:
+    def client_from(self, ip: str, key: str | None = None) -> httpx.AsyncClient:
         transport = httpx.ASGITransport(app=self.app, client=(ip, 1234))
-        return httpx.AsyncClient(transport=transport, base_url="http://t")
+        headers = {"Authorization": f"Bearer {key}"} if key else {}
+        return httpx.AsyncClient(transport=transport, base_url="http://t", headers=headers)
 
     async def enqueue(self, run_id: uuid.UUID, attempt: int) -> bool:
         self.enqueued.append((run_id, attempt))

@@ -30,6 +30,7 @@ from arq import create_pool
 from arq.connections import RedisSettings
 from sqlalchemy import select, text
 
+from app.api.auth import create_api_key
 from app.db.models import EmailDraft, EmailStatus
 from app.db.session import make_engine, make_sessionmaker
 from app.pipeline.orchestrator import Orchestrator, StepContext, StepFn, StepResult
@@ -115,11 +116,13 @@ class Check:
         print(f"  {'PASS' if ok else 'FAIL'}  {what}" + (f"  ({detail})" if detail else ""))
 
 
-async def follow(client: httpx.AsyncClient, run_id: str) -> tuple[list[dict], str | None]:
+async def follow(client: httpx.AsyncClient, run_id: str, headers: dict[str, str] | None = None
+                 ) -> tuple[list[dict], str | None]:  # fmt: skip
     """Read the SSE stream to its end: (every update payload, final status)."""
     updates: list[dict] = []
     name = final = None
-    async with client.stream("GET", f"/runs/{run_id}/events", timeout=60) as r:
+    async with client.stream("GET", f"/runs/{run_id}/events", timeout=60,
+                             headers=headers) as r:  # fmt: skip
         async for line in r.aiter_lines():
             if line.startswith("event: "):
                 name = line[7:]
@@ -179,6 +182,26 @@ async def drive(check: Check) -> None:
               "only the failed step re-ran", str(attempts))  # fmt: skip
         check(abs(view["cost_usd"] - 0.06) < 1e-6, "nothing paid twice", str(view["cost_usd"]))
 
+        print("API keys")
+        engine = make_engine(DATABASE_URL)
+        (_, acme), (_, rival) = [await create_api_key(make_sessionmaker(engine), n)
+                                 for n in ("Acme", "Rival")]  # fmt: skip
+        await engine.dispose()
+        as_acme, as_rival = ({"Authorization": f"Bearer {k}"} for k in (acme, rival))
+        r = await c.post("/runs", headers=as_acme,
+                         json={**lead, "domain": f"keyed-{uuid.uuid4().hex[:8]}.com"})  # fmt: skip
+        run_id = r.json()["run_id"]
+        _, final = await follow(c, run_id, as_acme)
+        check(final == "succeeded", "run created with a key finished", str(final))
+        codes = [(await c.get(f"/runs/{run_id}", headers=h)).status_code
+                 for h in (as_acme, as_rival, {})]  # fmt: skip
+        check(codes == [200, 404, 404], "only the owning key can read it", str(codes))
+        mine = (await c.get("/runs", headers=as_acme)).json()
+        theirs = (await c.get("/runs", headers=as_rival)).json()
+        check([m["run_id"] for m in mine] == [run_id] and theirs == [], "GET /runs is per team")
+        r = await c.get("/runs", headers={"Authorization": "Bearer oa_wrong"})
+        check(r.status_code == 401, "wrong key is 401", str(r.status_code))
+
         print("guards")
         redis = await create_pool(RedisSettings.from_dsn(REDIS_URL))
         rid = uuid.uuid4()  # never created: the worker will log an error for it, harmlessly
@@ -206,7 +229,8 @@ async def reset_queue() -> None:
 
 
 def main() -> int:
-    env = {**os.environ, "DATABASE_URL": DATABASE_URL, "REDIS_URL": REDIS_URL}
+    env = {**os.environ, "DATABASE_URL": DATABASE_URL, "REDIS_URL": REDIS_URL,
+           "ALLOW_ANONYMOUS_RUNS": "true"}  # the anonymous path is exercised too  # fmt: skip
     asyncio.run(reset())
     print("migrations")
     subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], env=env, check=True,

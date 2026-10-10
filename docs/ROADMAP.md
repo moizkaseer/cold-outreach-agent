@@ -445,3 +445,18 @@ Progress log after every working session (what was built, what broke, what's nex
   check the queue is empty before starting a real worker.
   Not covered: the real agents on Postgres/Redis (needs an approved paid run); Supabase
   from a deploy host. Next: review API.
+- 2026-10-10 — Backend day, step 2: AUTH (`app/api/auth.py`, `app/api/deps.py`, migration
+  `bdb9504cf090`). API keys (`oa_` + 256 random bits, shown once, only the SHA-256 stored;
+  `scripts/create_api_key.py` creates / lists / revokes). Runs get an owner
+  (`runs.api_key_id`): a team's runs are visible to its key only, everyone else gets 404
+  (not 403, so ids can't be probed). No key = anonymous: allowed to create runs only if
+  `ALLOW_ANONYMOUS_RUNS=true` (the public demo; default is locked down), and an anonymous
+  run is readable by whoever holds its random id. A WRONG key is always 401, never a
+  fallback to anonymous. New `GET /runs` (own runs, newest first, keyset paging). Rate
+  limits: per key (default 60/h, any IP) vs per IP for anonymous (3/h); the daily spend
+  cap stays global. CORS only for `CORS_ORIGINS`, no credentials (auth is a header, not a
+  cookie). 253 tests; key checks added to the infra smoke and passing on real Postgres;
+  migration up/down/up on Postgres, RLS on `api_keys`. Not yet applied to Supabase.
+  Known limits: one key = one team (no per-user identity inside a team); browser
+  `EventSource` can't send an Authorization header, so a keyed frontend must read the
+  stream with `fetch`. Next: review API.
