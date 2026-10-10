@@ -155,7 +155,6 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <div>
       <span class="label">Next, in order</span>
       <ol>
-        <li>Apply the 3 new migrations to Supabase.</li>
         <li>One paid end-to-end run on the local stack, about $0.10 estimated.</li>
         <li>Deploy API, worker and Redis to a host.</li>
         <li>Frontend: the Run button and a review screen.</li>
@@ -168,7 +167,6 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>Waiting on Moiz</h2>
     <ul class="wait">
-      <li><span class="tag">Blocks deploy</span><span>OK to apply 3 migrations to Supabase (API keys, review fields, sending).</span></li>
       <li><span class="tag">Blocks the last backend proof</span><span>OK for one paid end-to-end run on the local stack, about $0.10 estimated.</span></li>
       <li><span class="tag">Blocks real sending</span><span>A Resend account and a sending domain with SPF, DKIM and DMARC.</span></li>
       <li><span class="tag">Blocks judge work</span><span>Say OK to paid runs, or pick the cheaper measuring route.</span></li>
@@ -282,7 +280,7 @@ var WEEKS = [
     { s: "done", t: "Email quality judge", note: "v2.2 built, not measured. Uncalibrated." }
   ]},
   { n: 4, name: "Backend", items: [
-    { s: "done", t: "Postgres models and Alembic", note: "6 migrations tested up and down on Postgres 16. Supabase is 3 behind." },
+    { s: "done", t: "Postgres models and Alembic", note: "6 migrations tested up and down on Postgres 16. Supabase is at head." },
     { s: "done", t: "Orchestrator with resume from the failed step", note: "Resume proven through the real queue on Postgres." },
     { s: "done", t: "Redis and Arq worker", note: "Real round trip 2026-10-10, with fake steps." },
     { s: "done", t: "FastAPI: create run, get run, SSE, resume", note: "Run as a real server 2026-10-10." }

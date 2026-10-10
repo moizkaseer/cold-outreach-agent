@@ -506,3 +506,10 @@ Progress log after every working session (what was built, what broke, what's nex
   estimated, all of it my unapproved-worker mistake (step 1).
   Next: Moiz decides on applying migrations to Supabase, a paid end-to-end run on the
   local stack, host + Redis + Resend accounts; then frontend (Run button, review UI).
+- 2026-10-10 — Supabase brought to head `f028981b3077` (Moiz's OK). Same route as 10-07:
+  `alembic upgrade b3f1a2c4d5e6:head --sql` -> reviewed (additive only: 2 new tables, new
+  nullable columns, constraints) -> checked Supabase was at `b3f1a2c4d5e6` with 0 rows ->
+  applied in one transaction over HTTPS. Verified after: version row, 8 tables all with RLS
+  and 0 policies, new columns and the 4 named constraints present. Security advisor: only
+  the expected "RLS enabled, no policy" notes, plus the old `public.rls_auto_enable()`
+  warning (not ours; still Moiz's call).
