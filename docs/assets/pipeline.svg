@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="380" viewBox="0 0 1280 380" role="img" aria-label="Pipeline: cheap checks, then the agents with a verifier loop, then people">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111a2e"/>
+    </linearGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#64748b"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="380" rx="20" fill="url(#bg)"/>
+
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <!-- group frames -->
+    <g fill="#0f172a" stroke="#263349">
+      <rect x="32" y="36" width="250" height="308" rx="14"/>
+      <rect x="306" y="36" width="622" height="308" rx="14"/>
+      <rect x="952" y="36" width="296" height="308" rx="14"/>
+    </g>
+    <g font-size="12.5" font-weight="700" letter-spacing="2" fill="#94a3b8">
+      <text x="56" y="72">1 · CHEAP CHECKS</text>
+      <text x="330" y="72">2 · AGENTS</text>
+      <text x="976" y="72">3 · PEOPLE</text>
+    </g>
+    <g font-size="12.5" fill="#64748b">
+      <text x="56" y="322">Stop bad leads before paying</text>
+      <text x="330" y="322">The model thinks. Code checks every fact and every claim.</text>
+      <text x="976" y="322">Nothing leaves without a person</text>
+    </g>
+
+    <!-- nodes -->
+    <g font-size="15" font-weight="600" text-anchor="middle">
+      <!-- group 1 -->
+      <g fill="#111c31" stroke="#334155">
+        <rect x="56" y="96" width="202" height="44" rx="10"/>
+        <rect x="56" y="162" width="202" height="44" rx="10"/>
+        <rect x="56" y="228" width="202" height="44" rx="10"/>
+      </g>
+      <g fill="#e2e8f0">
+        <text x="157" y="123">validate</text>
+        <text x="157" y="189">dedupe</text>
+        <text x="157" y="255">score the fit</text>
+      </g>
+
+      <!-- group 2 -->
+      <rect x="330" y="140" width="150" height="76" rx="10" fill="#0c2a24" stroke="#34d399"/>
+      <text x="405" y="172" fill="#d1fae5">research agent</text>
+      <text x="405" y="194" font-size="11.5" font-weight="400" fill="#6ee7b7" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace">search fetch finish</text>
+
+      <g fill="#111c31" stroke="#334155">
+        <rect x="510" y="156" width="120" height="44" rx="10"/>
+        <rect x="660" y="156" width="96" height="44" rx="10"/>
+      </g>
+      <g fill="#e2e8f0">
+        <text x="570" y="183">pain points</text>
+        <text x="708" y="183">writer</text>
+      </g>
+      <rect x="792" y="156" width="112" height="44" rx="10" fill="#0c2a24" stroke="#34d399"/>
+      <text x="848" y="183" fill="#d1fae5">verifier</text>
+
+      <!-- group 3 -->
+      <rect x="976" y="96" width="248" height="44" rx="10" fill="#0a2233" stroke="#38bdf8"/>
+      <text x="1100" y="123" fill="#e0f2fe">human review</text>
+      <g fill="#111c31" stroke="#334155">
+        <rect x="976" y="162" width="248" height="44" rx="10"/>
+        <rect x="976" y="228" width="248" height="44" rx="10"/>
+      </g>
+      <g fill="#e2e8f0">
+        <text x="1100" y="189">send</text>
+        <text x="1100" y="255">classify replies</text>
+      </g>
+    </g>
+
+    <!-- arrows -->
+    <g stroke="#64748b" stroke-width="1.6" fill="none" marker-end="url(#a)">
+      <path d="M157 140v20"/>
+      <path d="M157 206v20"/>
+      <path d="M258 250h36v-72h34"/>
+      <path d="M480 178h28"/>
+      <path d="M630 178h28"/>
+      <path d="M756 178h34"/>
+      <path d="M904 178h36v-60h34"/>
+      <path d="M1100 140v20"/>
+      <path d="M1100 206v20"/>
+    </g>
+    <!-- revise loop -->
+    <path d="M848 156v-36h-140v34" stroke="#fbbf24" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <text x="778" y="110" font-size="12.5" fill="#fbbf24" text-anchor="middle">unsupported claim: revise, max 2</text>
+    <text x="405" y="240" font-size="12" fill="#64748b" text-anchor="middle">facts with URL + quote</text>
+    <text x="848" y="222" font-size="12" fill="#64748b" text-anchor="middle">claim → source</text>
+  </g>
+</svg>

@@ -57,18 +57,9 @@ facts, and one made-up funding round in a cold email costs the sender their cred
 The pipeline is a plain Python state machine. The model is called only where judgement
 is needed, and wherever a mistake would matter, **code makes the final decision**.
 
-```mermaid
-flowchart LR
-    A(validate) --> B(dedupe) --> C(score) --> D[research agent]
-    D --> E(pain points) --> F(writer) --> G{verifier}
-    G -->|unsupported claim, max 2 revisions| F
-    G --> H[human review] --> I(send) --> J(classify replies)
-
-    classDef agent fill:#0c2a24,stroke:#34d399,color:#d1fae5
-    classDef human fill:#0a2233,stroke:#38bdf8,color:#e0f2fe
-    class D,G agent
-    class H human
-```
+<p align="center">
+  <img src="docs/assets/pipeline.png" alt="Pipeline in three stages: cheap checks (validate, dedupe, score), agents (research, pain points, writer, verifier with a revise loop), people (human review, send, classify replies)" width="100%">
+</p>
 
 <details>
 <summary><b>What each step does</b></summary>
