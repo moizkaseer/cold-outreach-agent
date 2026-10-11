@@ -565,3 +565,14 @@ Progress log after every working session (what was built, what broke, what's nex
   spend up to the $2/day cap); a real email via Resend; frontend.
 - 2026-10-11 — Decision (Moiz): frontend (Run button, review screen) is on hold while he
   builds a new portfolio website. Backend-only work until he says otherwise.
+- 2026-10-11 — Week 7, reply classification step 1: the classifier (`app/agents/replies/`,
+  `app/schemas/reply.py`). Haiku, no tools; 8 categories (interested, question, not_now,
+  not_interested, wrong_person, unsubscribe, out_of_office, other). The reply is untrusted
+  text, so the model only suggests and CODE decides what must not depend on it: (1) quoted
+  original text is stripped first (our own footer contains "unsubscribe"); (2) an opt-out
+  phrase in the prospect's own words always means `unsubscribe`, even if the model says
+  otherwise or fails (broad on purpose: a false hit costs one lead, a miss keeps emailing
+  someone who said stop); (3) the model must quote the reply verbatim, and a category
+  whose quote isn't in the reply is flagged `needs_human`. 317 tests, fakes only: NEVER
+  run against the real model, so its accuracy is unknown. Next: step 2, `replies` table +
+  `POST /emails/{id}/replies` with unsubscribe -> suppression list.
