@@ -156,7 +156,6 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <div>
       <span class="label">Next, in order</span>
       <ol>
-        <li>Frontend: the Run button and a review screen.</li>
         <li>Send one real email to ourselves through the provider.</li>
         <li>Back to quality: measure judge v2.2 cheaply, then writer tuning.</li>
       </ol>
@@ -174,6 +173,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <li><span class="tag soft">To do</span><span>Set a monthly spend limit in the Anthropic console, and the healthcheck and pre-deploy command on the API service.</span></li>
       <li><span class="tag soft">Decision</span><span>Supabase flags <code>public.rls_auto_enable()</code> as callable by anon. It is not ours. Keep or drop?</span></li>
       <li><span class="tag soft">Decision</span><span>"Never mention AI" also blocks openers about an AI company's own product. Strict for now.</span></li>
+      <li><span class="tag soft">On hold</span><span>Frontend (Run button, review screen) waits for the new portfolio site.</span></li>
       <li><span class="tag soft">Shelved</span><span>Send or don't-send labels for the 10 emails wait until 2 or 3 real sales people can label them.</span></li>
     </ul>
   </section>
@@ -291,7 +291,7 @@ var WEEKS = [
     { s: "tests", t: "Prompt-injection evals", note: "Never run against the real model. Estimated $0.20 to $0.40." }
   ]},
   { n: 6, name: "Ship the demo", items: [
-    { s: "todo", t: "Connect the Run button on moizali.vercel.app" },
+    { s: "todo", t: "Connect the Run button on moizali.vercel.app", note: "On hold until the new portfolio site exists." },
     { s: "done", t: "Rate limiting and daily spending cap", note: "Atomic. Burst-tested on Postgres." },
     { s: "done", t: "Auth: API keys, per-team ownership, CORS" },
     { s: "done", t: "Docker and deploy", note: "Railway: API, worker, Redis. Supabase database. One real run 2026-10-11." }

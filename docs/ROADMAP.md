@@ -39,7 +39,8 @@ Progress log after every working session (what was built, what broke, what's nex
 - [x] Prompt-injection test pages in evals (built + tested with fakes; never run against the real model)
 
 ## Week 6 — Ship the demo
-- [ ] Connect "Run" button on moizali.vercel.app
+- [ ] Connect "Run" button on moizali.vercel.app (ON HOLD, 2026-10-11: Moiz is building a
+  new portfolio site first; do not start frontend work until he says so)
 - [x] Rate limiting + daily spending cap (`app/api/limits.py`; DB-backed; atomic via a
   Postgres advisory lock; burst-tested on real Postgres 2026-10-10)
 - [x] Auth: API keys, per-team ownership of runs and emails, CORS (2026-10-10)
@@ -562,3 +563,5 @@ Progress log after every working session (what was built, what broke, what's nex
   Lesson: "online and green" only means the process is up; a pending run that never starts
   = no worker on the queue. Open: ALLOW_ANONYMOUS_RUNS=true on the live API (public can
   spend up to the $2/day cap); a real email via Resend; frontend.
+- 2026-10-11 — Decision (Moiz): frontend (Run button, review screen) is on hold while he
+  builds a new portfolio website. Backend-only work until he says otherwise.
