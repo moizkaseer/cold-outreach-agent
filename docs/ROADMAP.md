@@ -595,3 +595,4 @@ Progress log after every working session (what was built, what broke, what's nex
   replies and a paid run). Supabase is 1 migration behind (`c7d21e5a9b40`) unless
   Railway's pre-deploy `alembic upgrade head` is set; the new endpoints 500 until then,
   everything else is unaffected.
+- 2026-10-11 — Added `README.md`: what the project does, a real example email with its evidence, how it works, honest status + measured numbers, how to run it. The live URL is deliberately left out (anonymous runs are on there).
