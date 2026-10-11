@@ -140,7 +140,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <div class="meta label">
       <span>Updated 2026-10-11</span>
       <span>Source: docs/ROADMAP.md</span>
-      <span>290 tests passing</span>
+      <span>329 tests passing</span>
     </div>
     <div class="tally" id="tally"></div>
   </header>
@@ -239,6 +239,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <li>One API key is one team. There is no per-person identity inside a team.</li>
       <li>An edited email is not re-verified. It is marked as edited and goes back to a human.</li>
       <li>Sending has no bounce or complaint handling, and the recipient address is typed by hand.</li>
+      <li>Replies are pasted in by hand, and the reply classifier's accuracy is not measured.</li>
       <li>The rubric has no criterion for templated phrasing, so the judge cannot see it.</li>
       <li>This network blocks outbound ports 5432 and 6543. Migrations were applied to Supabase over HTTPS instead.</li>
     </ul>
@@ -247,6 +248,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>History</h2>
     <ul class="log">
+      <li><time datetime="2026-10-11">2026-10-11</time><span>Reply classification built: eight categories, an opt-out phrase always wins by code, and an unsubscribe reply goes on the suppression list. Frontend put on hold.</span></li>
       <li><time datetime="2026-10-11">2026-10-11</time><span>Deployed on Railway: API, worker and Redis, with Supabase. Fixed on the way: a Dockerfile Railway rejected, missing variables, an empty Redis URL, a worker box running the API command. First real lead through the live deployment.</span></li>
       <li><time datetime="2026-10-10">2026-10-10</time><span>Backend day. First run on real Postgres and Redis, Docker image built. Fixed: API could not start, resume race, stranded runs when the queue is down. Added API keys, review API, sending with unsubscribe, atomic limits. About $0.02 spent by mistake when a real worker picked up leftover test jobs.</span></li>
       <li><time datetime="2026-10-09">2026-10-09</time><span>Direction set: users are sales teams, so the sender profile arrives with each request. First real end-to-end runs, 10 leads. Writer tuning loop with saved research. Judge check with planted flaws. Email judge v1 to v2.2.</span></li>
@@ -280,7 +282,7 @@ var WEEKS = [
     { s: "done", t: "Email quality judge", note: "v2.2 built, not measured. Uncalibrated." }
   ]},
   { n: 4, name: "Backend", items: [
-    { s: "done", t: "Postgres models and Alembic", note: "6 migrations tested up and down on Postgres 16. Supabase is at head." },
+    { s: "done", t: "Postgres models and Alembic", note: "7 migrations tested up and down on Postgres 16." },
     { s: "done", t: "Orchestrator with resume from the failed step", note: "Resume proven through the real queue on Postgres." },
     { s: "done", t: "Redis and Arq worker", note: "Ran a real lead on Railway 2026-10-11." },
     { s: "done", t: "FastAPI: create run, get run, SSE, resume", note: "Live on Railway." }
@@ -299,7 +301,7 @@ var WEEKS = [
   { n: 7, name: "Close the loop", items: [
     { s: "partial", t: "Review UI: approve, edit, reject", note: "API done. No screen yet." },
     { s: "tests", t: "Sending integration, after approval only", note: "Fake provider only. No real email sent." },
-    { s: "todo", t: "Reply-classification workflow" }
+    { s: "tests", t: "Reply classification", note: "Classifier and API built 2026-10-11. Replies are pasted by hand. Never run against the real model." }
   ]},
   { n: 8, name: "Discovery and story", items: [
     { s: "todo", t: "Contact discovery through Apollo or Hunter" },

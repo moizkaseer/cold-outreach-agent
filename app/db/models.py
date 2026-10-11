@@ -15,6 +15,7 @@ from typing import Any
 
 from sqlalchemy import (
     JSON,
+    Boolean,
     DateTime,
     Float,
     ForeignKey,
@@ -188,6 +189,28 @@ class EmailDraft(Base):
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     run: Mapped[Run] = relationship(back_populates="email")
+
+
+class Reply(Base):
+    """A prospect's reply to a sent email, as pasted in by the team, plus how it was
+    classified (app/api/replies.py). The text is outside content: never an instruction."""
+
+    __tablename__ = "replies"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    email_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("emails.id", name="fk_replies_email_id"), index=True
+    )
+    body: Mapped[str] = mapped_column(Text)
+    category: Mapped[str] = mapped_column(String(32))  # a ReplyCategory value
+    reason: Mapped[str] = mapped_column(Text)
+    quote: Mapped[str | None] = mapped_column(Text)  # words from the reply that decided it
+    needs_human: Mapped[bool] = mapped_column(Boolean)
+    decided_by_code: Mapped[bool] = mapped_column(Boolean)  # the opt-out rule, not the model
+    suppressed: Mapped[bool] = mapped_column(Boolean)  # this reply put the address on the list
+    cost_usd: Mapped[float | None] = mapped_column(Float)  # estimated; None = no model call
+    created_by: Mapped[str] = mapped_column(String(200))  # API key name
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
 class Suppression(Base):

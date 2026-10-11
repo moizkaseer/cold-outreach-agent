@@ -21,6 +21,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.agents.replies import ReplyRun
 from app.api.auth import find_key
 from app.api.limits import Limits
 from app.db.models import ApiKey
@@ -41,6 +42,9 @@ class AppDeps:
     mailer: EmailSender | None = None
     public_base_url: str | None = None
     sends_per_key_per_day: int | None = 30  # None = no cap
+    # (subject, body, reply text) -> classification. None = replies are off on this server.
+    classify_reply: Callable[[str, str, str], Awaitable[ReplyRun]] | None = None
+    replies_per_key_per_day: int | None = 200  # each one is a paid model call
 
 
 def get_deps(request: Request) -> AppDeps:

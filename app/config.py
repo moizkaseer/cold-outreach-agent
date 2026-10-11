@@ -82,6 +82,8 @@ class InfraSettings(BaseSettings):
     send_from_email: str | None = None  # an address on a domain verified with the provider
     public_base_url: str | None = None  # where this API is reachable; used in unsubscribe links
     sends_per_key_per_day: int = Field(default=30, ge=0)  # low volume on purpose; 0 = no cap
+    # Each classified reply is one small paid model call; 0 = no cap.
+    replies_per_key_per_day: int = Field(default=200, ge=0)
 
     # --- Public demo guards (app/api/limits.py). 0 disables a guard.
     demo_runs_per_client_per_hour: int = Field(default=3, ge=0)

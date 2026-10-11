@@ -38,7 +38,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import selectinload
 
-from app.api import review, sending
+from app.api import replies, review, sending
 from app.api.deps import AppDeps, Caller, Team, get_deps
 from app.api.limits import (
     Limits,
@@ -237,13 +237,27 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
 
             http = httpx.AsyncClient()
             mailer = ResendSender(s.resend_api_key.get_secret_value(), s.send_from_email, http)
+        import anthropic
+
+        from app.agents.replies import ReplyClassifier, ReplyRun
+
+        claude = anthropic.AsyncAnthropic(api_key=s.anthropic_api_key.get_secret_value())
+        classifier = ReplyClassifier(client=claude, model=s.model_fast)  # Haiku: classification
+
+        async def classify_reply(subject: str, body: str, reply: str) -> ReplyRun:
+            return await classifier.classify(subject=subject, body=body, reply=reply)
+
+        reply_cap = s.replies_per_key_per_day or None
         app.state.deps = AppDeps(make_sessionmaker(engine), enqueue, sender, limits,
                                  allow_anonymous=s.allow_anonymous_runs, mailer=mailer,
                                  public_base_url=s.public_base_url,
-                                 sends_per_key_per_day=s.sends_per_key_per_day or None)  # fmt: skip
+                                 sends_per_key_per_day=s.sends_per_key_per_day or None,
+                                 classify_reply=classify_reply,
+                                 replies_per_key_per_day=reply_cap)  # fmt: skip
         yield
         if http is not None:
             await http.aclose()
+        await claude.close()
         await redis.aclose()
         await engine.dispose()
 
@@ -268,6 +282,7 @@ def create_app(deps: AppDeps | None = None) -> FastAPI:
 
     app.include_router(review.router)
     app.include_router(sending.router)
+    app.include_router(replies.router)
 
     @app.get("/health")
     async def health() -> dict[str, str]:

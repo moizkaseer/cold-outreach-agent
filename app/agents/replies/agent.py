@@ -32,7 +32,7 @@ class ClassifiedReply:
 @dataclass
 class ReplyRun:
     result: ClassifiedReply
-    agent: AgentResult[ReplyClassification] | None  # None when no model call was needed
+    agent: AgentResult[ReplyClassification] | None  # None when no model call was made or it failed
 
 
 class ReplyClassifier:
@@ -48,18 +48,23 @@ class ReplyClassifier:
                                 needs_human=True, decided_by_code=True),
                 None,
             )  # fmt: skip
-        agent = await run_agent_loop(
-            name="replies",
-            client=self._client,
-            model=self._model,
-            system=SYSTEM_PROMPT,
-            user_message=USER_TEMPLATE.format(subject=subject, body=body, reply=own),
-            tools=[],
-            output_model=ReplyClassification,
-            max_turns=3,
-            token_budget=20_000,
-            refusal_fallback=False,  # Haiku
-        )
+        try:
+            agent = await run_agent_loop(
+                name="replies",
+                client=self._client,
+                model=self._model,
+                system=SYSTEM_PROMPT,
+                user_message=USER_TEMPLATE.format(subject=subject, body=body, reply=own),
+                tools=[],
+                output_model=ReplyClassification,
+                max_turns=3,
+                token_budget=20_000,
+                refusal_fallback=False,  # Haiku
+            )
+        except anthropic.APIError:
+            # The model being down must not lose the reply or an opt-out in it: the code
+            # rules still run, and anything else is left for a person.
+            return ReplyRun(decide(own, None), None)
         return ReplyRun(decide(own, agent.output), agent)
 
 

@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import pytest
 
 from app.agents.loop import FINISH_TOOL_NAME
@@ -104,3 +106,19 @@ def test_strip_quoted() -> None:
     assert strip_quoted("Line one\n> quoted\nLine two") == "Line one\nLine two"
     assert strip_quoted("Sounds good\n\nSent from my iPhone") == "Sounds good"
     assert strip_quoted("From what I can see, yes.") == "From what I can see, yes."
+
+
+async def test_model_outage_does_not_lose_an_opt_out() -> None:
+    import anthropic
+    import httpx
+
+    async def create(**_: object) -> None:
+        raise anthropic.APIConnectionError(request=httpx.Request("POST", "http://x"))
+
+    def down() -> SimpleNamespace:
+        return SimpleNamespace(beta=SimpleNamespace(messages=SimpleNamespace(create=create)))
+
+    run = await classify(down(), "Please unsubscribe me")  # type: ignore[arg-type]
+    assert run.agent is None and run.result.category is ReplyCategory.UNSUBSCRIBE
+    run = await classify(down(), "Sounds good")  # type: ignore[arg-type]
+    assert run.result.category is ReplyCategory.OTHER and run.result.needs_human

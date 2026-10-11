@@ -53,7 +53,9 @@ Progress log after every working session (what was built, what broke, what's nex
 - [~] Sending integration (after approval only) — built 2026-10-10 behind an interface
   (`app/sending/`, `app/api/sending.py`) with unsubscribe + suppression list; tested with a
   fake provider only, NEVER run against Resend (needs an account + sending domain)
-- [ ] Connect reply-classification workflow
+- [~] Connect reply-classification workflow: built 2026-10-11 (`app/agents/replies/`,
+  `app/api/replies.py`); replies are pasted in by hand, tested with fakes only, the
+  classifier has NEVER run against the real model
 
 ## Week 8 — Discovery and story
 - [ ] Contact discovery via provider API (Apollo/Hunter; find the right person to contact)
@@ -576,3 +578,20 @@ Progress log after every working session (what was built, what broke, what's nex
   whose quote isn't in the reply is flagged `needs_human`. 317 tests, fakes only: NEVER
   run against the real model, so its accuracy is unknown. Next: step 2, `replies` table +
   `POST /emails/{id}/replies` with unsubscribe -> suppression list.
+- 2026-10-11 — Reply classification step 2: storage + API (`app/api/replies.py`, model
+  `Reply`, migration `c7d21e5a9b40`). `POST /emails/{id}/replies {text}` (owning team, SENT
+  emails only) classifies and stores the reply and returns a `next_step` chosen by code
+  from the category; `GET /emails/{id}/replies`; `GET /replies?category=`. An `unsubscribe`
+  reply puts the sent-to address on the team's suppression list BEFORE the reply is saved,
+  and a later send to it is refused (409). If the model is down (`anthropic.APIError`) the
+  reply is still stored: opt-out phrases still suppress, anything else is `other` +
+  `needs_human`. Classification runs inside the request (one short Haiku call, not a
+  30-120s run); estimated cost is saved on the reply; cap 200 replies/team/day
+  (`REPLIES_PER_KEY_PER_DAY`). 329 tests, ruff clean; migration up/down/up + `alembic
+  check` + RLS on local Postgres 16; infra smoke still all green. No API spend.
+  Known gaps: replies are pasted by hand (no inbound-mail webhook); reply cost is NOT
+  counted in the global daily spend cap (only bounded by the per-team count); the cap
+  check isn't atomic; classifier accuracy unmeasured (needs a small labelled set of
+  replies and a paid run). Supabase is 1 migration behind (`c7d21e5a9b40`) unless
+  Railway's pre-deploy `alembic upgrade head` is set; the new endpoints 500 until then,
+  everything else is unaffected.
