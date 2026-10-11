@@ -148,7 +148,8 @@ docker compose up --build     # API on http://localhost:8000
 Create an API key, then start a run. A run calls the real models and costs about $0.09:
 
 ```bash
-docker compose run --rm api python -m scripts.create_api_key "My team"
+DATABASE_URL=postgresql+asyncpg://postgres:outreach@localhost:5432/outreach \
+  uv run python -m scripts.create_api_key "My team"
 
 curl -X POST http://localhost:8000/runs \
   -H "Authorization: Bearer YOUR_KEY" -H "Content-Type: application/json" \
