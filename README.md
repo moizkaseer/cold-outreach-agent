@@ -129,8 +129,9 @@ run a free smoke test that boots the real server, a real worker, Postgres and Re
 
 <br>
 
-An early judge passed claims whose dates and numbers were in no quote at all. Swapping
-the judge model alone moved the same 24 facts from 0.92 to 0.42. I rebuilt it so the
+An early judge passed claims whose dates and numbers were in no quote at all. Changing
+only the judge moved the score for the same 24 facts from 0.92 to 0.67, and to 0.42 with
+a stronger model. I rebuilt it so the
 model lists each detail and names its quote, and code derives the verdict.
 *Lesson: an uncalibrated judge is a random number with a confident face.*
 
