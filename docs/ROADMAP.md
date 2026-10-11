@@ -596,3 +596,4 @@ Progress log after every working session (what was built, what broke, what's nex
   Railway's pre-deploy `alembic upgrade head` is set; the new endpoints 500 until then,
   everything else is unaffected.
 - 2026-10-11 — Added `README.md`: what the project does, a real example email with its evidence, how it works, honest status + measured numbers, how to run it. The live URL is deliberately left out (anonymous runs are on there).
+- 2026-10-11 — README redesigned (Moiz: the first one was too plain). Hero banner + an image of the real PostHog draft beside its evidence (`docs/assets/*.svg` are the sources, PNGs rendered with headless Chrome), badges, comparison table, styled pipeline diagram, a guarantees table linking to the code, and a "what broke" section built from this log. Added `.github/workflows/ci.yml` (ruff + pytest, no keys needed; verified first in a clean clone with no .env) so the tests badge is real.

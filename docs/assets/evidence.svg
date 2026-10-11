@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="700" viewBox="0 0 1280 700" role="img" aria-label="A drafted email next to the evidence for each claim in it">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111a2e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="700" rx="20" fill="url(#bg)"/>
+
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <!-- left: the draft -->
+    <rect x="40" y="40" width="590" height="540" rx="14" fill="#0f172a" stroke="#263349"/>
+    <text x="68" y="82" font-size="13" font-weight="700" letter-spacing="2" fill="#94a3b8">DRAFT EMAIL</text>
+    <rect x="496" y="62" width="108" height="28" rx="14" fill="#0c2a24" stroke="#34d399"/>
+    <text x="550" y="81" font-size="13" font-weight="700" fill="#6ee7b7" text-anchor="middle">✓ verified</text>
+    <path d="M68 106h534" stroke="#263349"/>
+
+    <text x="68" y="138" font-size="13" fill="#64748b">To</text>
+    <text x="130" y="138" font-size="14" fill="#cbd5e1">Alex Morgan, Head of Growth, posthog.com</text>
+    <text x="68" y="164" font-size="13" fill="#64748b">Subject</text>
+    <text x="130" y="164" font-size="14" font-weight="700" fill="#f1f5f9">Free-to-paid at PostHog</text>
+    <path d="M68 184h534" stroke="#263349"/>
+
+    <g font-size="15.5" fill="#e2e8f0">
+      <text x="68" y="220">Hi Alex,</text>
+      <text x="68" y="256"><tspan fill="#6ee7b7" font-weight="600">98% of PostHog customers use it for free</tspan><tspan fill="#34d399" font-size="11" dy="-6" font-weight="700"> 1</tspan><tspan dy="6">, with</tspan></text>
+      <text x="68" y="280"><tspan fill="#6ee7b7" font-weight="600">usage-based paid products</tspan><tspan fill="#34d399" font-size="11" dy="-6" font-weight="700"> 2</tspan><tspan dy="6"> on top. Teams with a base</tspan></text>
+      <text x="68" y="304">like that often find the real leak is in onboarding, where</text>
+      <text x="68" y="328">free users stall before they reach a paid tier or a second</text>
+      <text x="68" y="352">product.</text>
+      <text x="68" y="388">At Onboardly we help B2B software companies find and fix</text>
+      <text x="68" y="412">the onboarding steps where new users drop off. <tspan fill="#7dd3fc" font-weight="600">We lifted</tspan></text>
+      <text x="68" y="436"><tspan fill="#7dd3fc" font-weight="600">trial-to-paid conversion 18% in 10 weeks for a 40-person</tspan></text>
+      <text x="68" y="460"><tspan fill="#7dd3fc" font-weight="600">analytics startup</tspan><tspan fill="#38bdf8" font-size="11" dy="-6" font-weight="700"> 3</tspan><tspan dy="6">.</tspan></text>
+      <text x="68" y="496">Open to a 15-minute call next week?</text>
+      <text x="68" y="532">Sam</text>
+    </g>
+    <text x="68" y="562" font-size="12" fill="#64748b">Test sender with invented results. This email was never sent.</text>
+
+    <!-- right: the evidence -->
+    <rect x="650" y="40" width="590" height="540" rx="14" fill="#0f172a" stroke="#263349"/>
+    <text x="678" y="82" font-size="13" font-weight="700" letter-spacing="2" fill="#94a3b8">EVIDENCE FOR EACH CLAIM</text>
+    <path d="M678 106h534" stroke="#263349"/>
+
+    <!-- claim 1 -->
+    <circle cx="690" cy="140" r="11" fill="#0c2a24" stroke="#34d399"/>
+    <text x="690" y="145" font-size="12" font-weight="700" fill="#6ee7b7" text-anchor="middle">1</text>
+    <text x="712" y="145" font-size="15" font-weight="600" fill="#f1f5f9">98% of PostHog customers use it for free</text>
+    <text x="1212" y="145" font-size="13" font-weight="700" fill="#6ee7b7" text-anchor="end">supported</text>
+    <rect x="712" y="160" width="500" height="104" rx="8" fill="#0b1323" stroke="#1e293b"/>
+    <rect x="712" y="160" width="3" height="104" fill="#34d399"/>
+    <text x="730" y="184" font-size="12" fill="#64748b">Quote found on the fetched page</text>
+    <text x="730" y="207" font-size="13.5" font-style="italic" fill="#cbd5e1">"All our paid products are pay-per-use with generous monthly</text>
+    <text x="730" y="227" font-size="13.5" font-style="italic" fill="#cbd5e1">free tiers. In fact, 98% of our customers use PostHog for free."</text>
+    <text x="730" y="251" font-size="12.5" fill="#38bdf8" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace">https://posthog.com/</text>
+
+    <!-- claim 2 -->
+    <circle cx="690" cy="304" r="11" fill="#0c2a24" stroke="#34d399"/>
+    <text x="690" y="309" font-size="12" font-weight="700" fill="#6ee7b7" text-anchor="middle">2</text>
+    <text x="712" y="309" font-size="15" font-weight="600" fill="#f1f5f9">PostHog has usage-based paid products</text>
+    <text x="1212" y="309" font-size="13" font-weight="700" fill="#6ee7b7" text-anchor="end">supported</text>
+    <text x="712" y="333" font-size="13" fill="#94a3b8">Same page, same quote: "All our paid products are pay-per-use".</text>
+
+    <path d="M678 362h534" stroke="#1e293b"/>
+
+    <!-- claim 3 -->
+    <circle cx="690" cy="398" r="11" fill="#0a2233" stroke="#38bdf8"/>
+    <text x="690" y="403" font-size="12" font-weight="700" fill="#7dd3fc" text-anchor="middle">3</text>
+    <text x="712" y="403" font-size="15" font-weight="600" fill="#f1f5f9">Lifted trial-to-paid conversion 18% in 10 weeks</text>
+    <text x="1212" y="403" font-size="13" font-weight="700" fill="#7dd3fc" text-anchor="end">supported</text>
+    <text x="712" y="427" font-size="13" fill="#94a3b8">Matches result 1 in the sender's own profile. The writer may only</text>
+    <text x="712" y="447" font-size="13" fill="#94a3b8">use results the sender supplied. It cannot invent one.</text>
+
+    <path d="M678 476h534" stroke="#1e293b"/>
+    <text x="678" y="508" font-size="13" fill="#94a3b8">Code, not the model, decides whether the email passes:</text>
+    <text x="678" y="532" font-size="13" fill="#cbd5e1"><tspan fill="#34d399" font-weight="700">✓</tspan> the URL was fetched in this run   <tspan fill="#34d399" font-weight="700" dx="10">✓</tspan> the quote is in the page text</text>
+    <text x="678" y="556" font-size="13" fill="#cbd5e1"><tspan fill="#34d399" font-weight="700">✓</tspan> 3 of 3 claims supported   <tspan fill="#34d399" font-weight="700" dx="10">✓</tspan> under 120 words, plain text</text>
+
+    <!-- stats strip -->
+    <g text-anchor="middle">
+      <g fill="#0f172a" stroke="#263349">
+        <rect x="40" y="600" width="285" height="64" rx="12"/>
+        <rect x="345" y="600" width="285" height="64" rx="12"/>
+        <rect x="650" y="600" width="285" height="64" rx="12"/>
+        <rect x="955" y="600" width="285" height="64" rx="12"/>
+      </g>
+      <g font-size="22" font-weight="800" fill="#f8fafc">
+        <text x="182" y="630">37 seconds</text>
+        <text x="487" y="630">$0.086</text>
+        <text x="792" y="630">83 words</text>
+        <text x="1097" y="630" font-size="19">0 sent without approval</text>
+      </g>
+      <g font-size="12.5" fill="#94a3b8">
+        <text x="182" y="651">worker time, first step to verified draft</text>
+        <text x="487" y="651">estimated model + search cost</text>
+        <text x="792" y="651">one company number, one ask</text>
+        <text x="1097" y="651">a person approves every email</text>
+      </g>
+    </g>
+  </g>
+</svg>
