@@ -59,16 +59,15 @@ is needed, and wherever a mistake would matter, **code makes the final decision*
 
 ```mermaid
 flowchart LR
-    A([validate]) --> B([dedupe]) --> C([score])
-    C --> D[["research agent<br/>search · fetch · finish"]]
-    D --> E([pain points]) --> F([writer]) --> G{{verifier}}
-    G -- "unsupported claim<br/>(max 2 revisions)" --> F
-    G --> H[/human review/] --> I([send]) --> J([classify replies])
+    A(validate) --> B(dedupe) --> C(score) --> D[research agent]
+    D --> E(pain points) --> F(writer) --> G{verifier}
+    G -->|unsupported claim, max 2 revisions| F
+    G --> H[human review] --> I(send) --> J(classify replies)
 
-    classDef agent fill:#0c2a24,stroke:#34d399,color:#d1fae5;
-    classDef human fill:#0a2233,stroke:#38bdf8,color:#e0f2fe;
-    class D,G agent;
-    class H human;
+    classDef agent fill:#0c2a24,stroke:#34d399,color:#d1fae5
+    classDef human fill:#0a2233,stroke:#38bdf8,color:#e0f2fe
+    class D,G agent
+    class H human
 ```
 
 <details>
