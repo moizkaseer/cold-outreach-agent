@@ -1,4 +1,5 @@
 <title>Outreach Agent Roadmap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: one scanning column. Current state first, then who is blocking what,
@@ -35,7 +36,7 @@
   color-scheme: dark;
 }
 body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
-.page { max-width: 1020px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: flex; flex-direction: column; gap: 40px; }
+.page { max-width: 1020px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 36px 64px; display: flex; flex-direction: column; gap: 40px; }
 h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
 h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
 h2 { font-size: 19px; font-weight: 600; }
@@ -44,6 +45,8 @@ p { margin: 0; }
 code, .mono { font-family: var(--mono); font-size: 0.9em; }
 .label { font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .muted { color: var(--muted); }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 section { display: flex; flex-direction: column; gap: 14px; }
 
 /* header */
@@ -118,7 +121,22 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
 .log li > * { min-width: 0; }
 .log time { font-family: var(--mono); font-size: 12.5px; color: var(--muted); padding-top: 2px; }
 
+/* first task: numbered steps, then a lookup table for what Railway shows */
+.steps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 14px; max-width: 76ch; }
+.steps li::marker { font-family: var(--mono); color: var(--muted); font-size: 12.5px; }
+.steps li > ul { margin: 6px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.steps h3 { margin-bottom: 4px; }
+.ui { font-family: var(--mono); font-size: 0.88em; padding: 1px 5px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); white-space: nowrap; }
+
+/* everything left: groups of numbered items; the numbers are referenced by the suggested order */
+.left { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 28px; }
+.left > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.left ol { margin: 0; padding-left: 26px; display: flex; flex-direction: column; gap: 7px; }
+.left ol li::marker { font-family: var(--mono); color: var(--muted); font-size: 12.5px; }
+.order { background: var(--accent-soft); border-radius: 4px; padding: 12px 14px; }
+
 @media (max-width: 720px) {
+  .left { grid-template-columns: 1fr; }
   h1 { font-size: 25px; }
   .now, .wait { grid-template-columns: 1fr; }
   .facts { grid-template-columns: 1fr 1fr; }
@@ -138,7 +156,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
     <h1>Outreach Agent Roadmap</h1>
     <p>A company domain plus a person's name and role goes in. A short cold email comes out, with every company fact backed by a source URL. This page tracks what is built, what has run for real, and what is still open.</p>
     <div class="meta label">
-      <span>Updated 2026-10-11</span>
+      <span>Updated 2026-10-14</span>
       <span>Source: docs/ROADMAP.md</span>
       <span>329 tests passing</span>
     </div>
@@ -151,20 +169,118 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
       <h2>The backend is deployed on Railway and ran a real lead end to end</h2>
       <p>The API, the worker and Redis run on Railway, with Supabase as the database. On 2026-10-11 one real lead went through the live deployment: API key, queue, worker, real agents, Supabase. The worker took 37 seconds and an estimated $0.086, and the email came out verified with its source URL and quote visible in the review API.</p>
       <p>The backend was finished the day before: API keys with per-team ownership, the review API, sending behind an interface, and atomic rate limits, all proven first on local Postgres and Redis in Docker.</p>
+      <p><strong>2026-10-14 check:</strong> tests, lint and CI are green and Supabase is at the latest migration. But the live API is still running code from 2026-10-11, so the reply endpoints are not online. Railway has stopped deploying new pushes.</p>
       <p class="muted">Not proven yet: a real email through the provider. Email judge v2.2 is still built but not measured. Anonymous runs are switched on in the live deployment, so the public can spend up to the $2 daily cap.</p>
     </div>
     <div>
       <span class="label">Next, in order</span>
       <ol>
-        <li>Send one real email to ourselves through the provider.</li>
-        <li>Back to quality: measure judge v2.2 cheaply, then writer tuning.</li>
+        <li>Get Railway deploying the latest code again. Steps below.</li>
+        <li>Decide whether anonymous runs stay on.</li>
+        <li>Set up Resend and a sending domain, then send one real email to ourselves.</li>
+        <li>Verify the golden facts and label the 24 calibration facts, so eval numbers can be trusted.</li>
+        <li>Week 8: contact discovery and the fit signal.</li>
       </ol>
     </div>
+  </section>
+
+  <section id="railway">
+    <h2>First task: get Railway deploying again</h2>
+    <p class="muted">Safe to do now: no runs are in flight, and redeploying costs no API money. Check from outside: the live API lists 12 routes and <code>/replies</code> returns 404. After the fix it should list the reply routes too.</p>
+    <ol class="steps">
+      <li>
+        <h3>Look at the API service's deploy history</h3>
+        <ul>
+          <li>Go to railway.app and open the project.</li>
+          <li>Click the box for the <strong>API</strong> service, the one connected to the GitHub repo.</li>
+          <li>Open the <span class="ui">Deployments</span> tab and look at the top entry: its commit message and status.</li>
+        </ul>
+      </li>
+      <li>
+        <h3>Match what you see to a fix</h3>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Top of the list shows</th><th>Meaning</th><th>Do this</th></tr></thead>
+            <tbody>
+              <tr><td>An old commit such as "README redesign&hellip;" marked Active, nothing newer above it</td><td>Railway is not hearing about pushes</td><td>Go to step 3</td></tr>
+              <tr><td>Newer commits marked <strong>Failed</strong> or <strong>Crashed</strong></td><td>It tried to deploy and broke</td><td>Click that deploy, then <span class="ui">View logs</span>, and send the error to Claude</td></tr>
+              <tr><td>Newer commits marked <strong>Skipped</strong></td><td>Watch paths are filtering them out</td><td><span class="ui">Settings</span> &rarr; <span class="ui">Watch Paths</span>, clear it, save</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </li>
+      <li>
+        <h3>Reconnect the repo, only if no new deploys appear</h3>
+        <ul>
+          <li>In the API service open <span class="ui">Settings</span> &rarr; <span class="ui">Source</span>.</li>
+          <li>Check the repo is <code>moizkaseer/cold-outreach-agent</code> and the branch is <code>main</code>.</li>
+          <li>If it shows disconnected or wrong, disconnect and connect it again.</li>
+          <li>Make sure automatic deploys on push are on, if the option is shown.</li>
+          <li>Press <span class="ui">Ctrl+K</span>, type "deploy", and run "Deploy latest commit" if it is offered. If not, Claude pushes a small commit to trigger a deploy.</li>
+        </ul>
+      </li>
+      <li>
+        <h3>Do the same for the worker service</h3>
+        <ul>
+          <li>Click the <strong>worker</strong> box and repeat steps 1 to 3.</li>
+          <li>Keep its start command as <code>arq app.workers.worker.WorkerSettings</code>.</li>
+        </ul>
+      </li>
+      <li>
+        <h3>Tell Claude it is done</h3>
+        <ul><li>Claude checks from outside, for free, that <code>/replies</code> is on the live API.</li></ul>
+      </li>
+    </ol>
+  </section>
+
+  <section id="left">
+    <h2>Everything left, frontend excluded</h2>
+    <div class="left">
+      <div>
+        <span class="label">Only Moiz can do</span>
+        <ol start="1">
+          <li>Fix Railway deploys (the steps above).</li>
+          <li>Decide whether <code>ALLOW_ANONYMOUS_RUNS=true</code> stays on. Anyone can spend up to $2 a day while it is on.</li>
+          <li>Verify the 101 golden facts in <code>evals/golden_set/</code>. Without this, research accuracy cannot be measured.</li>
+          <li>Label 24 facts in <code>evals/calibration/labels.csv</code>, so we know if the fact judge can be trusted.</li>
+          <li>Create a Resend account and a separate sending domain with SPF, DKIM and DMARC.</li>
+        </ol>
+      </div>
+      <div>
+        <span class="label">Claude runs, needs Moiz's OK (costs money)</span>
+        <ol start="6">
+          <li>Measure the reply classifier: write labelled sample replies, then one paid run, about $0.05 (estimate).</li>
+          <li>Measure email judge v2.2: about $0.20 to $0.50 (estimate).</li>
+          <li>Run the prompt-injection evals against the real model: about $0.20 to $0.40 (estimate).</li>
+          <li>Real research eval run, after item 3.</li>
+          <li>First real email through Resend to our own inbox, after item 5.</li>
+        </ol>
+      </div>
+      <div>
+        <span class="label">Week 8, built together</span>
+        <ol start="11">
+          <li>Contact discovery through Apollo or Hunter. Needs an account and API key.</li>
+          <li>Fit signal: cited evidence of whether they use the seller's product or a competitor's.</li>
+          <li>Optional: research on the Claude Agent SDK, compared with ours on the evals.</li>
+          <li>Rewrite the case study with real numbers from items 6 to 9.</li>
+        </ol>
+      </div>
+      <div>
+        <span class="label">Known gaps, no money needed</span>
+        <ol start="15">
+          <li>Reply classification cost is not counted in the global $2 daily cap.</li>
+          <li>Per-team daily caps for sends and replies can overshoot slightly under simultaneous requests.</li>
+          <li>No bounce or complaint handling from Resend yet.</li>
+        </ol>
+      </div>
+    </div>
+    <p class="order"><strong>Suggested order:</strong> 1, 2, 5, 10 to get the full loop working for real (research, draft, approve, send, reply). Then 3 and 4 so eval numbers can be trusted. Week 8 last.</p>
   </section>
 
   <section>
     <h2>Waiting on Moiz</h2>
     <ul class="wait">
+      <li><span class="tag">Blocks the live reply API</span><span>Railway is not deploying new pushes. See <a href="#railway">the first task</a>.</span></li>
       <li><span class="tag">Blocks real sending</span><span>A Resend account and a sending domain with SPF, DKIM and DMARC.</span></li>
       <li><span class="tag">Blocks judge work</span><span>Say OK to paid runs, or pick the cheaper measuring route.</span></li>
       <li><span class="tag">Blocks trusted eval numbers</span><span>Verify the golden facts. 0 of 101 checked so far. See <code>evals/golden_set/README.md</code>.</span></li>
@@ -248,6 +364,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
   <section>
     <h2>History</h2>
     <ul class="log">
+      <li><time datetime="2026-10-14">2026-10-14</time><span>Readiness check. 329 tests, lint and CI green; Supabase at the latest migration. The live API is still on 2026-10-11 code because Railway stopped deploying pushes. Added the fix steps and the full list of what is left.</span></li>
       <li><time datetime="2026-10-11">2026-10-11</time><span>Reply classification built: eight categories, an opt-out phrase always wins by code, and an unsubscribe reply goes on the suppression list. Frontend put on hold.</span></li>
       <li><time datetime="2026-10-11">2026-10-11</time><span>Deployed on Railway: API, worker and Redis, with Supabase. Fixed on the way: a Dockerfile Railway rejected, missing variables, an empty Redis URL, a worker box running the API command. First real lead through the live deployment.</span></li>
       <li><time datetime="2026-10-10">2026-10-10</time><span>Backend day. First run on real Postgres and Redis, Docker image built. Fixed: API could not start, resume race, stranded runs when the queue is down. Added API keys, review API, sending with unsubscribe, atomic limits. About $0.02 spent by mistake when a real worker picked up leftover test jobs.</span></li>
@@ -296,7 +413,7 @@ var WEEKS = [
     { s: "todo", t: "Connect the Run button on moizali.vercel.app", note: "On hold until the new portfolio site exists." },
     { s: "done", t: "Rate limiting and daily spending cap", note: "Atomic. Burst-tested on Postgres." },
     { s: "done", t: "Auth: API keys, per-team ownership, CORS" },
-    { s: "done", t: "Docker and deploy", note: "Railway: API, worker, Redis. Supabase database. One real run 2026-10-11." }
+    { s: "done", t: "Docker and deploy", note: "Railway: API, worker, Redis. Supabase database. One real run 2026-10-11. Since then Railway is not deploying new pushes." }
   ]},
   { n: 7, name: "Close the loop", items: [
     { s: "partial", t: "Review UI: approve, edit, reject", note: "API done. No screen yet." },
